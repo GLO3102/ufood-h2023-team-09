@@ -1,19 +1,9 @@
-<script>
-import IconLogo from './icons/IconLogo.vue';
-export default {
-  name: "nav-menu",
-  components: {
-    "icon-logo": IconLogo,
-  },
-};
-
-</script>
 
 <template>
   <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="/">
-      <icon-logo/>
+      <img src="https://i.imgur.com/LGJc4s0.png" title="source: imgur.com" />
     </a>
     <a class="navbar-item" href="/">
       Ufood

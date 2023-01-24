@@ -29,7 +29,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <button class="button is-block is-info is-medium is-fullwidth">Login <i class="fa fa-sign-in" aria-hidden="true"></i></button>
+                            <button class="button is-block is-info is-medium is-fullwidth">Login</button>
                         </form>
                     </div>
                 </div>

@@ -8,7 +8,7 @@
                     <p class="subtitle has-text-black">Please log in to proceed.</p>
                     <div class="box">
                         <figure class="avatar">
-                            <img src="@/assets/person.svg" width="50">
+                            <img src="@/assets/person.svg" width="55">
                         </figure>
                         <form>
                             <div class="field">

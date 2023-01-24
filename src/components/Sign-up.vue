@@ -9,19 +9,28 @@
                     <div class="box">
                         <form>
                             <div class="field">
-                                <div class="control">
+                                <div class="control has-icons-left">
                                     <input class="input is-medium" type="username" placeholder="Username" autofocus="true">
+                                    <span class="icon is-small is-left">
+                                        <img src="@/assets/user.svg" width="20">
+                                    </span>
                                 </div>
                             </div>
                             <div class="field">
-                                <div class="control">
+                                <div class="control has-icons-left">
                                     <input class="input is-medium" type="email" placeholder="Email">
+                                    <span class="icon is-small is-left">
+                                        <img src="@/assets/envelope.svg" width="20">
+                                    </span>
                                 </div>
                             </div>
 
                             <div class="field">
-                                <div class="control">
+                                <div class="control has-icons-left">
                                     <input class="input is-medium" type="password" placeholder="Password">
+                                    <span class="icon is-small is-left">
+                                        <img src="@/assets/lock.svg" width="20">
+                                    </span>
                                 </div>
                             </div>
                             <button class="button is-block is-info is-medium is-fullwidth">Sign up</button>

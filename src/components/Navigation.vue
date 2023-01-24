@@ -44,6 +44,12 @@
           <a class="button is-primary">
             Sign-up
           </a>
+          <a class="button is-light">
+            <img src="@/assets/person.svg" width="40" height="40"/>
+          </a>
+          <a class="button is-light">
+            <img src="@/assets/log-out.svg" width="40" height="40"/>
+          </a>
          </div>
        </div>
       </div>

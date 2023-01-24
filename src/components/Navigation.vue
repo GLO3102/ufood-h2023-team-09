@@ -37,16 +37,16 @@
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">
-          <a class="button is-light">
+          <router-link class="button is-light" to="/log-in">
             <img src="@/assets/person.svg" width="40" height="40"/>
             Log in
-          </a>
-          <a class="button is-primary">
+          </router-link>
+          <router-link class="button is-primary" to="/sign-up">
             Sign-up
-          </a>
-          <a class="button is-light">
+          </router-link>
+          <router-link class="button is-light" to="/user">
             <img src="@/assets/person.svg" width="40" height="40"/>
-          </a>
+          </router-link>
           <a class="button is-light">
             <img src="@/assets/log-out.svg" width="40" height="40"/>
           </a>

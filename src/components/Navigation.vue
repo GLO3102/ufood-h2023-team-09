@@ -1,17 +1,40 @@
+<script>
+import IconLogo from './icons/IconLogo.vue';
+export default {
+  name: "nav-menu",
+  components: {
+    "icon-logo": IconLogo,
+  },
+};
+
+</script>
+
 <template>
-  <nav>
-    <ul>
-      <li>
-        <router-link to="/">Home</router-link>
-      </li>
-      <li>
-        <router-link to="/restaurant">Restaurant</router-link>
-      </li>
-      <li>
-        <router-link to="/user">User Profile</router-link>
-      </li>
-    </ul>
-  </nav>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="/">
+      <icon-logo/>
+    </a>
+    <a class="navbar-item" href="/">
+      Ufood
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons">
+          <a class="button is-primary">
+            Sign-up
+          </a>
+          <a class="button is-light">
+            Log in
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
 </template>
 
 <style></style>

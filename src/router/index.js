@@ -19,6 +19,16 @@ const routes = [
     name: "User",
     component: User,
   },
+  {
+    path: "/log-in",
+    name: "Log-in",
+    component: () => import("@/components/Log-in"),
+  },
+  {
+    path: "/sign-up",
+    name: "Sign-up",
+    component: () => import("@/components/Sign-up"),
+  }
 ];
 
 export const router = createRouter({

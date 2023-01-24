@@ -13,12 +13,12 @@
 <template>
   <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
-    <a class="navbar-item" href="/">
+    <router-link class="navbar-item" to="/restaurant">
       <img src="@/assets/burger.svg" width="50" height="50"/>
-    </a>
-    <a class="navbar-item" id="logo-text" href="/">
+    </router-link>
+    <router-link class="navbar-item" id="logo-text" to="/">
       Ufood
-    </a>
+    </router-link>
     <a role="button" class="navbar-burger" id="burger" v-on:click="toggleBurger()" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
@@ -27,6 +27,10 @@
   </div>
 
   <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+      <router-link class="navbar-item" to="/restaurant">Restaurant</router-link>
+      <router-link class="navbar-item" to="/user">User</router-link>
+    </div>
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">

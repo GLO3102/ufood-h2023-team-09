@@ -1,3 +1,14 @@
+<script setup>
+    import { useUserStore } from '@/stores/user'
+    import { useRouter } from 'vue-router';
+    const router = useRouter()
+    const userStore = useUserStore()
+    const login = () => {
+        userStore.login()
+        router.push('/')
+    }
+</script>
+
 <template>
     <section class="hero">
         <div class="hero-body">
@@ -29,7 +40,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <button class="button is-block is-info is-medium is-fullwidth">Login</button>
+                            <button class="button is-block is-info is-medium is-fullwidth" @click="login()">Login</button>
                         </form>
                     </div>
                 </div>

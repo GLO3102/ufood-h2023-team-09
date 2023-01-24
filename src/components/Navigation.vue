@@ -28,6 +28,9 @@
 
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
+      <div class="navbar-item">
+        <input class="input" type="search" placeholder="Search...">
+      </div>
       <router-link class="navbar-item" to="/restaurant">Restaurant</router-link>
       <router-link class="navbar-item" to="/user">User</router-link>
     </div>

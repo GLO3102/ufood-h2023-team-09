@@ -1,6 +1,7 @@
 <script setup>
     import { useUserStore } from '@/stores/user'
     import { useRouter } from 'vue-router';
+    import { computed } from 'vue';
     const router = useRouter()
     const userStore = useUserStore()
     const toggleBurger = () => {
@@ -13,8 +14,15 @@
       userStore.logout()
       router.push('/')
     }
-    
+    const home = computed(() => {
+      if(router.currentRoute.value.path != "/") {
+        return true
+      } else {
+        return false
+      }
+    })
 </script>
+
 <template>
   <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
@@ -34,7 +42,7 @@
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
       <div class="navbar-item">
-        <input class="input" type="search" placeholder="Search...">
+        <input v-show="home" class="input" type="search" placeholder="Search...">
       </div>
       <router-link class="navbar-item" to="/restaurant">Restaurant</router-link>
       <router-link class="navbar-item" to="/user">User</router-link>

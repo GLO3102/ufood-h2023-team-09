@@ -1,8 +1,10 @@
 <script setup>
 function dropDownOnOff() {
-  let dropdown = document.getElementById("dropdownCategories");
-  dropdown.classList.toggle("is-active");
+  document.getElementById("dropdownCategories").classList.toggle("is-active");
 }
+window.onclick = function () {
+  document.getElementById("dropdownCategories").classList.remove("is-active");
+};
 </script>
 
 <script>
@@ -21,7 +23,11 @@ export default {
       </div>
 
       <div class="filter">
-        <div class="dropdown" id="dropdownCategories" @click="dropDownOnOff()">
+        <div
+          class="dropdown"
+          id="dropdownCategories"
+          @click.stop="dropDownOnOff()"
+        >
           <div class="dropdown-trigger">
             <button
               class="button"
@@ -63,6 +69,7 @@ export default {
       <div class="restaurant-card"><restaurant-card></restaurant-card></div>
       <div class="restaurant-card"><restaurant-card></restaurant-card></div>
       <div class="restaurant-card"><restaurant-card></restaurant-card></div>
+      <div class="restaurant-card"><restaurant-card></restaurant-card></div>
     </div>
 
     <div>GLO-3102 Home</div>
@@ -75,6 +82,7 @@ export default {
   justify-content: center;
   flex-wrap: wrap;
   margin-bottom: 3dvw;
+  margin-inline: 5px;
 }
 .search {
   width: 500px;
@@ -85,15 +93,13 @@ export default {
   display: flex;
   flex-wrap: nowrap;
 }
-
 .restaurant-list {
   display: flex;
   flex-wrap: wrap;
-  margin-inline: 3dvw;
   justify-content: center;
 }
 .restaurant-card {
-  width: 380px;
+  width: 400px;
   margin: 1dvw;
 }
 </style>

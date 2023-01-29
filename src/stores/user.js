@@ -14,5 +14,4 @@ export const useUserStore = defineStore({
             this.isLoggedIn = false;
         }
     }
-});
-            
+});           

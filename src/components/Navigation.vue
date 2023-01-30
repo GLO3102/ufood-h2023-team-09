@@ -14,12 +14,8 @@
       userStore.logout()
       router.push('/')
     }
-    const home = computed(() => {
-      if(router.currentRoute.value.path != "/") {
-        return true
-      } else {
-        return false
-      }
+    const isNotHome = computed(() => {
+      return router.currentRoute.value.path != "/";
     })
 </script>
 
@@ -42,7 +38,7 @@
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
       <div class="navbar-item">
-        <input v-show="home" class="input" type="search" placeholder="Search...">
+        <input v-show="isNotHome" class="input" type="search" placeholder="Search...">
       </div>
       <router-link class="navbar-item" to="/restaurant">Restaurant</router-link>
       <router-link class="navbar-item" to="/user">User</router-link>

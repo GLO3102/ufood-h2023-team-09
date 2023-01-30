@@ -1,7 +1,8 @@
 <script>
 import { defineComponent } from "vue";
 import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
-
+import { useUserStore } from "@/stores/user";
+import { computed } from "vue";
 import "vue3-carousel/dist/carousel.css";
 
 export default defineComponent({
@@ -14,6 +15,11 @@ export default defineComponent({
   },
 });
 </script>
+<script setup>
+const isFavoriteRestaurantsEmpty = computed(() => {
+  return useUserStore().favoriteRestaurants.length === 0;
+});
+</script>
 
 <template>
   <div class="hero">
@@ -22,7 +28,7 @@ export default defineComponent({
       <div>
         <nav class="level">
           <div class="level-item has-text-centered">
-          <figure class="image is-4by4">
+            <figure class="image is-4by4">
               <img
                 class="is-rounded"
                 src="https://i.pinimg.com/originals/05/11/45/051145a8e366876f859378154aa7df8b.jpg"
@@ -30,16 +36,14 @@ export default defineComponent({
               />
             </figure>
           </div>
-          
-            <div class="level-item">
-            <div class="is-6 is-offset-32 has-text-centered">
-            <h1 class="title is-2">User Name<br></h1>
-            <h2 class="subtitle is-4">
-              <br>This is user' score
-            </h2>
+
+          <div class="level-item">
+            <div v-show="isFavoriteRestaurantsEmpty" class="is-6 is-offset-32 has-text-centered">
+              <h1 class="title is-2">User Name<br /></h1>
+              <h2 class="subtitle is-4"><br />This is user' score</h2>
+            </div>
           </div>
-        </div>
-        </nav> 
+        </nav>
       </div>
       <!-- End user info-->
       <!-- Begin Work Content IF USER HAVE VISITED RESTAURANTS-->
@@ -50,7 +54,8 @@ export default defineComponent({
               <figure class="image is-3by5">
                 <img
                   src="https://i.pinimg.com/564x/c5/1a/41/c51a41fad6717db9106f0f2a89a2ea00.jpg"
-                  alt=""/>
+                  alt=""
+                />
               </figure>
             </div>
             <div class="card-content is-overlay">
@@ -67,7 +72,8 @@ export default defineComponent({
               <figure class="image is-3by5">
                 <img
                   src="https://i.pinimg.com/564x/08/25/38/082538afc45124898e4a792a5250d352.jpg"
-                  alt=""/>
+                  alt=""
+                />
               </figure>
             </div>
             <div class="card-content is-overlay">
@@ -84,7 +90,8 @@ export default defineComponent({
               <figure class="image is-3by5">
                 <img
                   src="https://i.pinimg.com/564x/95/19/fb/9519fb6c2a9576b4017356c29fb15f93.jpg"
-                  alt=""/>
+                  alt=""
+                />
               </figure>
             </div>
             <div class="card-content is-overlay">
@@ -101,7 +108,8 @@ export default defineComponent({
               <figure class="image is-3by5">
                 <img
                   src="https://i.pinimg.com/564x/9f/2f/6b/9f2f6bd333752f91e23514ea1a946e3c.jpg"
-                  alt=""/>
+                  alt=""
+                />
               </figure>
             </div>
             <div class="card-content is-overlay">
@@ -118,7 +126,8 @@ export default defineComponent({
               <figure class="image is-3by5">
                 <img
                   src="https://i.pinimg.com/564x/98/10/2c/98102cbaf0d75501f968ece02a83482f.jpg"
-                  alt=""/>
+                  alt=""
+                />
               </figure>
             </div>
             <div class="card-content is-overlay">

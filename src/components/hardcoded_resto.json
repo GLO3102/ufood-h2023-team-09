@@ -1,0 +1,29 @@
+{
+    "name": "La Barberie",
+    "id": "53ec122d27aafe77d8c37b8",
+    "address": "310 Rue Saint-Roch, Québec, QC G1K 6S2",
+    "tel": "(418) 522-4373",
+    "location": {
+        "type": "Point",
+        "coordinates": [
+            -71.2180951, 46.8178912
+        ]
+    },
+    "opening_hours": {
+        "monday": "12h-24h",
+        "tuesday":"12h-24h",
+        "wednesday":"12h-24h",
+        "thursday":"12h-24h",
+        "friday":"12h-24h",
+        "saturday":"12h-24h",
+        "sunday":"12h-24h"
+    },
+    "pictures": [
+        "picture.com"
+    ],
+    "genres": [
+        "casual"
+    ],
+    "price_range": 3,
+    "rating": 4.2
+}

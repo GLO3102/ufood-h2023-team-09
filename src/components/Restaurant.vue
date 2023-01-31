@@ -1,426 +1,146 @@
-        <!-- Scripts -->
-<script>
-function 
-</script>
-
 <template>
-  <div>
-    <!-- Begin Preloader -->
-    <div class="preloader-wrapper">
-      <div class="preloader">
-        <img src="img/preloader.gif" alt="" />
+  <div class = "container">
+    {{resto_data.name}}
+    <div class="rating-container">
+      <svg style="display:none;">
+        <defs>
+          <symbol id="fivestars">
+            <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd"/>
+            <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd" transform="translate(24)"/>
+            <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd" transform="translate(48)"/>
+            <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd" transform="translate(72)"/>
+            <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd"  transform="translate(96)"/>
+          </symbol>
+        </defs>
+      </svg>
+      <div class="rating">
+      <!--   <div class="rating-bg" style="width: 90%;"></div> -->
+        <progress class="rating-bg" value="3" max="5"></progress>
+        <svg><use xlink:href="#fivestars"/></svg>
       </div>
     </div>
-    <!-- End Preloader-->
-    <!-- Begin Scroll Up Button -->
 
-    <form action="#home">
-      <button id="toTop" title="Go to top">
-        <i class="fas fa-angle-up"></i>
-      </button>
-    </form>
-    <!-- End Scroll Up Button -->
-
-    <!-- Begin Header -->
-    <div class="header-wrapper" id="home">
-      <!-- Begin Hero -->
-
-      <!-- End Hero -->
+    <div class="schedule-container" id="schedule">
+      {{formatSchedule(resto_data.opening_hours)}}
     </div>
-    <!-- End Header -->
+    
+    <div class="slider_container">
+      <Carousel id="gallery" :items-to-show="1" :wrap-around="false" v-model="currentSlide">
+      <Slide v-for="slide in 10" :key="slide">
+        <div class="carousel__item">{{ slide }}</div>
+      </Slide>
+      </Carousel>
 
-    <!-- Begin Main Content -->
-    <div class="main-content">
-      <!-- Begin About Me Section -->
-      <div class="section-light about-me" id="about-me">
-        <div class="container">
-          <div class="column is-12 about-me">
-            <h1 class="title has-text-centered section-title">About Me</h1>
-          </div>
-          <div class="columns is-multiline">
-            <div
-              class="column is-6 has-vertically-aligned-content"
-              data-aos="fade-right"
-            >
-              <p class="is-larger">
-                &emsp;&emsp;<strong
-                  >Showcase is a modern, beautiful personal website template to
-                  showcase who you are, as well as projects you've worked on in
-                  the past.</strong
-                >
-              </p>
-              <br />
-              <p>
-                Showcase was built from the ground up with Bulma to be fast and
-                responsive out of the box with all source files well documented
-                for easy to customization. The Showcase template gives you a
-                personal space to share what you are all about as a creative
-                designer, developer, photographer, and more!
-              </p>
-              <br />
-              <div class="is-divider"></div>
-              <div class="columns about-links">
-                <div class="column">
-                  <p class="heading">
-                    <strong>Give me a ring</strong>
-                  </p>
-                  <p class="subheading">
-                    123-456-7890
-                  </p>
-                </div>
-                <div class="column">
-                  <p class="heading">
-                    <strong>Email Me</strong>
-                  </p>
-                  <p class="subheading">
-                    hello@example.com
-                  </p>
-                </div>
-                <div class="column">
-                  <p class="heading">
-                    <strong>View my portfolio</strong>
-                  </p>
-                  <p class="subheading">
-                    example.com
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="column is-6 right-image " data-aos="fade-left">
-              <img
-                class="is-rounded"
-                src="https://picsum.photos/id/366/600/375"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- End About Me Content -->
-      <div class="section-dark resume">
-        <div class="container">
-          <div
-            class="columns is-multiline"
-            data-aos="fade-in"
-            data-aos-easing="linear"
-          >
-            <div class="column is-12 about-me">
-              <h1 class="title has-text-centered section-title">
-                View My Resume
-              </h1>
-            </div>
-            <div class="column is-10 has-text-centered is-offset-1">
-              <h2 class="subtitle">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et doloremagna aliqua
-              </h2>
-              <form action="example.docs">
-                <button class="button">
-                  Download Resume&emsp;<i class="fad fa-download fa-lg"></i>
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Begin Services Content -->
-      <div class="section-color services" id="services">
-        <div class="container">
-          <div class="columns is-multiline">
-            <div
-              class="column is-12 about-me"
-              data-aos="fade-in"
-              data-aos-easing="linear"
-            >
-              <h1 class="title has-text-centered section-title">Services</h1>
-
-              <h2 class="subtitle">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua
-              </h2>
-              <br />
-            </div>
-            <div class="columns is-12">
-              <div
-                class="column is-4 has-text-centered"
-                data-aos="fade-in"
-                data-aos-easing="linear"
-              >
-                <i class="fad fa-meteor fa-3x"></i>
-                <hr />
-                <h2>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua
-                </h2>
-              </div>
-              <div
-                class="column is-4 has-text-centered"
-                data-aos="fade-in"
-                data-aos-easing="linear"
-              >
-                <i class="fas fa-paint-brush fa-3x"></i>
-                <hr />
-                <h2>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua
-                </h2>
-              </div>
-              <div
-                class="column is-4 has-text-centered"
-                data-aos="fade-in"
-                data-aos-easing="linear"
-              >
-                <i class="fas fa-rocket fa-3x"></i>
-                <hr />
-                <h2>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua
-                </h2>
-              </div>
-            </div>
-            <hr />
-            <div class="columns is-12">
-              <div
-                class="column is-4 has-text-centered"
-                data-aos="fade-in"
-                data-aos-easing="linear"
-              >
-                <i class="fas fa-upload fa-3x"></i>
-                <hr />
-                <h2>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua
-                </h2>
-              </div>
-              <div
-                class="column is-4 has-text-centered"
-                data-aos="fade-in"
-                data-aos-easing="linear"
-              >
-                <i class="fas fa-bus fa-3x"></i>
-                <hr />
-                <h2>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua
-                </h2>
-              </div>
-              <div
-                class="column is-4 has-text-centered"
-                data-aos="fade-in"
-                data-aos-easing="linear"
-              >
-                <i class="fas fa-code fa-3x"></i>
-                <hr />
-                <h2>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua
-                </h2>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- End Services Content -->
-      <!-- Begin Skills Content -->
-      <div class="section-light skills" id="skills">
-        <div class="container">
-          <div class="columns is-multiline">
-            <div class="column is-12 about-me">
-              <h1 class="title has-text-centered section-title">Skills</h1>
-            </div>
-            <div
-              class="column is-6"
-              data-aos="fade-in"
-              data-aos-easing="linear"
-            >
-              <h1>Adobe Experience Design</h1>
-              <progress class="progress" value="70" max="100">30%</progress>
-              <h1>Adobe After Effects</h1>
-              <progress class="progress" value="65" max="100">30%</progress>
-              <h1>Visual Studio Code</h1>
-              <progress class="progress" value="58" max="100">45%</progress>
-              <h1>Sketch</h1>
-              <progress class="progress" value="90" max="100">60%</progress>
-            </div>
-            <div
-              class="column is-6"
-              data-aos="fade-in"
-              data-aos-easing="linear"
-            >
-              <h1>HTML</h1>
-              <progress class="progress" value="85" max="100">30%</progress>
-              <h1>CSS</h1>
-              <progress class="progress" value="95" max="100">30%</progress>
-              <h1>VueJS</h1>
-              <progress class="progress" value="70" max="100">45%</progress>
-              <h1>React</h1>
-              <progress class="progress" value="60" max="100">60%</progress>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- End Skills Content -->
-      <!-- Begin Work Content -->
-      <div class="section-dark my-work" id="my-work">
-        <div class="container">
-          <div
-            class="columns is-multiline"
-            data-aos="fade-in"
-            data-aos-easing="linear"
-          >
-            <div class="column is-12">
-              <h1 class="title has-text-centered section-title">My Work</h1>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=0');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=10');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=20');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=30');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=40');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=50');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=60');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=70');"
-                ></figure>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- End Work Content -->
-      <!-- Begin Contact Content -->
-      <div class="section-light contact" id="contact">
-        <div class="container">
-          <div
-            class="columns is-multiline"
-            data-aos="fade-in-up"
-            data-aos-easing="linear"
-          >
-            <div class="column is-12 about-me">
-              <h1 class="title has-text-centered section-title">
-                Get in touch
-              </h1>
-            </div>
-            <div class="column is-8 is-offset-2">
-              <form
-                action="https://formspree.io/email@example.com"
-                method="POST"
-              >
-                <div class="field">
-                  <label class="label">Name</label>
-                  <div class="control has-icons-left">
-                    <input
-                      class="input"
-                      type="text"
-                      placeholder="Ex. Jane Smith"
-                      name="Name"
-                    />
-                    <span class="icon is-small is-left">
-                      <i class="fas fa-user"></i>
-                    </span>
-                  </div>
-                </div>
-                <div class="field">
-                  <label class="label">Email</label>
-                  <div class="control has-icons-left">
-                    <input
-                      class="input"
-                      type="email"
-                      placeholder="Ex. hello@arctheme.com"
-                      name="Email"
-                    />
-                    <span class="icon is-small is-left">
-                      <i class="fas fa-envelope"></i>
-                    </span>
-                  </div>
-                </div>
-                <div class="field">
-                  <label class="label">Message</label>
-                  <div class="control">
-                    <textarea
-                      class="textarea"
-                      placeholder="Textarea"
-                      name="Message"
-                    ></textarea>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="control ">
-                    <button class="button submit-button">
-                      Submit&nbsp;&nbsp;
-                      <i class="fas fa-paper-plane"></i>
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- End Contact Content -->
+      <Carousel
+        id="thumbnails"
+        :items-to-show="4"
+        :wrap-around="true"
+        v-model="currentSlide"
+        ref="carousel">
+        <Slide v-for="slide in 10" :key="slide">
+          <div class="carousel__item" @click="slideTo(slide - 1)">{{ slide }}</div>
+        </Slide>
+      </Carousel>
     </div>
-    <!-- End Main Content -->
-
-    <!-- Begin Footer -->
-    <div class="footer">
-      <p>
-        <strong class="white">Bulma</strong> by <a href="http://jgthms.com">Jeremy Thomas</a>.
-        The source code is licensed
-        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content is licensed
-        <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
-      </p>
-    </div>
-    <!-- End Footer -->
   </div>
 </template>
+
+<script setup>
+  const formatSchedule = (array_json) => {
+    let container1 = document.getElementById("schedule");
+    let table = document.createElement("table");
+    for (let key in array_json){
+      let table_element = document.createElement("tr");
+      table_element.textContent = key + "->" + array_json[key];
+      table.appendChild(table_element);
+    }
+    container1.appendChild(table);
+  };
+
+</script>
+<script>
+  import { defineComponent } from 'vue';
+  import { Carousel, Slide } from 'vue3-carousel';
+  import json from './hardcoded_resto.json';
+  import 'vue3-carousel/dist/carousel.css';
+
+  export default ({
+    name: 'Basic',
+    components: {
+      Carousel,
+      Slide
+    },
+    data: () => ({
+      currentSlide: 0,
+      resto_data : json
+    }),
+    methods: {
+      slideTo(val) {
+        this.currentSlide = val
+      }
+    }
+  })
+</script>
+
+<style>
+.slider_container{
+  width: 50%;
+  margin: auto;
+  border: 3px solid #73AD21;
+}
+.carousel__item {
+  min-height: 200px;
+  width: 100%;
+  background-color: var(--vc-clr-primary);
+  color: var(--vc-clr-white);
+  font-size: 20px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel__slide {
+  padding: 10px;
+}
+
+.carousel__prev,
+.carousel__next {
+  box-sizing: content-box;
+  border: 5px solid white;
+}
+
+.rating {
+  width: 120px;
+  height: 24px;
+  position: relative;
+  background-color: gray;
+}
+
+.rating progress.rating-bg {
+  -webkit-appearance: none;
+  -moz-appearence: none;
+  appearance: none;
+  border: none;
+  display: inline-block;
+  height: 24px;
+  width: 100%;
+  color: orange;
+}
+
+.rating progress.rating-bg::-webkit-progress-value {
+  background-color: orange;
+}
+
+.rating progress.rating-bg::-moz-progress-bar {
+  background-color: orange;
+}
+
+.rating svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+</style>

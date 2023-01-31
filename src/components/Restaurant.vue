@@ -20,8 +20,8 @@
       </div>
     </div>
 
-    <div class="schedule-container" id="schedule">
-      {{formatSchedule(resto_data.opening_hours)}}
+    <div class="schedule" id="schedule" ref="schedule">
+      <button v-on:click="formatSchedule1(resto_data.opening_hours)"> hELLO</button>
     </div>
     
     <div class="slider_container">
@@ -46,17 +46,25 @@
 </template>
 
 <script setup>
-  const formatSchedule = (array_json) => {
+  import { onMounted } from 'vue';
+  const hours = json.opening_hours;
+
+  onMounted((hours) => {
+    console.log("Mounted");
+    formatSchedule1(hours);
+  })
+
+  const formatSchedule1 = (hours) => {
     let container1 = document.getElementById("schedule");
     let table = document.createElement("table");
-    for (let key in array_json){
+    for (let key in hours){
       let table_element = document.createElement("tr");
-      table_element.textContent = key + "->" + array_json[key];
+      table_element.textContent = key + "->" + hours[key];
       table.appendChild(table_element);
     }
     container1.appendChild(table);
-  };
-
+    
+  }
 </script>
 <script>
   import { defineComponent } from 'vue';
@@ -64,7 +72,7 @@
   import json from './hardcoded_resto.json';
   import 'vue3-carousel/dist/carousel.css';
 
-  export default ({
+  export default defineComponent ({
     name: 'Basic',
     components: {
       Carousel,
@@ -76,10 +84,21 @@
     }),
     methods: {
       slideTo(val) {
-        this.currentSlide = val
+        this.currentSlide = val;
+      },
+      
+      formatSchedule(array_json){
+        let container1 = document.getElementById("schedule");
+        let table = document.createElement("table");
+        for (let key in array_json){
+          let table_element = document.createElement("tr");
+          table_element.textContent = key + "->" + array_json[key];
+          table.appendChild(table_element);
+        }
+        container1.appendChild(table);
       }
     }
-  })
+  });
 </script>
 
 <style>

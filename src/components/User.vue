@@ -1,139 +1,170 @@
-<template>
-  <div>
-    <h1>User Profile</h1>
-    <div>GLO-3102 User Profile page</div>
-  
-    <div class="hero-body">
-              <div class="container has-text-centered">
-                  <div class="columns is-vcentered">
-                      <div class="column is-5">
-                          <figure class="image is-4by4">
-                              <img class="is-rounded" src="https://i.pinimg.com/originals/05/11/45/051145a8e366876f859378154aa7df8b.jpg" alt="UserPicture">
-                          </figure>
-                      </div>
-                      <div class="column is-6 is-offset-1">
-                          <h1 class="title is-2">
-                              Superhero Scaffolding
-                          </h1>
-                          <h2 class="subtitle is-4">
-                              Let this cover page describe a product or service.
-                          </h2>
-                          <br>
-                          <p class="has-text-centered">
-                              <a class="button is-medium is-info is-outlined">
-                                  Learn more
-                              </a>
-                          </p>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="hero-foot">
-            <div class="container">
-                
+<script>
+import { defineComponent } from "vue";
+import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
+import { useUserStore } from "@/stores/user";
+import { computed } from "vue";
+import "vue3-carousel/dist/carousel.css";
 
-        <!-- Begin Work Content -->
-      <div class="section-dark my-work" id="my-work">
-        <div class="container">
-          <div
-            class="columns is-multiline"
-            data-aos="fade-in"
-            data-aos-easing="linear"
-          >
-            <div class="column is-12">
-              <h1 class="title has-text-centered section-title">My Work</h1>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=0');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=10');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=20');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=30');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=40');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=50');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=60');"
-                ></figure>
-              </a>
-            </div>
-            <div class="column is-3">
-              <a href="#">
-                <figure
-                  class="image is-2by1 work-item"
-                  style="background-image: url('https://picsum.photos/320/180?image=70');"
-                ></figure>
-              </a>
+export default defineComponent({
+  name: "Basic",
+  components: {
+    Carousel,
+    Slide,
+    Pagination,
+    Navigation,
+  },
+});
+</script>
+<script setup>
+const isFavoriteRestaurantsEmpty = computed(() => {
+  return useUserStore().favoriteRestaurants.length === 0;
+});
+</script>
+
+<template>
+  <div class="hero">
+    <div class="hero-body">
+      <!-- Begin user info-->
+      <div>
+        <nav class="level">
+          <div class="level-item has-text-centered">
+            <figure class="image is-4by4">
+              <img
+                class="is-rounded"
+                src="https://i.pinimg.com/originals/05/11/45/051145a8e366876f859378154aa7df8b.jpg"
+                alt="UserPicture"
+              />
+            </figure>
+          </div>
+
+          <div class="level-item">
+            <div v-show="isFavoriteRestaurantsEmpty" class="is-6 is-offset-32 has-text-centered">
+              <h1 class="title is-2">User Name<br /></h1>
+              <h2 class="subtitle is-4"><br />This is user' score</h2>
             </div>
           </div>
+        </nav>
+      </div>
+      <!-- End user info-->
+      <!-- Begin Work Content IF USER HAVE VISITED RESTAURANTS-->
+      <Carousel wrap-around="true" :items-to-show="2.5">
+        <Slide :key="slide">
+          <div class="carousel__item">
+            <div class="card">
+              <figure class="image is-3by5">
+                <img
+                  src="https://i.pinimg.com/564x/c5/1a/41/c51a41fad6717db9106f0f2a89a2ea00.jpg"
+                  alt=""
+                />
+              </figure>
+            </div>
+            <div class="card-content is-overlay">
+              <span class="tag is-primary">Number of visits</span>
+            </div>
+            <div class="card-content slider-text">
+              <div class="is-size-5 box">IMAGE_CAPTION_HERE</div>
+            </div>
+          </div>
+        </Slide>
+        <Slide :key="slide">
+          <div class="carousel__item">
+            <div class="card">
+              <figure class="image is-3by5">
+                <img
+                  src="https://i.pinimg.com/564x/08/25/38/082538afc45124898e4a792a5250d352.jpg"
+                  alt=""
+                />
+              </figure>
+            </div>
+            <div class="card-content is-overlay">
+              <span class="tag is-primary">Number of visits</span>
+            </div>
+            <div class="card-content slider-text">
+              <div class="is-size-5 box">IMAGE_CAPTION_HERE</div>
+            </div>
+          </div>
+        </Slide>
+        <Slide :key="slide">
+          <div class="carousel__item">
+            <div class="card">
+              <figure class="image is-3by5">
+                <img
+                  src="https://i.pinimg.com/564x/95/19/fb/9519fb6c2a9576b4017356c29fb15f93.jpg"
+                  alt=""
+                />
+              </figure>
+            </div>
+            <div class="card-content is-overlay">
+              <span class="tag is-primary">Number of visits</span>
+            </div>
+            <div class="card-content slider-text">
+              <div class="is-size-5 box">IMAGE_CAPTION_HERE</div>
+            </div>
+          </div>
+        </Slide>
+        <Slide :key="slide">
+          <div class="carousel__item">
+            <div class="card">
+              <figure class="image is-3by5">
+                <img
+                  src="https://i.pinimg.com/564x/9f/2f/6b/9f2f6bd333752f91e23514ea1a946e3c.jpg"
+                  alt=""
+                />
+              </figure>
+            </div>
+            <div class="card-content is-overlay">
+              <span class="tag is-primary">Number of visits</span>
+            </div>
+            <div class="card-content slider-text">
+              <div class="is-size-5 box">IMAGE_CAPTION_HERE</div>
+            </div>
+          </div>
+        </Slide>
+        <Slide :key="slide">
+          <div class="carousel__item">
+            <div class="card">
+              <figure class="image is-3by5">
+                <img
+                  src="https://i.pinimg.com/564x/98/10/2c/98102cbaf0d75501f968ece02a83482f.jpg"
+                  alt=""
+                />
+              </figure>
+            </div>
+            <div class="card-content is-overlay">
+              <span class="tag is-primary">Number of visits</span>
+            </div>
+            <div class="card-content slider-text">
+              <div class="is-size-5 box">IMAGE_CAPTION_HERE</div>
+            </div>
+          </div>
+        </Slide>
+        <template #addons>
+          <Navigation />
+          <Pagination />
+        </template>
+      </Carousel>
+      <!-- End Work Content IF USER HAVE VISITED RESTAURANTS-->
+      <!-- Begin Work Content IF USER DONT VISIT//GOTTA SHOW INDICATION OF NON VISITED AND LINK TO HOME PAGE-->
+      <!-- End Work Content IF USER DONT VISIT-->
+    </div>
+    <div class="hero-foot">
+      <div class="container">
+        <div class="tabs is-centered">
+          <ul>
+            <li><a>And this is the bottom</a></li>
+          </ul>
         </div>
       </div>
-      <!-- End Work Content -->
-      <div class="tabs is-centered">
-                    <ul>
-                        <li><a>And this is the bottom</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-         
-        
-        
-</div>
-      
-
+    </div>
+  </div>
 </template>
 
 <style scoped>
 div {
   margin: 3px;
 }
-label{
+label {
   display: inline-block;
   width: 100px;
 }
 </style>
-
-

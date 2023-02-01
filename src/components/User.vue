@@ -71,7 +71,7 @@ const breakpoints = {
             <figure class="image is-4by4">
               <img
                 class="is-rounded"
-                src="https://i.pinimg.com/originals/05/11/45/051145a8e366876f859378154aa7df8b.jpg"
+                src="https://i.pinimg.com/564x/15/a8/bc/15a8bc7417bb5583b96c24a359fd5dfe.jpg"
                 alt="UserPicture"
               />
             </figure>
@@ -79,7 +79,7 @@ const breakpoints = {
 
           <div class="level-item">
             <div class="is-6 is-offset-32 has-text-centered">
-              <h1 class="title is-2">User Name<br /></h1>
+              <h1 class="title is-2">Dr. Panda<br /></h1>
               <h2 class="subtitle is-1 has-text-primary has-text-weight-bold">
                 <br />750
               </h2>
@@ -110,16 +110,16 @@ const breakpoints = {
                 <div class="card">
                   <figure class="image is-4by3">
                     <img
-                      src="https://i.pinimg.com/564x/c5/1a/41/c51a41fad6717db9106f0f2a89a2ea00.jpg"
+                      src="https://i.pinimg.com/236x/83/c1/e7/83c1e7c64211f263f588a2f74dd309c6.jpg"
                       alt=""
                     />
                   </figure>
                 </div>
                 <div class="card-content is-overlay">
-                  <span class="tag is-primary">Number of visits</span>
+                  <span class="tag is-primary is-size-5">20</span>
                 </div>
                 <div class="card-content slider-text">
-                  <div class="is-size-5 box">IMAGE_CAPTION_HERE</div>
+                  <div class="is-size-5 box">RESTAURANT_NAME</div>
                 </div>
               </div>
             </Slide>
@@ -134,10 +134,10 @@ const breakpoints = {
                   </figure>
                 </div>
                 <div class="card-content is-overlay">
-                  <span class="tag is-primary">Number of visits</span>
+                  <span class="tag is-primary is-size-5">9</span>
                 </div>
                 <div class="card-content slider-text">
-                  <div class="is-size-5 box">IMAGE_CAPTION_HERE</div>
+                  <div class="is-size-5 box">RESTAURANT_NAME</div>
                 </div>
               </div>
             </Slide>
@@ -152,10 +152,10 @@ const breakpoints = {
                   </figure>
                 </div>
                 <div class="card-content is-overlay">
-                  <span class="tag is-primary">Number of visits</span>
+                  <span class="tag is-primary is-size-5">15</span>
                 </div>
                 <div class="card-content slider-text">
-                  <div class="is-size-5 box">IMAGE_CAPTION_HERE</div>
+                  <div class="is-size-5 box">RESTAURANT_NAME</div>
                 </div>
               </div>
             </Slide>
@@ -170,10 +170,10 @@ const breakpoints = {
                   </figure>
                 </div>
                 <div class="card-content is-overlay">
-                  <span class="tag is-primary">Number of visits</span>
+                  <span class="tag is-primary is-size-5">10</span>
                 </div>
                 <div class="card-content slider-text">
-                  <div class="is-size-5 box">IMAGE_CAPTION_HERE</div>
+                  <div class="is-size-5 box">RESTAURANT_NAME</div>
                 </div>
               </div>
             </Slide>
@@ -188,10 +188,10 @@ const breakpoints = {
                   </figure>
                 </div>
                 <div class="card-content is-overlay">
-                  <span class="tag is-primary">Number of visits</span>
+                  <span class="tag is-primary is-size-5">8</span>
                 </div>
                 <div class="card-content slider-text">
-                  <div class="is-size-5 box">IMAGE_CAPTION_HERE</div>
+                  <div class="is-size-5 box">RESTAURANT_NAME</div>
                 </div>
               </div>
             </Slide>

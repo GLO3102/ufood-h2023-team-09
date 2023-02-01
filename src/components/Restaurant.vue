@@ -113,7 +113,7 @@
   });
 </script>
 
-<style>
+<style scoped>
 .slider_container{
   width: 50%;
   margin: auto;
@@ -122,8 +122,8 @@
 .carousel__item {
   min-height: 200px;
   width: 100%;
-  background-color: var(--vc-clr-primary);
-  color: var(--vc-clr-white);
+  background-color: greenyellow;
+  color: white;
   font-size: 20px;
   border-radius: 8px;
   display: flex;

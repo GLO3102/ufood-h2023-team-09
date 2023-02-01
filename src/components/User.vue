@@ -20,6 +20,18 @@ data: () => ({
 });
 </script>
 <script setup>
+//TO REMOVE
+const toggleViews = () => {
+  if (useUserStore().favoriteRestaurants.length === 0) {
+    useUserStore().$patch({ favoriteRestaurants: ["domino"] });
+  } else {
+    useUserStore().$patch({ favoriteRestaurants: [] });
+  }
+  let viewRestaurantsEmpty = document.getElementById("viewRestaurantsEmpty");
+  let viewRestaurants = document.getElementById("viewRestaurants");
+  viewRestaurantsEmpty.classList.toggle("is-hidden");
+  viewRestaurants.classList.toggle("is-hidden");
+};
 const isFavoriteRestaurantsEmpty = computed(() => {
   return useUserStore().favoriteRestaurants.length === 0;
 });
@@ -77,9 +89,9 @@ const breakpoints = {
       </div>
       <!-- End user info-->
 
-      <!-- Begin Work Content IF USER HAVE VISITED RESTAURANTS-->
-      <!--Carousel setting set on page-->
-      <div v-show="isFavoriteRestaurantsEmpty">
+      <div>
+        <!-- Begin Work Content IF USER HAVE VISITED RESTAURANTS-->
+        <!--Carousel setting set on page-->
         <div v-show="!isFavoriteRestaurantsEmpty" class="box">
           <!--carousel title-->
           <div class="has-text-centered">
@@ -210,8 +222,16 @@ const breakpoints = {
     <div class="hero-foot">
       <div class="">
         <div class="tabs is-centered">
-          <ul>
+          <ul class="bottom-ul">
             <li><a href="./User.vue">And this is the bottom</a></li>
+            <!--TO REMOVE-->
+            <button
+              id="temporary"
+              class="button is-size-4"
+              v-on:click="toggleViews()"
+            >
+              CLICK TO SEE OTHER VIEW WITH RESTAURANTS
+            </button>
           </ul>
         </div>
       </div>
@@ -220,6 +240,15 @@ const breakpoints = {
 </template>
 
 <style scoped>
+#temporary {
+  background-color: aqua;
+  border-color: black;
+  border-width: 10px;
+}
+.bottom-ul {
+  display: flex;
+  flex-direction: column;
+}
 div {
   margin: 3px;
 }

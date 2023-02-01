@@ -33,16 +33,59 @@
       <IloveWeb></IloveWeb>
     </div>
 
+    <div class="box">
+          <!--carousel title-->
+          <div class="has-text-centered">
+            <div>
+              <h1 class="title is-3" >Menu                     
+<br /></h1>
+            </div>
+          </div>
     <div class="slider_container">
-      <Carousel id="gallery" :items-to-show="1" :wrap-around="false" v-model="currentSlide">
-      <Slide v-for="slide in resto_data.pictures.length" :key="slide">
-        <div class="carousel__item">{{ slide }}</div>
+      <Carousel id="gallery" :items-to-show="1" :wrap-around="true" v-model="currentSlide"
+            :settings="settings"
+            :breakpoints="breakpoints">
+            <Slide  :key="slide">
+        <div class="carousel__item">
+                <div class="card">
+                  <figure >
+                    <img
+                      src="https://www.menupix.com/menus/2016022328479_01.jpg"
+                      alt=""
+                    />
+                  </figure>
+                </div>          
+          </div>
+      </Slide>      
+      <Slide  :key="slide">
+        <div class="carousel__item">
+                <div class="card">
+                  <figure >
+                    <img
+                      src="https://offloadmedia.feverup.com/secretlosangeles.com/wp-content/uploads/2019/10/22095522/70991088_150912036128545_2481090655335180758_n.jpg"
+                      alt=""
+                    />
+                  </figure>
+                </div>          
+          </div>
+      </Slide>
+      <Slide :key="slide">
+        <div class="carousel__item">
+                <div class="card">
+                  <figure >
+                    <img
+                      src="http://www.lphishiring.com/assets/culture-1.jpg"
+                      alt=""
+                    />
+                  </figure>
+                </div>          
+          </div>
       </Slide>
       </Carousel>
 
       <Carousel
         id="thumbnails"
-        :items-to-show="4"
+        :items-to-show="2"
         :wrap-around="true"
         v-model="currentSlide"
         ref="carousel">
@@ -51,6 +94,7 @@
         </Slide>
       </Carousel>
     </div>
+    </div> 
   </div>
 </template>
 
@@ -115,7 +159,7 @@
 
 <style scoped>
 .slider_container{
-  width: 50%;
+  width: 100%;
   margin: auto;
   border: 3px solid #73AD21;
 }

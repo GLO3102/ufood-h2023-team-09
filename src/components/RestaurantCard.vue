@@ -22,7 +22,7 @@
           </figure>
         </div>
         <div class="media-content">
-          <p class="title is-4">John Smith</p>
+          <p class="title is-4">{{name}}</p>
           <p class="subtitle is-6">@johnsmith</p>
         </div>
       </div>
@@ -38,5 +38,10 @@
   </div>
 </template>
 
+<script>
+export default {
+  props: ['name']
+}
+</script>
 
 

@@ -1,6 +1,15 @@
 <template>
   <div class = "container">
     {{resto_data.name}}
+    <div>
+      {{ resto_data.address }}
+    </div>
+    <div>
+      {{ resto_data.location }}
+    </div>
+    <div>
+      {{ resto_data.tel }}
+    </div>
     <div class="rating-container">
       <svg style="display:none;">
         <defs>
@@ -15,18 +24,18 @@
       </svg>
       <div class="rating">
       <!--   <div class="rating-bg" style="width: 90%;"></div> -->
-        <progress class="rating-bg" value="3" max="5"></progress>
+        <progress class="rating-bg" value="0" max="5"></progress>
         <svg><use xlink:href="#fivestars"/></svg>
       </div>
     </div>
 
-    <div class="schedule" id="schedule" ref="schedule">
-      <button v-on:click="formatSchedule1(resto_data.opening_hours)"> hELLO</button>
+    <div class="schedule" id="schedule">
+      <IloveWeb></IloveWeb>
     </div>
-    
+
     <div class="slider_container">
       <Carousel id="gallery" :items-to-show="1" :wrap-around="false" v-model="currentSlide">
-      <Slide v-for="slide in 10" :key="slide">
+      <Slide v-for="slide in resto_data.pictures.length" :key="slide">
         <div class="carousel__item">{{ slide }}</div>
       </Slide>
       </Carousel>
@@ -37,7 +46,7 @@
         :wrap-around="true"
         v-model="currentSlide"
         ref="carousel">
-        <Slide v-for="slide in 10" :key="slide">
+        <Slide v-for="slide in resto_data.pictures.length" :key="slide">
           <div class="carousel__item" @click="slideTo(slide - 1)">{{ slide }}</div>
         </Slide>
       </Carousel>
@@ -69,14 +78,17 @@
 <script>
   import { defineComponent } from 'vue';
   import { Carousel, Slide } from 'vue3-carousel';
+  import  Schedule  from './Schedule.vue';
   import json from './hardcoded_resto.json';
   import 'vue3-carousel/dist/carousel.css';
+  
 
   export default defineComponent ({
     name: 'Basic',
     components: {
       Carousel,
-      Slide
+      Slide,
+      "IloveWeb" : Schedule
     },
     data: () => ({
       currentSlide: 0,

@@ -10,7 +10,7 @@
         ]
     },
     "opening_hours": {
-        "monday": "12h-24h",
+        "monday": "12h-13h",
         "tuesday":"12h-24h",
         "wednesday":"12h-24h",
         "thursday":"12h-24h",
@@ -19,6 +19,9 @@
         "sunday":"12h-24h"
     },
     "pictures": [
+        "picture.com",
+        "picture.com",
+        "picture.com",
         "picture.com"
     ],
     "genres": [

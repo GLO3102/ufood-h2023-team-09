@@ -61,10 +61,17 @@ const login = () => {
 
 <style scoped>
 #loginBox {
-  min-width: 400px;
-  max-width: 800px;
+  min-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
 }
+@media screen and (max-width: 560px) {
+  #loginBox {
+    min-width: 300px;
+    max-width: 500px;
+  }
+}
+
 .hero-body {
   display: flex;
   justify-content: center;

@@ -5,6 +5,7 @@ export const useUserStore = defineStore({
     state: () => ({
         isLoggedIn: false,
         username: "username",
+        favoriteRestaurants: [],
     }),
     actions: {
         login() {
@@ -14,5 +15,4 @@ export const useUserStore = defineStore({
             this.isLoggedIn = false;
         }
     }
-});
-            
+});           

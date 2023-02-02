@@ -35,7 +35,7 @@
             "rating": 4.2
         },
         {
-            "name": "La Barberie",
+            "name": "Chez Bernie",
             "id": "53ec122d27aafe77d8c37b8",
             "address": "310 Rue Saint-Roch, Québec, QC G1K 6S2",
             "tel": "(418) 522-4373",
@@ -56,7 +56,7 @@
                 "sunday": "12h-24h"
             },
             "pictures": [
-                "https://media.timeout.com/images/105921028/750/422/image.jpg",
+                "https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=1600",
                 "picture.com",
                 "picture.com",
                 "picture.com"
@@ -68,7 +68,7 @@
             "rating": 4.2
         },
         {
-            "name": "La Barberie",
+            "name": "Il Castelo",
             "id": "53ec122d27aafe77d8c37b8",
             "address": "310 Rue Saint-Roch, Québec, QC G1K 6S2",
             "tel": "(418) 522-4373",
@@ -89,7 +89,7 @@
                 "sunday": "12h-24h"
             },
             "pictures": [
-                "https://media.timeout.com/images/105921028/750/422/image.jpg",
+                "https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=1600",
                 "picture.com",
                 "picture.com",
                 "picture.com"

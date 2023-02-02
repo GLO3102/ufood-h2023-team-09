@@ -1,53 +1,36 @@
 <script setup>
+import RestaurantCard from "./RestaurantCard.vue";
+import json from "./hardcoded_resto.json";
+let restaurantsList = json;
 // Toggle dropdown menu
-function dropDownOnOff() {
+function dropDownToggle() {
   document.getElementById("dropdownCategories").classList.toggle("is-active");
 }
 // Close the dropdown menu when a click is made elswhere
-window.onclick = function () {
-  document.getElementById("dropdownCategories").classList.remove("is-active");
-};
+window.onclick = function (event) {
+  try{
+    document.getElementById("dropdownCategories").classList.remove("is-active");
+  } catch(error){
+    // An error is thrown when we click on a link (this error doesn't have any impact)
+    if (!(error  instanceof TypeError)){
+      throw error;
+      }
+  }
+}
 // Toggle the range filter buttons
 function rangeFilter(range) {
   document.getElementById(range).classList.toggle("is-active");
-}
-
-function displayRestaurantsList() {
-  const restaurantsList = {
-    items: [
-      {
-        name: "La Barberie",
-        id: "53ec122d27aafe77d8c37b8",
-        address: "310 Rue Saint-Roch, Québec, QC G1K 6S2",
-        tel: "(418) 522-4373",
-        location: {
-          type: "Point",
-          coordinates: [-71.2180951, 46.8178912],
-        },
-        opening_hours: { monday: "12h-24h" },
-        pictures: ["picture.com"],
-        genres: ["casual"],
-        price_range: 3,
-        rating: 4.2,
-      },
-    ],
-    total: 1,
-  };
-  let container = document.getElementById("restaurant-list");
-  restaurantsList.items.forEach((item, index) => {
-    let card = document.createElement("restaurant-card");
-    card.name = "test";
-    container.appendChild(card);
+  let list = [...document.getElementsByClassName('restaurant-card')];
+  list.forEach((card) => {
+    let test = range;
+    if(range === `range${card.dataset.range}`){
+      card.style.display = 'block';
+    }else{
+      card.style.display = 'none';
+    }
+    
   });
 }
-</script>
-
-<script>
-import RestaurantCard from "./RestaurantCard.vue";
-export default {
-  name: "app",
-  components: { "restaurant-card": RestaurantCard },
-};
 </script>
 
 <template>
@@ -61,7 +44,7 @@ export default {
         <div
           class="dropdown"
           id="dropdownCategories"
-          @click.stop="dropDownOnOff()"
+          @click.stop="dropDownToggle()"
         >
           <div class="dropdown-trigger">
             <button
@@ -102,17 +85,31 @@ export default {
       </div>
     </div>
 
-    <div class="restaurant-list" @mounted="displayRestaurantsList()">
-      <div class="restaurant-card"><restaurant-card></restaurant-card></div>
-      <div class="restaurant-card"><restaurant-card></restaurant-card></div>
-      <div class="restaurant-card"><restaurant-card></restaurant-card></div>
-      <div class="restaurant-card"><restaurant-card></restaurant-card></div>
-      <div class="restaurant-card"><restaurant-card></restaurant-card></div>
-      <div class="restaurant-card"><restaurant-card></restaurant-card></div>
-      <div class="restaurant-card"><restaurant-card></restaurant-card></div>
-      <div class="restaurant-card"><restaurant-card></restaurant-card></div>
-      <div class="restaurant-card"><restaurant-card></restaurant-card></div>
-      <div class="restaurant-card"><restaurant-card></restaurant-card></div>
+    <div class="restaurant-list">
+      <div v-for="restaurant in restaurantsList.items" :key="restaurant">
+        <router-link to="/restaurant">
+          <div class="restaurant-card" :id="restaurant.id" @click="Restaurant" :data-range="restaurant.price_range">
+            <RestaurantCard
+              :name="restaurant.name"
+              :id="restaurant.id"
+              :address="restaurant.address"
+              :tel="restaurant.tel"
+              :location="restaurant.location"
+              :opening_hours="restaurant.opening_hours"
+              :monday="restaurant.opening_hours.monday"
+              :tuesday="restaurant.opening_hours.tuesday"
+              :wednesday="restaurant.opening_hours.wednesday"
+              :thursday="restaurant.opening_hours.thursday"
+              :friday="restaurant.opening_hours.friday"
+              :saturday="restaurant.opening_hours.sturday"
+              :sunday="restaurant.opening_hours.sunday"
+              :pictures="restaurant.pictures"
+              :genres="restaurant.genres"
+              :price_range="restaurant.price_range"
+              :rating="restaurant.rating"
+            ></RestaurantCard></div
+        ></router-link>
+      </div>
     </div>
 
     <div>GLO-3102 Home</div>

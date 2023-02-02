@@ -126,6 +126,7 @@
   import json from './hardcoded_resto.json';
   import 'vue3-carousel/dist/carousel.css';
   
+  json = json.items[0];
 
   export default defineComponent ({
     name: 'Basic',

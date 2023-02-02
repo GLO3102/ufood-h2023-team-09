@@ -32,6 +32,7 @@
     <div class="schedule" id="schedule">
       <IloveWeb></IloveWeb>
     </div>
+    <MapLocation></MapLocation>
 
     <div class="box">
           <!--carousel title-->
@@ -123,6 +124,7 @@
   import { defineComponent } from 'vue';
   import { Carousel, Slide } from 'vue3-carousel';
   import  Schedule  from './Schedule.vue';
+  import MapLocation from './MapLocation.vue';
   import json from './hardcoded_resto.json';
   import 'vue3-carousel/dist/carousel.css';
   
@@ -133,6 +135,7 @@
     components: {
       Carousel,
       Slide,
+      MapLocation,
       "IloveWeb" : Schedule
     },
     data: () => ({
@@ -142,17 +145,6 @@
     methods: {
       slideTo(val) {
         this.currentSlide = val;
-      },
-      
-      formatSchedule(array_json){
-        let container1 = document.getElementById("schedule");
-        let table = document.createElement("table");
-        for (let key in array_json){
-          let table_element = document.createElement("tr");
-          table_element.textContent = key + "->" + array_json[key];
-          table.appendChild(table_element);
-        }
-        container1.appendChild(table);
       }
     }
   });

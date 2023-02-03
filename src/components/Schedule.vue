@@ -1,6 +1,5 @@
 <script setup>
     import json from "./hardcoded_resto.json";
-    json = json.items[0];
 </script>
 
 <template>
@@ -11,7 +10,7 @@
                     <th><abbr title="Weekday">Weekday</abbr></th>
                     <th><abbr title="Opening hours">Opened</abbr></th>
                 </thead>
-                <tbody v-for="(hour, day) in json.opening_hours" :key="day">
+                <tbody v-for="(hour, day) in  json.items[0].opening_hours" :key="day">
                     <tr>
                         <th> {{day}} </th>
                         <td> {{hour}}</td>

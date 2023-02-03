@@ -45,8 +45,6 @@
 
       <div class="box" id="second-box">
         <div>
-
-
           <h1 class="title">About us</h1>
           <div class="resto-info">
             <Schedule></Schedule>
@@ -72,20 +70,21 @@
                 </tbody>
               </table>
             </div>
+            <Carousel id="gallery" :items-to-show="1" :wrap-around="true" v-model="currentSlide" :settings="settings">
+              <Slide v-for="pic in json.pictures" :key="pic">
+                <div class="carousel__item">
+                  <div class="card">
+                    <figure>
+                      <img :src="pic" alt="" />
+                    </figure>
+                  </div>
+                </div>
+              </Slide>
+            </Carousel>
           </div>
         </div>
 
-        <Carousel id="gallery" :items-to-show="1" :wrap-around="true" v-model="currentSlide" :settings="settings">
-          <Slide v-for="pic in json.pictures" :key="pic">
-            <div class="carousel__item">
-              <div class="card">
-                <figure>
-                  <img :src="pic" alt="" />
-                </figure>
-              </div>
-            </div>
-          </Slide>
-        </Carousel>
+
       </div>
 
       <div>
@@ -268,6 +267,7 @@ span+span {
   width: 100%;
   margin: auto;
   border: 3px solid #73AD21;
+  flex-shrink: 1;
 }
 
 .carousel__item {
@@ -282,8 +282,7 @@ span+span {
 
 .carousel {
   position: relative;
-
-  display: flex;
+  display: block;
   justify-content: center;
   flex-direction: column;
   flex-shrink: 1;
@@ -291,11 +290,9 @@ span+span {
 
 .carousel__item {
   position: relative;
-
-  display: flex;
   justify-content: center;
   flex-direction: column;
-
+  flex-shrink: 1;
 
 }
 
@@ -306,18 +303,17 @@ span+span {
 .carousel__prev {
   box-sizing: content-box;
   border: 5px solid white;
+  flex-shrink: 1;
 }
 
-.evaluation {
-  display: flex;
-}
+
 </style>
-<style>
+<style scoped>
 .carousel__slide {
   padding: 25px;
   opacity: 0.25;
   transform: scale(0.8);
-
+  
 
 }
 
@@ -378,12 +374,7 @@ span+span {
 }
 
 #second-box {
-  display: flex;
-  flex-shrink: 1;
-}
-
-#gallery{
-  width: 250px;
+  display: block;
 }
 
 #tags {

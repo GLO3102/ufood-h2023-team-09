@@ -69,7 +69,7 @@ function rangeFilter(range) {
 </script>
 
 <template>
-  <div>
+  <div class="home-container">
     <div class="search-filter">
       <div class="search">
         <input class="input" type="search" placeholder="Search..." />
@@ -152,6 +152,11 @@ function rangeFilter(range) {
 
 
 <style scoped>
+.home-container{
+  background: #fff;
+  box-shadow: inset 100px 0px 100px -50px #959595, 
+              inset -100px 0px 100px -50px #959595;
+}
 .search-filter {
   display: flex;
   justify-content: center;

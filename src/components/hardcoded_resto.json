@@ -101,7 +101,41 @@
             "rating": 4.2
         },
         {
-            "name": "La Barberie",
+            "name": "Chez Raul",
+            "id": "53ec122d27adfe77dec37b8",
+            "address": "310 Rue Saint-Roch, Québec, QC G1K 6S2",
+            "tel": "(418) 522-4373",
+            "location": {
+                "type": "Point",
+                "coordinates": [
+                    -71.2180951,
+                    46.8178912
+                ]
+            },
+            "opening_hours": {
+                "monday": "12h-13h",
+                "tuesday": "12h-24h",
+                "wednesday": "12h-24h",
+                "thursday": "12h-24h",
+                "friday": "12h-24h",
+                "saturday": "12h-24h",
+                "sunday": "12h-24h"
+            },
+            "pictures": [
+                "https://images.pexels.com/photos/1058277/pexels-photo-1058277.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                "picture.com",
+                "picture.com",
+                "picture.com"
+            ],
+            "genres": [
+                "casual",
+                "asian"
+            ],
+            "price_range": 3,
+            "rating": 4.2
+        },
+        {
+            "name": "St Hubert",
             "id": "53ec122d27aafe77d8c37b8",
             "address": "310 Rue Saint-Roch, Québec, QC G1K 6S2",
             "tel": "(418) 522-4373",
@@ -122,20 +156,20 @@
                 "sunday": "12h-24h"
             },
             "pictures": [
-                "https://media.timeout.com/images/105921028/750/422/image.jpg",
+                "https://dynl.mktgcdn.com/p/nSFXFkGUeEVk5pNK7gO8tevbjNtECwez46TG0Ypv4w0/800x800.jpg",
                 "picture.com",
                 "picture.com",
                 "picture.com"
             ],
             "genres": [
-                "casual"
+                "fast food"
             ],
             "price_range": 1,
-            "rating": 4.2
+            "rating": 3.2
         },
         {
-            "name": "La Barberie",
-            "id": "53ec122d27aafe77d8c37b8",
+            "name": "Pizza Pizza",
+            "id": "53ec122d27aafe77d8c8837b8",
             "address": "310 Rue Saint-Roch, Québec, QC G1K 6S2",
             "tel": "(418) 522-4373",
             "location": {
@@ -155,21 +189,22 @@
                 "sunday": "12h-24h"
             },
             "pictures": [
-                "https://media.timeout.com/images/105921028/750/422/image.jpg",
+                "https://brocku.ca/brock-news/wp-content/uploads/2019/01/Pizza-Pizza-RS-1600x1200.jpg?x70330",
                 "picture.com",
                 "picture.com",
                 "picture.com"
             ],
             "genres": [
-                "casual"
+                "fast food",
+                "Pizza"
             ],
-            "price_range": 4,
+            "price_range": 3,
             "rating": 4.2
         },
         {
-            "name": "La Barberie",
+            "name": "Madame Chose",
             "id": "53ec122d27aafe77d8c37b8",
-            "address": "310 Rue Saint-Roch, Québec, QC G1K 6S2",
+            "address": "5401 Boulevard des Galeries, room FM28  B, Québec, QC G2K 1N4",
             "tel": "(418) 522-4373",
             "location": {
                 "type": "Point",
@@ -188,7 +223,7 @@
                 "sunday": "12h-24h"
             },
             "pictures": [
-                "https://media.timeout.com/images/105921028/750/422/image.jpg",
+                "https://www.quebec-cite.com/sites/otq/files/styles/gallery_desktop/public/simpleview/1_1-7_5AA1932E-2672-4EC9-9CA674F115799245_15a6748f-5beb-4bb0-b4c50794bb2b7c19.jpg?itok=51B_12Dc",
                 "picture.com",
                 "picture.com",
                 "picture.com"
@@ -200,7 +235,7 @@
             "rating": 4.2
         },
         {
-            "name": "La Barberie",
+            "name": "Chez Vegan",
             "id": "53ec122d27aafe77d8c37b8",
             "address": "310 Rue Saint-Roch, Québec, QC G1K 6S2",
             "tel": "(418) 522-4373",
@@ -221,7 +256,7 @@
                 "sunday": "12h-24h"
             },
             "pictures": [
-                "https://media.timeout.com/images/105921028/750/422/image.jpg",
+                "https://images.pexels.com/photos/2253643/pexels-photo-2253643.jpeg?auto=compress&cs=tinysrgb&w=1600",
                 "picture.com",
                 "picture.com",
                 "picture.com"
@@ -233,7 +268,7 @@
             "rating": 4.2
         },
         {
-            "name": "La Barberie",
+            "name": "Fun Resto",
             "id": "53ec122d27aafe77d8c37b8",
             "address": "310 Rue Saint-Roch, Québec, QC G1K 6S2",
             "tel": "(418) 522-4373",
@@ -254,7 +289,7 @@
                 "sunday": "12h-24h"
             },
             "pictures": [
-                "https://media.timeout.com/images/105921028/750/422/image.jpg",
+                "https://images.pexels.com/photos/1267315/pexels-photo-1267315.jpeg?auto=compress&cs=tinysrgb&w=1600",
                 "picture.com",
                 "picture.com",
                 "picture.com"
@@ -266,7 +301,7 @@
             "rating": 4.2
         },
         {
-            "name": "La Barberie",
+            "name": "Cafe Origine",
             "id": "53ec122d27aafe77d8c37b8",
             "address": "310 Rue Saint-Roch, Québec, QC G1K 6S2",
             "tel": "(418) 522-4373",
@@ -287,40 +322,7 @@
                 "sunday": "12h-24h"
             },
             "pictures": [
-                "https://media.timeout.com/images/105921028/750/422/image.jpg",
-                "picture.com",
-                "picture.com",
-                "picture.com"
-            ],
-            "genres": [
-                "casual"
-            ],
-            "price_range": 3,
-            "rating": 4.2
-        },
-        {
-            "name": "La Barberie",
-            "id": "53ec122d27aafe77d8c37b8",
-            "address": "310 Rue Saint-Roch, Québec, QC G1K 6S2",
-            "tel": "(418) 522-4373",
-            "location": {
-                "type": "Point",
-                "coordinates": [
-                    -71.2180951,
-                    46.8178912
-                ]
-            },
-            "opening_hours": {
-                "monday": "12h-13h",
-                "tuesday": "12h-24h",
-                "wednesday": "12h-24h",
-                "thursday": "12h-24h",
-                "friday": "12h-24h",
-                "saturday": "12h-24h",
-                "sunday": "12h-24h"
-            },
-            "pictures": [
-                "https://media.timeout.com/images/105921028/750/422/image.jpg",
+                "https://images.pexels.com/photos/1402407/pexels-photo-1402407.jpeg?auto=compress&cs=tinysrgb&w=1600",
                 "picture.com",
                 "picture.com",
                 "picture.com"

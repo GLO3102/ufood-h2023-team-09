@@ -227,7 +227,7 @@ const breakpoints = {
             <!--TO REMOVE-->
             <button
               id="temporary"
-              class="button is-size-4"
+              class="button is-size-6"
               v-on:click="toggleViews()"
             >
               CLICK TO SEE OTHER VIEW WITH RESTAURANTS

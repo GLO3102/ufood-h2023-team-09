@@ -1,5 +1,6 @@
 <script setup>
     import json from "./hardcoded_resto.json";
+    json = json.items[0];
 </script>
 
 <template>

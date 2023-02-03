@@ -101,11 +101,11 @@ const breakpoints = {
           </div>
 
           <Carousel
-            wrap-around="true"
+            :wrap-around="true"
             :settings="settings"
             :breakpoints="breakpoints"
           >
-            <Slide :key="slide">
+            <Slide key="slide">
               <div class="carousel__item">
                 <div class="card">
                   <figure class="image is-4by3">
@@ -123,7 +123,7 @@ const breakpoints = {
                 </div>
               </div>
             </Slide>
-            <Slide :key="slide">
+            <Slide key="slide">
               <div class="carousel__item">
                 <div class="card">
                   <figure class="image is-4by3">
@@ -141,7 +141,7 @@ const breakpoints = {
                 </div>
               </div>
             </Slide>
-            <Slide :key="slide">
+            <Slide key="slide">
               <div class="carousel__item">
                 <div class="card">
                   <figure class="image is-4by3">
@@ -159,7 +159,7 @@ const breakpoints = {
                 </div>
               </div>
             </Slide>
-            <Slide :key="slide">
+            <Slide key="slide">
               <div class="carousel__item">
                 <div class="card">
                   <figure class="image is-4by3">
@@ -177,7 +177,7 @@ const breakpoints = {
                 </div>
               </div>
             </Slide>
-            <Slide :key="slide">
+            <Slide key="slide">
               <div class="carousel__item">
                 <div class="card">
                   <figure class="image is-4by3">

@@ -126,6 +126,7 @@
   import json from './hardcoded_resto.json';
   import 'vue3-carousel/dist/carousel.css';
   
+  json = json.items[0];
 
   export default defineComponent ({
     name: 'Basic',
@@ -184,7 +185,8 @@
   box-sizing: content-box;
   border: 5px solid white;
 }
-
+</style>
+<style>
 .rating {
   width: 120px;
   height: 24px;

@@ -23,7 +23,4 @@
 </template>
 
 <style scoped>
-.box{
-    
-}
 </style>

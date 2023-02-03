@@ -1,23 +1,13 @@
 <template>
-  <div class = "container">
-    {{resto_data.name}}
-    <div>
-      <span :style="'color:' + color_map[resto_data.price_range-1]">
-        {{ "$".repeat(resto_data.price_range)}}</span>
-  </div>
-    <div>
-      {{ resto_data.address }}
-    </div>
-    <div>
-      {{ resto_data.location }}
-    </div>
-    <div>
-      {{ resto_data.tel }}
-    </div>
-    <div>
-      <span v-for="genre in resto_data.genres" :key="genre" class="tag is-info" style="margin: 2px;">{{genre}}</span>
-  </div>
-    <div class="rating-container">
+  <div class="resto">
+
+    
+  <div class="container is-max-widescreen">
+    <br><br>
+    <section>
+      <div class="box">
+        <h1 class="title">{{resto_data.name}}</h1>
+        <div class="rating-container">
       <svg style="display:none;">
         <defs>
           <symbol id="fivestars">
@@ -29,16 +19,35 @@
           </symbol>
         </defs>
       </svg>
-      <div class="rating">
-      <!--   <div class="rating-bg" style="width: 90%;"></div> -->
-        <progress class="rating-bg" value="0" max="5"></progress>
-        <svg><use xlink:href="#fivestars"/></svg>
+      <div class="evaluation">
+          <div class="rating">
+        <!--   <div class="rating-bg" style="width: 90%;"></div> -->
+          <progress class="rating-bg" :value="resto_data.rating" max="5"></progress>
+          <svg><use xlink:href="#fivestars"/></svg> 
+        </div>
+        <span class="tag is-warning">{{resto_data.rating}}</span>
+        <span :class="'tag is-' + color_map[resto_data.price_range-1]">
+        {{ "$".repeat(resto_data.price_range) }}</span>
+      </div>
+     
+    </div>
+    </div>
+
+    <div class="box">
+      <div class="column one-half">
+        <h1 class="title">About us</h1>
+        <Schedule></Schedule>
       </div>
     </div>
 
-    <div class="schedule" id="schedule">
-      <IloveWeb></IloveWeb>
+    <div>
+      {{ resto_data.location }}
     </div>
+    <div>
+      {{ resto_data.tel }}
+    </div>
+
+
     <MapLocation></MapLocation>
     <Carousel id="gallery" :items-to-show="1" :wrap-around="true" v-model="currentSlide"
             :settings="settings">
@@ -182,33 +191,21 @@
             </template>
           </Carousel>
     </div>
+    </div> 
+    </section>
+  </div>
 
+</div>
 
 </template>
 
 <script setup>
+  const color_map = ["black", "warning", "primary"];
+
  
-  import { onMounted } from 'vue';
-  const color_map= ["#04c23d","#f0d802","#f08502","#f00202"];
-  const hours = json.opening_hours;
 
-  onMounted((hours) => {
-    console.log("Mounted");
-    formatSchedule1(hours);
-  })
 
-  const formatSchedule1 = (hours) => {
-    let container1 = document.getElementById("schedule");
-    let table = document.createElement("table");
-    for (let key in hours){
-      let table_element = document.createElement("tr");
-      table_element.textContent = key + "->" + hours[key];
-      table.appendChild(table_element);
-    }
-    container1.appendChild(table);
-    
-  }
-  const settings = {
+const settings = {
   itemsToShow: 1,
 };
 
@@ -253,7 +250,6 @@ const breakpoints = {
       Carousel,
       Slide,
       MapLocation,
-      "IloveWeb" : Schedule
     },
     data: () => ({
       currentSlide: 0,
@@ -268,6 +264,33 @@ const breakpoints = {
 </script>
 
 <style scoped>
+span + span {
+    margin-left: 10px;
+}
+.resto{
+  background: #fff;
+  box-shadow: inset 100px 0px 100px -50px #959595, 
+              inset -100px 0px 100px -50px #959595;
+}
+.container{
+
+  margin: auto;
+}
+.image img {
+  object-fit: cover;
+}
+.slider_container{
+  width: 100%;
+  margin: auto;
+  border: 3px solid #73AD21;
+}
+.carousel__item {
+  min-height: 200px;
+  width: 100%;
+  background-color: greenyellow;
+  color: white;
+  font-size: 20px;
+  border-radius: 8px;
 
 .carousel {
   position: relative;
@@ -292,13 +315,43 @@ const breakpoints = {
   box-sizing: content-box;
   border: 5px solid white;
 }
+.evaluation{
+  display: flex;
+}
 </style>
 <style>
+.carousel__slide {
+  padding: 25px;
+  opacity: 0.25;
+  transform: scale(0.8);
+
+
+}
+.carousel__slide--prev {
+
+  opacity: 0.5;
+
+}
+.carousel__slide--next {
+
+  opacity: 0.5;
+
+}
+.carousel__slide--active {
+
+  opacity: 1.0;
+  transform: scale(1);
+}
+
+.evaluation{
+  display: flex;
+}
+
 .rating {
   width: 120px;
   height: 24px;
   position: relative;
-  background-color: gray;
+  margin-right: 10px;
 }
 
 .rating progress.rating-bg {

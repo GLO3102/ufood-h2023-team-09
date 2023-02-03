@@ -2,6 +2,10 @@
   <div class = "container">
     {{resto_data.name}}
     <div>
+      <span :style="'color:' + color_map[resto_data.price_range-1]">
+        {{ "$".repeat(resto_data.price_range)}}</span>
+  </div>
+    <div>
       {{ resto_data.address }}
     </div>
     <div>
@@ -10,6 +14,9 @@
     <div>
       {{ resto_data.tel }}
     </div>
+    <div>
+      <span v-for="genre in resto_data.genres" :key="genre" class="tag is-info" style="margin: 2px;">{{genre}}</span>
+  </div>
     <div class="rating-container">
       <svg style="display:none;">
         <defs>
@@ -33,19 +40,8 @@
       <IloveWeb></IloveWeb>
     </div>
     <MapLocation></MapLocation>
-
-    <div class="box">
-          <!--carousel title-->
-          <div class="has-text-centered">
-            <div>
-              <h1 class="title is-3" >Menu                     
-<br /></h1>
-            </div>
-          </div>
-    <div class="slider_container">
-      <Carousel id="gallery" :items-to-show="1" :wrap-around="true" v-model="currentSlide"
-            :settings="settings"
-            :breakpoints="breakpoints">
+    <Carousel id="gallery" :items-to-show="1" :wrap-around="true" v-model="currentSlide"
+            :settings="settings">
             <Slide  :key="slide">
         <div class="carousel__item">
                 <div class="card">
@@ -61,7 +57,7 @@
       <Slide  :key="slide">
         <div class="carousel__item">
                 <div class="card">
-                  <figure >
+                  <figure>
                     <img
                       src="https://offloadmedia.feverup.com/secretlosangeles.com/wp-content/uploads/2019/10/22095522/70991088_150912036128545_2481090655335180758_n.jpg"
                       alt=""
@@ -73,7 +69,7 @@
       <Slide :key="slide">
         <div class="carousel__item">
                 <div class="card">
-                  <figure >
+                  <figure>
                     <img
                       src="http://www.lphishiring.com/assets/culture-1.jpg"
                       alt=""
@@ -83,24 +79,117 @@
           </div>
       </Slide>
       </Carousel>
-
+    
       <Carousel
-        id="thumbnails"
-        :items-to-show="2"
-        :wrap-around="true"
-        v-model="currentSlide"
-        ref="carousel">
-        <Slide v-for="slide in resto_data.pictures.length" :key="slide">
-          <div class="carousel__item" @click="slideTo(slide - 1)">{{ slide }}</div>
-        </Slide>
-      </Carousel>
+            wrap-around="true"
+            :settings="settings"
+            :breakpoints="breakpoints"
+          >
+            <Slide :key="slide">
+              <div class="carousel__item">
+                <div class="card">
+                  <figure class="image is-4by3">
+                    <img
+                      src="https://i.pinimg.com/236x/83/c1/e7/83c1e7c64211f263f588a2f74dd309c6.jpg"
+                      alt=""
+                    />
+                  </figure>
+                </div>
+                <div class="card-content is-overlay">
+                  <span class="tag is-primary is-size-5">20</span>
+                </div>
+                <div class="card-content slider-text">
+                  <div class="is-size-5 box">RESTAURANT_NAME</div>
+                </div>
+              </div>
+            </Slide>
+            <Slide :key="slide">
+              <div class="carousel__item">
+                <div class="card">
+                  <figure class="image is-4by3">
+                    <img
+                      src="https://i.pinimg.com/564x/08/25/38/082538afc45124898e4a792a5250d352.jpg"
+                      alt=""
+                    />
+                  </figure>
+                </div>
+                <div class="card-content is-overlay">
+                  <span class="tag is-primary is-size-5">9</span>
+                </div>
+                <div class="card-content slider-text">
+                  <div class="is-size-5 box">RESTAURANT_NAME</div>
+                </div>
+              </div>
+            </Slide>
+            <Slide :key="slide">
+              <div class="carousel__item">
+                <div class="card">
+                  <figure class="image is-4by3">
+                    <img
+                      src="https://i.pinimg.com/564x/95/19/fb/9519fb6c2a9576b4017356c29fb15f93.jpg"
+                      alt=""
+                    />
+                  </figure>
+                </div>
+                <div class="card-content is-overlay">
+                  <span class="tag is-primary is-size-5">15</span>
+                </div>
+                <div class="card-content slider-text">
+                  <div class="is-size-5 box">RESTAURANT_NAME</div>
+                </div>
+              </div>
+            </Slide>
+            <Slide :key="slide">
+              <div class="carousel__item">
+                <div class="card">
+                  <figure class="image is-4by3">
+                    <img
+                      src="https://i.pinimg.com/564x/9f/2f/6b/9f2f6bd333752f91e23514ea1a946e3c.jpg"
+                      alt=""
+                    />
+                  </figure>
+                </div>
+                <div class="card-content is-overlay">
+                  <span class="tag is-primary is-size-5">10</span>
+                </div>
+                <div class="card-content slider-text">
+                  <div class="is-size-5 box">RESTAURANT_NAME</div>
+                </div>
+              </div>
+            </Slide>
+            <Slide :key="slide">
+              <div class="carousel__item">
+                <div class="card">
+                  <figure class="image is-4by3">
+                    <img
+                      src="https://i.pinimg.com/564x/98/10/2c/98102cbaf0d75501f968ece02a83482f.jpg"
+                      alt=""
+                    />
+                  </figure>
+                </div>
+                <div class="card-content is-overlay">
+                  <span class="tag is-primary is-size-5">8</span>
+                </div>
+                <div class="card-content slider-text">
+                  <div class="is-size-5 box">RESTAURANT_NAME</div>
+                </div>
+              </div>
+            </Slide>
+ 
+            <template #addons>
+              <Navigation />
+              <Pagination />
+            </template>
+          </Carousel>
     </div>
-    </div> 
-  </div>
+
+
 </template>
 
 <script setup>
+ 
   import { onMounted } from 'vue';
+  const color_map= ["#04c23d","#f0d802","#f08502","#f00202"];
   const hours = json.opening_hours;
 
   onMounted((hours) => {
@@ -119,6 +208,34 @@
     container1.appendChild(table);
     
   }
+  const settings = {
+  itemsToShow: 1,
+};
+
+const breakpoints = {
+  640: {
+    itemsToShow: 1.5,
+  },
+
+  750: {
+    itemsToShow: 1.8,
+  },
+
+  1000: {
+    itemsToShow: 2,
+  },
+  1200: {
+    itemsToShow: 3,
+  },
+
+  1300: {
+    itemsToShow: 3.5,
+  },
+  1500: {
+    itemsToShow: 4.5,
+  },
+};
+
 </script>
 <script>
   import { defineComponent } from 'vue';
@@ -151,29 +268,27 @@
 </script>
 
 <style scoped>
-.slider_container{
-  width: 100%;
-  margin: auto;
-  border: 3px solid #73AD21;
-}
-.carousel__item {
-  min-height: 200px;
-  width: 100%;
-  background-color: greenyellow;
-  color: white;
-  font-size: 20px;
-  border-radius: 8px;
+
+.carousel {
+  position: relative;
+
   display: flex;
   justify-content: center;
-  align-items: center;
+  flex-direction: column;
+
+}
+.carousel__item {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  
+
 }
 
-.carousel__slide {
-  padding: 10px;
-}
 
-.carousel__prev,
-.carousel__next {
+.carousel__prev{
   box-sizing: content-box;
   border: 5px solid white;
 }

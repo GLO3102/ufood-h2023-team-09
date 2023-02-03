@@ -1,10 +1,7 @@
 <template>
   <div class="resto">
-
-    
   <div class="container is-max-widescreen">
     <br><br>
-    <section>
       <div class="box">
         <h1 class="title">{{resto_data.name}}</h1>
         <div class="rating-container">
@@ -192,10 +189,6 @@
           </Carousel>
     </div>
     </div> 
-    </section>
-  </div>
-
-</div>
 
 </template>
 
@@ -291,7 +284,7 @@ span + span {
   color: white;
   font-size: 20px;
   border-radius: 8px;
-
+}
 .carousel {
   position: relative;
 

@@ -185,7 +185,8 @@
   box-sizing: content-box;
   border: 5px solid white;
 }
-
+</style>
+<style>
 .rating {
   width: 120px;
   height: 24px;

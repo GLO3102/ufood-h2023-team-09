@@ -44,6 +44,8 @@ const color_map = ["black", "warning", "primary", "danger"];
           {{ "$".repeat(price_range) }}</span
         >
       </div>
+
+      <!-- Display rating with stars -->
       <div class="rating-container">
       <svg style="display:none;">
         <defs>
@@ -55,14 +57,14 @@ const color_map = ["black", "warning", "primary", "danger"];
             <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24" fill="white" fill-rule="evenodd"  transform="translate(96)"/>
           </symbol>
         </defs>
-      </svg>
+      </svg><span>Cote : {{ rating }}</span>
       <div class="rating">
-      <!--   <div class="rating-bg" style="width: 90%;"></div> -->
         <progress class="rating-bg" :value="rating" max="5"></progress>
         <svg><use xlink:href="#fivestars"/></svg>
+        
       </div>
     </div>
-      <div class="block">Cote : {{ rating }}</div>
+      
     </div>
   </div>
 </template>

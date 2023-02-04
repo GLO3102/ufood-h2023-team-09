@@ -62,7 +62,7 @@ const breakpoints = {
 </script>
 
 <template>
-  <div class="hero">
+  <div class="hero" id="user-entire-page">
     <div class="hero-body">
       <!-- Begin user info-->
       <div>
@@ -240,6 +240,11 @@ const breakpoints = {
 </template>
 
 <style scoped>
+#user-entire-page {
+  background: #fff;
+  box-shadow: inset 100px 0px 100px -50px #959595,
+    inset -100px 0px 100px -50px #959595;
+}
 #temporary {
   background-color: aqua;
   border-color: black;

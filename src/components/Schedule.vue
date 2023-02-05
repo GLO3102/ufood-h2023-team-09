@@ -4,7 +4,7 @@
 
 <template>
     <div>
-        <div class="box" style="width: 250px;">
+        <div class="box" style="width: 250px; margin-right: 10px;">
             <table class="table is-hoverable">
                 <thead>
                     <th><abbr title="Weekday">Weekday</abbr></th>

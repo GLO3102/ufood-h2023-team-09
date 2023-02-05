@@ -4,6 +4,22 @@ import RestaurantCard from "./RestaurantCard.vue";
 import json from "./hardcoded_resto.json";
 let restaurantsList = json;
 
+let categories = [
+  "Fast Food",
+  "Indian",
+  "Asian",
+  "Pizza",
+  "Casual",
+  "Chicken",
+  "Café",
+  "Thai",
+  "Middle Eastern",
+  "Bring your own wine",
+  "Vegan",
+  "Italian",
+  "Pasta",
+];
+
 // Dropdown
 // Toggle dropdown menu
 function dropDownToggle() {
@@ -96,11 +112,7 @@ function rangeFilter(range) {
           </div>
           <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-              <a href="#" class="dropdown-item"> Fast Food </a>
-              <a class="dropdown-item"> Indian </a>
-              <a href="#" class="dropdown-item is-active"> Asian </a>
-              <a href="#" class="dropdown-item"> Pizza </a>
-              <a href="#" class="dropdown-item"> Middle Eastern </a>
+              <a class="dropdown-item" v-for="category in categories" :key="category">{{ category }}</a>
             </div>
           </div>
         </div>
@@ -152,10 +164,10 @@ function rangeFilter(range) {
 
 
 <style scoped>
-.home-container{
+.home-container {
   background: #fff;
-  box-shadow: inset 100px 0px 100px -50px #959595, 
-              inset -100px 0px 100px -50px #959595;
+  box-shadow: inset 100px 0px 100px -50px #959595,
+    inset -100px 0px 100px -50px #959595;
 }
 .search-filter {
   display: flex;

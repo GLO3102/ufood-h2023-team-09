@@ -134,7 +134,6 @@ function rangeFilter(range) {
         :id="restaurant.id"
         :data-range="restaurant.price_range"
       >
-        <router-link to="/restaurant">
           <RestaurantCard
             :name="restaurant.name"
             :id="restaurant.id"
@@ -154,7 +153,7 @@ function rangeFilter(range) {
             :price_range="restaurant.price_range"
             :rating="restaurant.rating"
           ></RestaurantCard
-        ></router-link>
+        >
       </div>
     </div>
 

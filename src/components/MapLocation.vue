@@ -6,7 +6,7 @@ import { MapboxMap, MapboxMarker  } from '@studiometa/vue-mapbox-gl';
 
 <template>
   <div>
-  <div class=" card is-horizontal columns" style="margin-right:0px;">
+  <div class=" card is-horizontal columns" style="margin-left:0px;">
     <div class="card-content column is-two-fifths">
       <label class="label">Enter your adress here</label>
       <div class="field has-addons">
@@ -21,7 +21,7 @@ import { MapboxMap, MapboxMarker  } from '@studiometa/vue-mapbox-gl';
       </div>
       <label class="label">Destination Adress</label>
       <div class="content">
-        <p>{{ json.address }}</p>
+        <p>{{ json.items[0].address }}</p>
       </div>
 
     </div>
@@ -35,5 +35,14 @@ import { MapboxMap, MapboxMarker  } from '@studiometa/vue-mapbox-gl';
   </div>
 </template>
 
+<style scoped>
+@media screen and (max-width: 1200px)
+{    .column.is-two-fifths {
+    display: block;
+
+}
+
+}
+</style>
 
 

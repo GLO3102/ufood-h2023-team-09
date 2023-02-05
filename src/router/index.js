@@ -28,7 +28,7 @@ const routes = [
     path: "/sign-up",
     name: "Sign-up",
     component: () => import("@/components/Sign-up"),
-  }
+  },
 ];
 
 export const router = createRouter({

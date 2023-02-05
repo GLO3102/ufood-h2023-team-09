@@ -112,7 +112,12 @@ function rangeFilter(range) {
           </div>
           <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-              <a class="dropdown-item" v-for="category in categories" :key="category">{{ category }}</a>
+              <a
+                class="dropdown-item"
+                v-for="category in categories"
+                :key="category"
+                >{{ category }}</a
+              >
             </div>
           </div>
         </div>
@@ -134,33 +139,31 @@ function rangeFilter(range) {
         :id="restaurant.id"
         :data-range="restaurant.price_range"
       >
-          <RestaurantCard
-            :name="restaurant.name"
-            :id="restaurant.id"
-            :address="restaurant.address"
-            :tel="restaurant.tel"
-            :location="restaurant.location"
-            :opening_hours="restaurant.opening_hours"
-            :monday="restaurant.opening_hours.monday"
-            :tuesday="restaurant.opening_hours.tuesday"
-            :wednesday="restaurant.opening_hours.wednesday"
-            :thursday="restaurant.opening_hours.thursday"
-            :friday="restaurant.opening_hours.friday"
-            :saturday="restaurant.opening_hours.sturday"
-            :sunday="restaurant.opening_hours.sunday"
-            :pictures="restaurant.pictures"
-            :genres="restaurant.genres"
-            :price_range="restaurant.price_range"
-            :rating="restaurant.rating"
-          ></RestaurantCard
-        >
+        <RestaurantCard
+          :name="restaurant.name"
+          :id="restaurant.id"
+          :address="restaurant.address"
+          :tel="restaurant.tel"
+          :location="restaurant.location"
+          :opening_hours="restaurant.opening_hours"
+          :monday="restaurant.opening_hours.monday"
+          :tuesday="restaurant.opening_hours.tuesday"
+          :wednesday="restaurant.opening_hours.wednesday"
+          :thursday="restaurant.opening_hours.thursday"
+          :friday="restaurant.opening_hours.friday"
+          :saturday="restaurant.opening_hours.sturday"
+          :sunday="restaurant.opening_hours.sunday"
+          :pictures="restaurant.pictures"
+          :genres="restaurant.genres"
+          :price_range="restaurant.price_range"
+          :rating="restaurant.rating"
+        ></RestaurantCard>
       </div>
     </div>
 
     <div class="search-filter">GLO-3102 Home</div>
   </div>
 </template>
-
 
 <style scoped>
 .home-container {

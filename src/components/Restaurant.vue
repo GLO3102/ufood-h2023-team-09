@@ -10,39 +10,58 @@
               <symbol id="fivestars">
                 <path
                   d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                  fill="white" fill-rule="evenodd" />
+                  fill="white"
+                  fill-rule="evenodd"
+                />
                 <path
                   d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                  fill="white" fill-rule="evenodd" transform="translate(24)" />
+                  fill="white"
+                  fill-rule="evenodd"
+                  transform="translate(24)"
+                />
                 <path
                   d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                  fill="white" fill-rule="evenodd" transform="translate(48)" />
+                  fill="white"
+                  fill-rule="evenodd"
+                  transform="translate(48)"
+                />
                 <path
                   d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                  fill="white" fill-rule="evenodd" transform="translate(72)" />
+                  fill="white"
+                  fill-rule="evenodd"
+                  transform="translate(72)"
+                />
                 <path
                   d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                  fill="white" fill-rule="evenodd" transform="translate(96)" />
+                  fill="white"
+                  fill-rule="evenodd"
+                  transform="translate(96)"
+                />
               </symbol>
             </defs>
           </svg>
           <div class="evaluation">
             <div class="rating">
               <!--   <div class="rating-bg" style="width: 90%;"></div> -->
-              <progress class="rating-bg" :value="resto_data.rating" max="5"></progress>
+              <progress
+                class="rating-bg"
+                :value="resto_data.rating"
+                max="5"
+              ></progress>
               <svg>
                 <use xlink:href="#fivestars" />
               </svg>
             </div>
             <span class="tag is-warning">{{ resto_data.rating }}</span>
             <span :class="'tag is-' + color_map[resto_data.price_range - 1]">
-              {{ "$".repeat(resto_data.price_range) }}</span>
+              {{ "$".repeat(resto_data.price_range) }}</span
+            >
           </div>
         </div>
       </div>
 
       <div class="box" id="second-box">
-          <h1 class="title">About us</h1>   
+        <h1 class="title">About us</h1>
 
         <div class="resto-info">
           <div class="first-part">
@@ -71,12 +90,18 @@
             </div>
           </div>
           <div class="second-part">
-            <Carousel id="gallery" :items-to-show="1" :wrap-around="true" v-model="currentSlide" :settings="settings">
+            <Carousel
+              id="gallery"
+              :items-to-show="1"
+              :wrap-around="true"
+              v-model="currentSlide"
+              :settings="settings"
+            >
               <Slide v-for="index in json.pictures.length" :key="index">
                 <div class="carousel__item">
                   <div class="card">
                     <figure class="image is-4by3">
-                      <img :src="json.pictures[index-1]" alt="" />
+                      <img :src="json.pictures[index - 1]" alt="" />
                     </figure>
                   </div>
                 </div>
@@ -87,15 +112,21 @@
               </template>
             </Carousel>
           </div>
-
         </div>
       </div>
-      <Carousel id="thumbnails" :wrap-around="true" :settings="settings" :breakpoints="breakpoints" ref="carousel" v-model="currentSlide">
+      <Carousel
+        id="thumbnails"
+        :wrap-around="true"
+        :settings="settings"
+        :breakpoints="breakpoints"
+        ref="carousel"
+        v-model="currentSlide"
+      >
         <Slide v-for="index in json.pictures.length" :key="index">
           <div class="carousel__item" @click="slideTo(index - 1)">
-              <figure class="image is-4by3">
-                <img :src="json.pictures[index-1]" alt="" />
-              </figure>
+            <figure class="image is-4by3">
+              <img :src="json.pictures[index - 1]" alt="" />
+            </figure>
           </div>
         </Slide>
 
@@ -104,13 +135,11 @@
           <Pagination />
         </template>
       </Carousel>
-      <br><br>
+      <br /><br />
 
       <div class="container">
         <MapLocation></MapLocation>
       </div>
-
-
     </div>
   </div>
 </template>
@@ -141,7 +170,6 @@ const breakpoints = {
   1300: {
     itemsToShow: 3.5,
   },
-
 };
 </script>
 <script>
@@ -174,7 +202,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-span+span {
+span + span {
   margin-left: 10px;
 }
 
@@ -223,13 +251,12 @@ span+span {
 @media screen and (max-width: 1216px) {
   .resto-info {
     flex-direction: column;
-
   }
 }
 
 @media screen and (max-width: 500px) {
   .first-part {
-   flex-direction: column;
+    flex-direction: column;
   }
 }
 
@@ -242,9 +269,7 @@ span+span {
 .second-part {
   max-width: 600px;
   flex-shrink: 1;
-
 }
-
 
 .resto-info {
   display: flex;

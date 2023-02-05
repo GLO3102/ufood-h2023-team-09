@@ -1,7 +1,7 @@
 <script setup>
 // Saves current day of the week as a number from 0 to 6, 0 being Sunday, into a variable
 let today = new Date().getDay();
-const color_map = ["success", "primary","danger", "black"];
+const color_map = ["success", "primary", "danger", "black"];
 </script>
 
 <template>
@@ -143,5 +143,3 @@ export default {
   flex-direction: column;
 }
 </style>
-
-

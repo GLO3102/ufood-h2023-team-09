@@ -46,7 +46,7 @@
       <div class="box" id="second-box">
         <div>
           <h1 class="title">About us</h1>
-          <div class="resto-info">
+          <div class="container resto-info">
             <Schedule></Schedule>
             <div class="box">
               <table class="table is-hoverable">
@@ -86,13 +86,9 @@
 
 
       </div>
-
-      <div>
-        {{ resto_data.location }}
+      <div class="container">
+        <MapLocation></MapLocation>
       </div>
-
-
-      <MapLocation></MapLocation>
 
 
       <Carousel :wrap-around="true" :settings="settings" :breakpoints="breakpoints">
@@ -297,7 +293,7 @@ span+span {
 }
 
 .resto-info {
-  display: flex;
+  display: inline;
 }
 
 .carousel__prev {

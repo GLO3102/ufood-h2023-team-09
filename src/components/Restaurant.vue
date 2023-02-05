@@ -145,7 +145,7 @@
 </template>
 
 <script setup>
-const color_map = ["black", "warning", "primary"];
+const color_map = ["success", "primary", "danger", "black"];
 
 const settings = {
   itemsToShow: 1,

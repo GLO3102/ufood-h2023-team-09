@@ -10,58 +10,40 @@
               <symbol id="fivestars">
                 <path
                   d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                  fill="white"
-                  fill-rule="evenodd"
-                />
+                  fill="white" fill-rule="evenodd" />
                 <path
                   d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                  fill="white"
-                  fill-rule="evenodd"
-                  transform="translate(24)"
-                />
+                  fill="white" fill-rule="evenodd" transform="translate(24)" />
                 <path
                   d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                  fill="white"
-                  fill-rule="evenodd"
-                  transform="translate(48)"
-                />
+                  fill="white" fill-rule="evenodd" transform="translate(48)" />
                 <path
                   d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                  fill="white"
-                  fill-rule="evenodd"
-                  transform="translate(72)"
-                />
+                  fill="white" fill-rule="evenodd" transform="translate(72)" />
                 <path
                   d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                  fill="white"
-                  fill-rule="evenodd"
-                  transform="translate(96)"
-                />
+                  fill="white" fill-rule="evenodd" transform="translate(96)" />
               </symbol>
             </defs>
           </svg>
           <div class="evaluation">
             <div class="rating">
               <!--   <div class="rating-bg" style="width: 90%;"></div> -->
-              <progress
-                class="rating-bg"
-                :value="resto_data.rating"
-                max="5"
-              ></progress>
+              <progress class="rating-bg" :value="resto_data.rating" max="5"></progress>
               <svg>
                 <use xlink:href="#fivestars" />
               </svg>
             </div>
             <span class="tag is-warning">{{ resto_data.rating }}</span>
             <span :class="'tag is-' + color_map[resto_data.price_range - 1]">
-              {{ "$".repeat(resto_data.price_range) }}</span
-            >
+              {{ "$".repeat(resto_data.price_range) }}</span>
           </div>
         </div>
       </div>
 
       <div class="box" id="second-box">
-        <h1 class="title">About us</h1>
+          <h1 class="title">About us</h1>   
+
         <div class="resto-info">
           <div class="first-part">
             <Schedule></Schedule>
@@ -88,122 +70,32 @@
               </table>
             </div>
           </div>
-          <Carousel
-            id="gallery"
-            :items-to-show="1"
-            :wrap-around="true"
-            v-model="currentSlide"
-            :settings="settings"
-          >
-            <Slide v-for="pic in json.pictures" :key="pic">
-              <div class="carousel__item">
-                <div class="card">
-                  <figure class="image is-4by3">
-                    <img :src="pic" alt="" />
-                  </figure>
+          <div class="second-part">
+            <Carousel id="gallery" :items-to-show="1" :wrap-around="true" v-model="currentSlide" :settings="settings">
+              <Slide v-for="index in json.pictures.length" :key="index">
+                <div class="carousel__item">
+                  <div class="card">
+                    <figure class="image is-4by3">
+                      <img :src="json.pictures[index-1]" alt="" />
+                    </figure>
+                  </div>
                 </div>
-              </div>
-            </Slide>
-          </Carousel>
+              </Slide>
+              <template #addons>
+                <Navigation />
+                <Pagination />
+              </template>
+            </Carousel>
+          </div>
+
         </div>
       </div>
-      <div class="container">
-        <MapLocation></MapLocation>
-      </div>
-
-      <Carousel
-        :wrap-around="true"
-        :settings="settings"
-        :breakpoints="breakpoints"
-      >
-        <Slide key="slide">
-          <div class="carousel__item">
-            <div class="card">
+      <Carousel id="thumbnails" :wrap-around="true" :settings="settings" :breakpoints="breakpoints" ref="carousel" v-model="currentSlide">
+        <Slide v-for="index in json.pictures.length" :key="index">
+          <div class="carousel__item" @click="slideTo(index - 1)">
               <figure class="image is-4by3">
-                <img
-                  src="https://i.pinimg.com/236x/83/c1/e7/83c1e7c64211f263f588a2f74dd309c6.jpg"
-                  alt=""
-                />
+                <img :src="json.pictures[index-1]" alt="" />
               </figure>
-            </div>
-            <div class="card-content is-overlay">
-              <span class="tag is-primary is-size-5">20</span>
-            </div>
-            <div class="card-content slider-text">
-              <div class="is-size-5 box">RESTAURANT_NAME</div>
-            </div>
-          </div>
-        </Slide>
-        <Slide key="slide">
-          <div class="carousel__item">
-            <div class="card">
-              <figure class="">
-                <img
-                  src="https://i.pinimg.com/564x/08/25/38/082538afc45124898e4a792a5250d352.jpg"
-                  alt=""
-                />
-              </figure>
-            </div>
-            <div class="card-content is-overlay">
-              <span class="tag is-primary is-size-5">9</span>
-            </div>
-            <div class="card-content slider-text">
-              <div class="is-size-5 box">RESTAURANT_NAME</div>
-            </div>
-          </div>
-        </Slide>
-        <Slide key="slide">
-          <div class="carousel__item">
-            <div class="card">
-              <figure class="image is-4by3">
-                <img
-                  src="https://i.pinimg.com/564x/95/19/fb/9519fb6c2a9576b4017356c29fb15f93.jpg"
-                  alt=""
-                />
-              </figure>
-            </div>
-            <div class="card-content is-overlay">
-              <span class="tag is-primary is-size-5">15</span>
-            </div>
-            <div class="card-content slider-text">
-              <div class="is-size-5 box">RESTAURANT_NAME</div>
-            </div>
-          </div>
-        </Slide>
-        <Slide key="slide">
-          <div class="carousel__item">
-            <div class="card">
-              <figure class="image is-4by3">
-                <img
-                  src="https://i.pinimg.com/564x/9f/2f/6b/9f2f6bd333752f91e23514ea1a946e3c.jpg"
-                  alt=""
-                />
-              </figure>
-            </div>
-            <div class="card-content is-overlay">
-              <span class="tag is-primary is-size-5">10</span>
-            </div>
-            <div class="card-content slider-text">
-              <div class="is-size-5 box">RESTAURANT_NAME</div>
-            </div>
-          </div>
-        </Slide>
-        <Slide key="slide">
-          <div class="carousel__item">
-            <div class="card">
-              <figure class="image is-4by3">
-                <img
-                  src="https://i.pinimg.com/564x/98/10/2c/98102cbaf0d75501f968ece02a83482f.jpg"
-                  alt=""
-                />
-              </figure>
-            </div>
-            <div class="card-content is-overlay">
-              <span class="tag is-primary is-size-5">8</span>
-            </div>
-            <div class="card-content slider-text">
-              <div class="is-size-5 box">RESTAURANT_NAME</div>
-            </div>
           </div>
         </Slide>
 
@@ -212,6 +104,13 @@
           <Pagination />
         </template>
       </Carousel>
+      <br><br>
+
+      <div class="container">
+        <MapLocation></MapLocation>
+      </div>
+
+
     </div>
   </div>
 </template>
@@ -242,9 +141,7 @@ const breakpoints = {
   1300: {
     itemsToShow: 3.5,
   },
-  1500: {
-    itemsToShow: 4.5,
-  },
+
 };
 </script>
 <script>
@@ -277,7 +174,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-span + span {
+span+span {
   margin-left: 10px;
 }
 
@@ -298,18 +195,12 @@ span + span {
 .slider_container {
   width: 100%;
   margin: auto;
-  border: 3px solid #73ad21;
   flex-shrink: 1;
 }
 
 .carousel__item {
   min-height: 200px;
   width: 100%;
-  background-color: greenyellow;
-  color: white;
-  font-size: 20px;
-  border-radius: 8px;
-  flex-shrink: 1;
 }
 
 .carousel {
@@ -332,14 +223,28 @@ span + span {
 @media screen and (max-width: 1216px) {
   .resto-info {
     flex-direction: column;
+
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .first-part {
+   flex-direction: column;
   }
 }
 
 .first-part {
   display: flex;
-  flex-direction: row;
   justify-content: space-around;
+  margin-bottom: 10px;
 }
+
+.second-part {
+  max-width: 600px;
+  flex-shrink: 1;
+
+}
+
 
 .resto-info {
   display: flex;
@@ -353,7 +258,8 @@ span + span {
 </style>
 <style scoped>
 .carousel__slide {
-  padding: 25px;
+  padding-left: 25px;
+  padding-right: 25px;
   opacity: 0.25;
   transform: scale(0.8);
 }

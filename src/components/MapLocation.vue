@@ -1,5 +1,5 @@
 <script setup>
-import json from "./hardcoded_resto.json";
+import json from "../dummy_jsons/hardcoded_resto.json";
 
 import { MapboxMap, MapboxMarker } from "@studiometa/vue-mapbox-gl";
 </script>

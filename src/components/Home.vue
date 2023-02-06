@@ -1,7 +1,7 @@
 <script setup>
 import RestaurantCard from "./RestaurantCard.vue";
 
-import json from "./hardcoded_resto.json";
+import json from "../dummy_jsons/hardcoded_resto.json";
 let restaurantsList = json;
 
 let categories = [

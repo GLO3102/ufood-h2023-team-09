@@ -177,7 +177,7 @@ import { defineComponent } from "vue";
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel";
 import Schedule from "./Schedule.vue";
 import MapLocation from "./MapLocation.vue";
-import json from "./hardcoded_resto.json";
+import json from "../dummy_jsons/hardcoded_resto.json";
 import "vue3-carousel/dist/carousel.css";
 
 json = json.items[0];

@@ -86,6 +86,7 @@ function rangeFilter(range) {
 
 <template>
   <div class="home-container">
+
     <div class="search-filter">
       <div class="search">
         <input class="input" type="search" placeholder="Search..." />
@@ -127,6 +128,16 @@ function rangeFilter(range) {
         <button class="button" id="2" @click="rangeFilter('2')">$$</button>
         <button class="button" id="3" @click="rangeFilter('3')">$$$</button>
         <button class="button" id="4" @click="rangeFilter('4')">$$$$</button>
+      </div>
+    </div>
+
+    <!-- List of categories selected -->
+    <div class="categories-selected-container">
+      <div class="categories-selected-list" v-for="category in categories" :key="category">
+        <div class="category-tag tags has-addons">
+          <span class="tag is-info">test</span>
+          <a class="tag is-delete"></a>
+        </div>
       </div>
     </div>
 
@@ -175,7 +186,7 @@ function rangeFilter(range) {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 3vw;
+  margin-bottom: 0;
   margin-inline: 5px;
 }
 .search {
@@ -187,6 +198,19 @@ function rangeFilter(range) {
   display: flex;
   flex-wrap: nowrap;
   flex-shrink: 1;
+}
+.categories-selected-container {
+  display: flex;
+  justify-content: center;
+  flex-flow: row wrap;
+  height: 3vw;
+}
+.categories-selected-list{
+  display: flex;
+  align-content: center;
+}
+.category-tag{
+  margin-inline: 3px;
 }
 .is-active {
   background-color: rgb(220, 220, 220);

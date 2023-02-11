@@ -138,13 +138,14 @@
       <br /><br />
 
       <div class="container">
-        <MapLocation></MapLocation>
+        <Map />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import Map from "./Map.vue";
 const color_map = ["black", "warning", "primary"];
 
 const settings = {
@@ -187,7 +188,6 @@ export default defineComponent({
   components: {
     Carousel,
     Slide,
-    MapLocation,
   },
   data: () => ({
     currentSlide: 0,

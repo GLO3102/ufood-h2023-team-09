@@ -138,7 +138,7 @@
       <br /><br />
 
       <div class="container">
-        <MapLocation></MapLocation>
+        <Map />
       </div>
     </div>
   </div>
@@ -188,7 +188,6 @@ export default defineComponent({
   components: {
     Carousel,
     Slide,
-    MapLocation,
   },
   data: () => ({
     currentSlide: 0,

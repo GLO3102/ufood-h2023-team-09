@@ -145,6 +145,7 @@
 </template>
 
 <script setup>
+import Map from "./Map.vue";
 const color_map = ["black", "warning", "primary"];
 
 const settings = {

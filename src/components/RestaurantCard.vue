@@ -97,7 +97,7 @@ const color_map = ["success", "primary", "danger", "black"];
                 <use xlink:href="#fivestars" />
               </svg>
             </div>
-            <div class="tag is-warning is-medium">{{ rating }}</div>
+            <div class="tag is-warning is-medium">{{ rating.toFixed(1) }}</div>
           </div>
         </div>
       </div>

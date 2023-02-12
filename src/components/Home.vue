@@ -1,89 +1,3 @@
-<script setup>
-import RestaurantCard from "./RestaurantCard.vue";
-
-import json from "../dummy_jsons/hardcoded_resto.json";
-let restaurantsList = json;
-
-let categories = [
-  "Fast Food",
-  "Indian",
-  "Asian",
-  "Pizza",
-  "Casual",
-  "Chicken",
-  "Café",
-  "Thai",
-  "Middle Eastern",
-  "Bring your own wine",
-  "Vegan",
-  "Italian",
-  "Pasta",
-];
-
-// Dropdown
-// Toggle dropdown menu
-function dropDownToggle() {
-  document.getElementById("dropdownCategories").classList.toggle("is-active");
-}
-// Close the dropdown menu when a click is made elswhere
-window.onclick = function (event) {
-  try {
-    document.getElementById("dropdownCategories").classList.remove("is-active");
-  } catch (error) {
-    // An error is thrown when we click on a link (this error doesn't have any impact)
-    // If the error is TypeError, ignore it, otherwise throw it
-    if (!(error instanceof TypeError)) {
-      throw error;
-    }
-  }
-};
-
-// Filter
-// Defines the states of the buttons
-let is1Active = false;
-let is2Active = false;
-let is3Active = false;
-let is4Active = false;
-// Toggle the range filter buttons
-function rangeFilter(range) {
-  // Toggles the state of the buttons
-  switch (range) {
-    case "1":
-      is1Active = !is1Active;
-      break;
-    case "2":
-      is2Active = !is2Active;
-      break;
-    case "3":
-      is3Active = !is3Active;
-      break;
-    case "4":
-      is4Active = !is4Active;
-      break;
-  }
-  // Toggles class "isActive" to change background color between white and light grey
-  document.getElementById(range).classList.toggle("is-active");
-  // Gets all restaurants card
-  let list = [...document.getElementsByClassName("restaurant-card")];
-  // Iterate through all cards and evaluate if they show or disappear
-  list.forEach((card) => {
-    //range === card.dataset.range
-
-    if (
-      (!is1Active && !is2Active && !is3Active && !is4Active) || // All buttons are inactive OR
-      (is1Active && card.dataset.range === "1") || // Button 1 is active AND current card's range is 1 OR
-      (is2Active && card.dataset.range === "2") || // Button 2 is active AND current card's range is 2 OR
-      (is3Active && card.dataset.range === "3") || // Button 3 is active AND current card's range is 3 OR
-      (is4Active && card.dataset.range === "4") // Button 4 is active AND current card's range is 4 OR
-    ) {
-      card.style.display = "block";
-    } else {
-      card.style.display = "none";
-    }
-  });
-}
-</script>
-
 <template>
   <div class="home-container">
     <div class="search-filter">
@@ -164,7 +78,112 @@ function rangeFilter(range) {
     <div class="search-filter">GLO-3102 Home</div>
   </div>
 </template>
+<script setup>
+import RestaurantCard from "./RestaurantCard.vue";
+import { getRestaurantsByPage } from "../api/restaurantApi.js";
 
+//let restaurantsList = json;
+
+let categories = [
+  "Fast Food",
+  "Indian",
+  "Asian",
+  "Pizza",
+  "Casual",
+  "Chicken",
+  "Café",
+  "Thai",
+  "Middle Eastern",
+  "Bring your own wine",
+  "Vegan",
+  "Italian",
+  "Pasta",
+];
+
+// Dropdown
+// Toggle dropdown menu
+function dropDownToggle() {
+  document.getElementById("dropdownCategories").classList.toggle("is-active");
+}
+// Close the dropdown menu when a click is made elswhere
+window.onclick = function (event) {
+  try {
+    document.getElementById("dropdownCategories").classList.remove("is-active");
+  } catch (error) {
+    // An error is thrown when we click on a link (this error doesn't have any impact)
+    // If the error is TypeError, ignore it, otherwise throw it
+    if (!(error instanceof TypeError)) {
+      throw error;
+    }
+  }
+};
+
+// Filter
+// Defines the states of the buttons
+let is1Active = false;
+let is2Active = false;
+let is3Active = false;
+let is4Active = false;
+// Toggle the range filter buttons
+function rangeFilter(range) {
+  // Toggles the state of the buttons
+  switch (range) {
+    case "1":
+      is1Active = !is1Active;
+      break;
+    case "2":
+      is2Active = !is2Active;
+      break;
+    case "3":
+      is3Active = !is3Active;
+      break;
+    case "4":
+      is4Active = !is4Active;
+      break;
+  }
+  // Toggles class "isActive" to change background color between white and light grey
+  document.getElementById(range).classList.toggle("is-active");
+  // Gets all restaurants card
+  let list = [...document.getElementsByClassName("restaurant-card")];
+  // Iterate through all cards and evaluate if they show or disappear
+  list.forEach((card) => {
+    //range === card.dataset.range
+
+    if (
+      (!is1Active && !is2Active && !is3Active && !is4Active) || // All buttons are inactive OR
+      (is1Active && card.dataset.range === "1") || // Button 1 is active AND current card's range is 1 OR
+      (is2Active && card.dataset.range === "2") || // Button 2 is active AND current card's range is 2 OR
+      (is3Active && card.dataset.range === "3") || // Button 3 is active AND current card's range is 3 OR
+      (is4Active && card.dataset.range === "4") // Button 4 is active AND current card's range is 4 OR
+    ) {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+  });
+}
+</script>
+<script>
+export default {
+  data() {
+    return {
+      restaurantsList: [],
+    };
+  },
+
+  methods: {
+    async getRestaurantFirstPage() {
+      getRestaurantsByPage(0).then((response) => {
+        this.restaurantsList = response;
+      });
+    },
+  },
+
+  created() {
+    this.getRestaurantFirstPage();
+  },
+};
+</script>
 <style scoped>
 .home-container {
   background: #fff;

@@ -9,7 +9,7 @@ const color_map = ["success", "primary", "danger", "black"];
     <div class="card-image">
       <figure class="image is-4by3">
         <router-link to="/restaurant"
-          ><img :src="pictures" alt="Placeholder image"
+          ><img :src="pictures[0]" alt="Placeholder image"
         /></router-link>
       </figure>
     </div>

@@ -32,7 +32,10 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style>
+.mapbox-directions-instructions {
+  height: 300px;
+}
 .pb {
   padding-bottom: 1.25rem;
 }

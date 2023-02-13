@@ -9,7 +9,7 @@ const color_map = ["success", "primary", "danger", "black"];
     <div class="card-image">
       <figure class="image is-4by3">
         <router-link to="/restaurant"
-          ><img :src="pictures" alt="Placeholder image"
+          ><img :src="pictures[0]" alt="Placeholder image"
         /></router-link>
       </figure>
     </div>
@@ -46,7 +46,10 @@ const color_map = ["success", "primary", "danger", "black"];
       </div>
 
       <!-- Direction button -->
-      <div class="button">{{ address }}</div>
+      <div class="button tooltip">
+        <span class="tooltiptext">{{ address }}</span>
+        {{ address.slice(0, 50) + "..." }}
+      </div>
 
       <!-- Phone button -->
       <div class="button">{{ tel }}</div>
@@ -97,7 +100,7 @@ const color_map = ["success", "primary", "danger", "black"];
                 <use xlink:href="#fivestars" />
               </svg>
             </div>
-            <div class="tag is-warning is-medium">{{ rating }}</div>
+            <div class="tag is-warning is-medium">{{ rating.toFixed(1) }}</div>
           </div>
         </div>
       </div>
@@ -130,6 +133,44 @@ export default {
 </script>
 
 <style scoped>
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: fit-content + 20px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+.card {
+  height: 720px;
+}
 .genres-container {
   display: flex;
   justify-content: left;

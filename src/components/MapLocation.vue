@@ -1,12 +1,12 @@
 <script setup>
-import json from "./hardcoded_resto.json";
+import json from "../dummy_jsons/hardcoded_resto.json";
 
 import { MapboxMap, MapboxMarker } from "@studiometa/vue-mapbox-gl";
 </script>
 
 <template>
   <div>
-    <div class="card is-horizontal columns" style="margin-left: 0px">
+    <div class="card is-horizontal columns mb-6" style="margin-left: 0px">
       <div class="card-content column is-two-fifths">
         <label class="label">Enter your adress here</label>
         <div class="field has-addons">

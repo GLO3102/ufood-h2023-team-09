@@ -138,14 +138,15 @@
       <br /><br />
 
       <div class="container">
-        <MapLocation></MapLocation>
+        <Map />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-const color_map = ["success", "primary", "danger", "black"];
+import Map from "./Map.vue";
+const color_map = ["black", "warning", "primary"];
 
 const settings = {
   itemsToShow: 1,
@@ -177,7 +178,7 @@ import { defineComponent } from "vue";
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel";
 import Schedule from "./Schedule.vue";
 import MapLocation from "./MapLocation.vue";
-import json from "./hardcoded_resto.json";
+import json from "../dummy_jsons/hardcoded_resto.json";
 import "vue3-carousel/dist/carousel.css";
 
 json = json.items[0];
@@ -187,7 +188,6 @@ export default defineComponent({
   components: {
     Carousel,
     Slide,
-    MapLocation,
   },
   data: () => ({
     currentSlide: 0,

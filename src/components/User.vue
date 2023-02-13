@@ -244,6 +244,7 @@ const breakpoints = {
   background: #fff;
   box-shadow: inset 100px 0px 100px -50px #959595,
     inset -100px 0px 100px -50px #959595;
+    margin: 0;
 }
 #temporary {
   background-color: aqua;

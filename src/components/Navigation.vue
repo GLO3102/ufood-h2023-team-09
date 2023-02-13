@@ -98,8 +98,14 @@ const isNotHome = computed(() => {
   </nav>
 </template>
 
-<style>
+<style scoped>
 #logo-text {
   font-size: 2rem;
+}
+.navbar{
+  position: static;
+}
+.navbar-burger{
+  align-self: center;
 }
 </style>

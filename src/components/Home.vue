@@ -82,11 +82,22 @@ function rangeFilter(range) {
     }
   });
 }
+
+function filterByCategory(category){
+  const drop = "drop-" + formatKebabCase(category)
+  const tag = "tag-" + formatKebabCase(category)
+  document.getElementById(drop).classList.toggle("is-active")
+  document.getElementById(tag).classList.toggle("is-tag-active")
+}
+
+function formatKebabCase(str){
+  let newString = str.toLowerCase()
+  return newString.replaceAll(" ", "-")
+}
 </script>
 
 <template>
   <div class="home-container">
-
     <div class="search-filter">
       <div class="search">
         <input class="input" type="search" placeholder="Search..." />
@@ -117,6 +128,8 @@ function rangeFilter(range) {
                 class="dropdown-item"
                 v-for="category in categories"
                 :key="category"
+                :id="'drop-' + formatKebabCase(category)"
+                @click="filterByCategory(category)"
                 >{{ category }}</a
               >
             </div>
@@ -129,17 +142,24 @@ function rangeFilter(range) {
         <button class="button" id="3" @click="rangeFilter('3')">$$$</button>
         <button class="button" id="4" @click="rangeFilter('4')">$$$$</button>
       </div>
-    </div>
 
+      
+    </div>
     <!-- List of categories selected -->
-    <div class="categories-selected-container">
-      <div class="categories-selected-list" v-for="category in categories" :key="category">
-        <div class="category-tag tags has-addons">
-          <span class="tag is-info">test</span>
-          <a class="tag is-delete"></a>
+      <div class="categories-selected-container">
+        <div
+          class="categories-selected tags has-addons"
+          v-for="category in categories"
+          :key="category"
+          :id="'tag-' + formatKebabCase(category)"
+        >
+            <span class="tag is-info is-medium"
+              >{{category}}</span
+            >
+            <a @click="filterByCategory(category)" class="tag is-delete is-medium"></a>
+
         </div>
       </div>
-    </div>
 
     <!-- Dynamically generated restaurants list -->
     <div class="restaurant-list">
@@ -199,18 +219,36 @@ function rangeFilter(range) {
   flex-wrap: nowrap;
   flex-shrink: 1;
 }
+.dropdown-item.is-active{
+  display: none;
+}
 .categories-selected-container {
+  min-height: 3vw;
   display: flex;
-  justify-content: center;
   flex-flow: row wrap;
-  height: 3vw;
-}
-.categories-selected-list{
-  display: flex;
+  justify-content: center;
   align-content: center;
+  flex-grow: 1;
 }
-.category-tag{
-  margin-inline: 3px;
+.categories-selected {
+  display: flex;
+  margin: 6px;
+  display: none;
+}
+.is-tag-active{
+display: flex;
+}
+.tags .tag {
+    margin-bottom: 0;
+}
+.tags{
+    margin-bottom: 6px;
+}
+.tags:not(:last-child) {
+    margin-bottom: 6px;
+}
+.tags:last-child {
+    margin-bottom: 6px;
 }
 .is-active {
   background-color: rgb(220, 220, 220);

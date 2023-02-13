@@ -79,11 +79,20 @@
   </div>
 </template>
 <script setup>
+import { onMounted } from "vue";
+import { onUnmounted } from "vue";
 import RestaurantCard from "./RestaurantCard.vue";
 import { getRestaurantsByPage } from "../api/restaurantApi.js";
-
-//let restaurantsList = json;
-
+const loadMoreRestaurants = async () => {
+  let newPosts = await getRestaurantsByPage(0);
+};
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
+const handleScroll = (e) => {};
 let categories = [
   "Fast Food",
   "Indian",
@@ -172,15 +181,15 @@ export default {
   },
 
   methods: {
-    async getRestaurantFirstPage() {
-      getRestaurantsByPage(0).then((response) => {
+    async getRestaurantByPage(index) {
+      await getRestaurantsByPage(index).then((response) => {
         this.restaurantsList = response;
       });
     },
   },
 
   created() {
-    this.getRestaurantFirstPage();
+    this.getRestaurantByPage(0);
   },
 };
 </script>

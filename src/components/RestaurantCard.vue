@@ -130,6 +130,9 @@ export default {
 </script>
 
 <style scoped>
+.card {
+  height: 720px;
+}
 .genres-container {
   display: flex;
   justify-content: left;

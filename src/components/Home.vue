@@ -1,82 +1,3 @@
-<template>
-  <div class="home-container">
-    <div class="search-filter">
-      <div class="search">
-        <input class="input" type="search" placeholder="Search..." />
-      </div>
-
-      <div class="filter">
-        <!-- Dropdown menu -->
-        <div
-          class="dropdown"
-          id="dropdownCategories"
-          @click.stop="dropDownToggle()"
-        >
-          <div class="dropdown-trigger">
-            <button
-              class="button"
-              aria-haspopup="true"
-              aria-controls="dropdown-menu"
-            >
-              <span>Categories</span>
-              <span class="icon is-small">
-                <i class="fas fa-angle-down" aria-hidden="true"></i>
-              </span>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-menu" role="menu">
-            <div class="dropdown-content">
-              <a
-                class="dropdown-item"
-                v-for="category in categories"
-                :key="category"
-                >{{ category }}</a
-              >
-            </div>
-          </div>
-        </div>
-        <!-- Range filter buttons -->
-        <button class="button" id="1" @click="rangeFilter('1')">$</button>
-        <button class="button" id="2" @click="rangeFilter('2')">$$</button>
-        <button class="button" id="3" @click="rangeFilter('3')">$$$</button>
-        <button class="button" id="4" @click="rangeFilter('4')">$$$$</button>
-      </div>
-    </div>
-
-    <!-- Dynamically generated restaurants list -->
-    <div class="restaurant-list" ref="restaurantListScroll">
-      <div
-        v-for="restaurant in restaurantsList.items"
-        :key="restaurant"
-        class="restaurant-card"
-        :id="restaurant.id"
-        :data-range="restaurant.price_range"
-      >
-        <RestaurantCard
-          :name="restaurant.name"
-          :id="restaurant.id"
-          :address="restaurant.address"
-          :tel="restaurant.tel"
-          :location="restaurant.location"
-          :opening_hours="restaurant.opening_hours"
-          :monday="restaurant.opening_hours.monday"
-          :tuesday="restaurant.opening_hours.tuesday"
-          :wednesday="restaurant.opening_hours.wednesday"
-          :thursday="restaurant.opening_hours.thursday"
-          :friday="restaurant.opening_hours.friday"
-          :saturday="restaurant.opening_hours.sturday"
-          :sunday="restaurant.opening_hours.sunday"
-          :pictures="restaurant.pictures"
-          :genres="restaurant.genres"
-          :price_range="restaurant.price_range"
-          :rating="restaurant.rating"
-        ></RestaurantCard>
-      </div>
-    </div>
-
-    <div class="search-filter">GLO-3102 Home</div>
-  </div>
-</template>
 <script setup>
 import RestaurantCard from "./RestaurantCard.vue";
 import { getRestaurantsByPage } from "../api/restaurantApi.js";
@@ -206,6 +127,86 @@ export default {
   },
 };
 </script>
+<template>
+  <div class="home-container">
+    <div class="search-filter">
+      <div class="search">
+        <input class="input" type="search" placeholder="Search..." />
+      </div>
+
+      <div class="filter">
+        <!-- Dropdown menu -->
+        <div
+          class="dropdown"
+          id="dropdownCategories"
+          @click.stop="dropDownToggle()"
+        >
+          <div class="dropdown-trigger">
+            <button
+              class="button"
+              aria-haspopup="true"
+              aria-controls="dropdown-menu"
+            >
+              <span>Categories</span>
+              <span class="icon is-small">
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu" role="menu">
+            <div class="dropdown-content">
+              <a
+                class="dropdown-item"
+                v-for="category in categories"
+                :key="category"
+                >{{ category }}</a
+              >
+            </div>
+          </div>
+        </div>
+        <!-- Range filter buttons -->
+        <button class="button" id="1" @click="rangeFilter('1')">$</button>
+        <button class="button" id="2" @click="rangeFilter('2')">$$</button>
+        <button class="button" id="3" @click="rangeFilter('3')">$$$</button>
+        <button class="button" id="4" @click="rangeFilter('4')">$$$$</button>
+      </div>
+    </div>
+
+    <!-- Dynamically generated restaurants list -->
+    <div class="restaurant-list" ref="restaurantListScroll">
+      <div
+        v-for="restaurant in restaurantsList.items"
+        :key="restaurant"
+        class="restaurant-card"
+        :id="restaurant.id"
+        :data-range="restaurant.price_range"
+      >
+        <RestaurantCard
+          :name="restaurant.name"
+          :id="restaurant.id"
+          :address="restaurant.address"
+          :tel="restaurant.tel"
+          :location="restaurant.location"
+          :opening_hours="restaurant.opening_hours"
+          :monday="restaurant.opening_hours.monday"
+          :tuesday="restaurant.opening_hours.tuesday"
+          :wednesday="restaurant.opening_hours.wednesday"
+          :thursday="restaurant.opening_hours.thursday"
+          :friday="restaurant.opening_hours.friday"
+          :saturday="restaurant.opening_hours.sturday"
+          :sunday="restaurant.opening_hours.sunday"
+          :pictures="restaurant.pictures"
+          :genres="restaurant.genres"
+          :price_range="restaurant.price_range"
+          :rating="restaurant.rating"
+        ></RestaurantCard>
+      </div>
+    </div>
+
+    <div class="search-filter">GLO-3102 Home</div>
+  </div>
+</template>
+
 <style scoped>
 .home-container {
   background: #fff;

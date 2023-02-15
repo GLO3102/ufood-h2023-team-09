@@ -37,7 +37,7 @@ const color_map = ["success", "primary", "danger", "black"];
       </div>
 
       <!-- Displays today's opening hours -->
-      <div class="opening-hours button mb-1">
+      <div class="opening-hours mb-1">
         <div v-if="today === 1">Today : {{ monday }}</div>
         <div v-else-if="today === 2">Today : {{ tuesday }}</div>
         <div v-else-if="today === 3">Today : {{ wednesday }}</div>
@@ -48,13 +48,13 @@ const color_map = ["success", "primary", "danger", "black"];
       </div>
 
       <!-- Direction button -->
-      <div class="button tooltip mb-1">
+      <div class="tooltip mb-1">
         <span class="tooltiptext">{{ address }}</span>
         {{ address.slice(0, 49) + "..." }}
       </div>
 
       <!-- Phone button -->
-      <div class="button mb-1">{{ tel }}</div>
+      <div class="mb-1">{{ tel }}</div>
 
       <!-- Display rating with stars -->
       <div class="rating-container">
@@ -93,6 +93,8 @@ const color_map = ["success", "primary", "danger", "black"];
             </symbol>
           </defs>
         </svg>
+
+        
         <div class="evaluation">
           <div class="button is-primary mr-1">Rate</div>
           <div class="button is-primary">Add to favorite</div>
@@ -179,7 +181,6 @@ img:hover {
   opacity: 1;
 }
 .card {
-  height: 760px;
 }
 .genres-container {
   display: flex;
@@ -192,5 +193,8 @@ img:hover {
 .address-phone {
   display: flex;
   flex-direction: column;
+}
+.evaluation{
+  flex-wrap: wrap;
 }
 </style>

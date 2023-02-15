@@ -180,8 +180,6 @@ img:hover {
   visibility: visible;
   opacity: 1;
 }
-.card {
-}
 .genres-container {
   display: flex;
   justify-content: left;

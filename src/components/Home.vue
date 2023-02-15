@@ -1,27 +1,38 @@
 <script setup>
-import RestaurantCard from "./RestaurantCard.vue";
-import { getRestaurantsByPage } from "../api/restaurantApi.js";
+import RestaurantCard from "./RestaurantCard.vue"
+import { getRestaurantsByPage } from "../api/restaurantApi.js"
 
 const load1morePage = async () => {
-  let newPosts = await getRestaurantsByPage(1);
-  console.log(newPosts);
-  console.log(restaurantsList.items);
-};
+  let newPosts = await getRestaurantsByPage(1)
+  console.log(newPosts)
+  console.log(restaurantsList.items)
+}
 let categories = [
-  "Fast Food",
-  "Indian",
-  "Asian",
-  "Pizza",
-  "Casual",
-  "Chicken",
-  "Café",
-  "Thai",
-  "Middle Eastern",
-  "Bring your own wine",
-  "Vegan",
-  "Italian",
-  "Pasta",
-];
+  "desserts",
+  "bistro",
+  "ambiance",
+  "fast-food",
+  "fruits de mer",
+  "hamburgers",
+  "végétarien",
+  "santé",
+  "mexicain",
+  "café",
+  "libanais",
+  "italien",
+  "happy hour",
+  "japonais",
+  "asiatique",
+  "steakhouse",
+  "boulangerie",
+  "grec",
+  "charcuterie",
+  "pizzeria",
+  "cuisine moléculaire",
+  "vietnamien",
+  "indien",
+  "européen"
+]
 
 // Dropdown
 // Toggle dropdown menu
@@ -43,31 +54,31 @@ window.onclick = function (event) {
 
 // Filter
 // Defines the states of the buttons
-let is1Active = false;
-let is2Active = false;
-let is3Active = false;
-let is4Active = false;
+let is1Active = false
+let is2Active = false
+let is3Active = false
+let is4Active = false
 // Toggle the range filter buttons
 function rangeFilter(range) {
   // Toggles the state of the buttons
   switch (range) {
     case "1":
-      is1Active = !is1Active;
-      break;
+      is1Active = !is1Active
+      break
     case "2":
-      is2Active = !is2Active;
-      break;
+      is2Active = !is2Active
+      break
     case "3":
-      is3Active = !is3Active;
-      break;
+      is3Active = !is3Active
+      break
     case "4":
-      is4Active = !is4Active;
-      break;
+      is4Active = !is4Active
+      break
   }
   // Toggles class "isActive" to change background color between white and light grey
-  document.getElementById(range).classList.toggle("is-active");
+  document.getElementById(range).classList.toggle("is-active")
   // Gets all restaurants card
-  let list = [...document.getElementsByClassName("restaurant-card")];
+  let list = [...document.getElementsByClassName("restaurant-card")]
   // Iterate through all cards and evaluate if they show or disappear
   list.forEach((card) => {
     //range === card.dataset.range
@@ -79,11 +90,11 @@ function rangeFilter(range) {
       (is3Active && card.dataset.range === "3") || // Button 3 is active AND current card's range is 3 OR
       (is4Active && card.dataset.range === "4") // Button 4 is active AND current card's range is 4 OR
     ) {
-      card.style.display = "block";
+      card.style.display = "block"
     } else {
-      card.style.display = "none";
+      card.style.display = "none"
     }
-  });
+  })
 }
 
 function filterByCategory(category){
@@ -104,40 +115,40 @@ export default {
     return {
       restaurantsList: [],
       index: 1,
-    };
+    }
   },
   mounted() {
-    window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll)
   },
   unmounted() {
-    window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll)
   },
   methods: {
     async getRestaurantByPage(index) {
       await getRestaurantsByPage(index).then((response) => {
-        this.restaurantsList = response;
-      });
+        this.restaurantsList = response
+      })
     },
     async loadMoreRestaurants() {
       if (this.index > 12) return;
-      let newPosts = await getRestaurantsByPage(this.index);
+      let newPosts = await getRestaurantsByPage(this.index)
       this.restaurantsList.items = this.restaurantsList.items.concat(
         newPosts.items
-      );
-      this.index++;
+      )
+      this.index++
     },
     handleScroll(e) {
-      let element = this.$refs.restaurantListScroll;
+      let element = this.$refs.restaurantListScroll
       if (element.getBoundingClientRect().bottom < window.innerHeight) {
-        this.loadMoreRestaurants();
+        this.loadMoreRestaurants()
       }
     },
   },
 
   created() {
-    this.getRestaurantByPage(0);
+    this.getRestaurantByPage(0)
   },
-};
+}
 </script>
 <template>
   <div class="home-container">

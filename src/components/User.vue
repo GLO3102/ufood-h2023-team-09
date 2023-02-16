@@ -59,6 +59,29 @@ const breakpoints = {
     itemsToShow: 3.5,
   },
 };
+
+function UserInfo() {
+  return {
+    id: "23455",
+    firstName: "Valorie",
+    lastName: "Deployed",
+    email: "1234@gmail.com",
+    picture:
+      "https://i.pinimg.com/564x/15/a8/bc/15a8bc7417bb5583b96c24a359fd5dfe.jpg",// "https://i.pinimg.com/564x/71/d9/cb/71d9cb057643ad9194c4e8807fa22c08.jpg"
+    score: "800",
+  };
+}
+
+const activeUser = new UserInfo();
+console.log(activeUser.picture);
+/*props: [
+  activeUser.firstName,
+  activeUser.lastName,
+  activeUser.id,
+  activeUser.email,
+  activeUser.picture,
+  activeUser.score,
+];*/
 </script>
 
 <template>
@@ -71,7 +94,7 @@ const breakpoints = {
             <figure class="image is-4by4">
               <img
                 class="is-rounded"
-                src="https://i.pinimg.com/564x/15/a8/bc/15a8bc7417bb5583b96c24a359fd5dfe.jpg"
+                src="activeUser.picture"
                 alt="UserPicture"
               />
             </figure>
@@ -79,9 +102,9 @@ const breakpoints = {
 
           <div class="level-item">
             <div class="is-6 is-offset-32 has-text-centered">
-              <h1 class="title is-2">Dr. Panda<br /></h1>
+              <h1 class="title is-2">{{ activeUser.firstName }} {{ activeUser.lastName }}<br /></h1>
               <h2 class="subtitle is-1 has-text-primary has-text-weight-bold">
-                <br />750
+                <br />{{activeUser.score}}
               </h2>
             </div>
           </div>
@@ -244,7 +267,7 @@ const breakpoints = {
   background: #fff;
   box-shadow: inset 100px 0px 100px -50px #959595,
     inset -100px 0px 100px -50px #959595;
-    margin: 0;
+  margin: 0;
 }
 #temporary {
   background-color: aqua;

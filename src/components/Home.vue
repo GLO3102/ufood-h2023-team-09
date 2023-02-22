@@ -1,12 +1,45 @@
 <script setup>
-import RestaurantCard from "./RestaurantCard.vue"
-import { getRestaurantsByPage } from "../api/restaurantApi.js"
+import { onMounted, onUnmounted, ref } from "vue";
 
-const load1morePage = async () => {
-  let newPosts = await getRestaurantsByPage(1)
-  console.log(newPosts)
-  console.log(restaurantsList.items)
+import RestaurantCard from "./RestaurantCard.vue";
+import { getRestaurantsByPage } from "../api/restaurantApi.js";
+
+// infinite scroll
+const restaurantListScroll = ref(null);
+let restaurantsList = ref([]);
+getRestaurantByPage(0);
+const index = ref(1);
+onMounted(() => {
+  getRestaurantByPage(0);
+  window.addEventListener("scroll", handleScroll);
+});
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
+
+function handleScroll(e) {
+  let element = restaurantListScroll.value;
+  if (element.getBoundingClientRect().bottom < window.innerHeight) {
+    loadMoreRestaurants();
+  }
 }
+async function load1morePage() {
+  let newPosts = await getRestaurantsByPage(1);
+}
+async function getRestaurantByPage(index) {
+  await getRestaurantsByPage(index).then((response) => {
+    restaurantsList.value = response;
+  });
+}
+async function loadMoreRestaurants() {
+  if (index.value > 12) return;
+  let newPosts = await getRestaurantsByPage(index.value);
+  restaurantsList.value.items = restaurantsList.value.items.concat(
+    newPosts.items
+  );
+  index.value++;
+}
+
 let categories = [
   "desserts",
   "bistro",
@@ -31,8 +64,8 @@ let categories = [
   "cuisine moléculaire",
   "vietnamien",
   "indien",
-  "européen"
-]
+  "européen",
+];
 
 // Dropdown
 // Toggle dropdown menu
@@ -54,35 +87,34 @@ window.onclick = function (event) {
 
 // Filter
 // Defines the states of the buttons
-let is1Active = false
-let is2Active = false
-let is3Active = false
-let is4Active = false
+let is1Active = false;
+let is2Active = false;
+let is3Active = false;
+let is4Active = false;
 // Toggle the range filter buttons
 function rangeFilter(range) {
   // Toggles the state of the buttons
   switch (range) {
     case "1":
-      is1Active = !is1Active
-      break
+      is1Active = !is1Active;
+      break;
     case "2":
-      is2Active = !is2Active
-      break
+      is2Active = !is2Active;
+      break;
     case "3":
-      is3Active = !is3Active
-      break
+      is3Active = !is3Active;
+      break;
     case "4":
-      is4Active = !is4Active
-      break
+      is4Active = !is4Active;
+      break;
   }
   // Toggles class "isActive" to change background color between white and light grey
-  document.getElementById(range).classList.toggle("is-active")
+  document.getElementById(range).classList.toggle("is-active");
   // Gets all restaurants card
-  let list = [...document.getElementsByClassName("restaurant-card")]
+  let list = [...document.getElementsByClassName("restaurant-card")];
   // Iterate through all cards and evaluate if they show or disappear
   list.forEach((card) => {
     //range === card.dataset.range
-
     if (
       (!is1Active && !is2Active && !is3Active && !is4Active) || // All buttons are inactive OR
       (is1Active && card.dataset.range === "1") || // Button 1 is active AND current card's range is 1 OR
@@ -90,64 +122,23 @@ function rangeFilter(range) {
       (is3Active && card.dataset.range === "3") || // Button 3 is active AND current card's range is 3 OR
       (is4Active && card.dataset.range === "4") // Button 4 is active AND current card's range is 4 OR
     ) {
-      card.style.display = "block"
+      card.style.display = "block";
     } else {
-      card.style.display = "none"
+      card.style.display = "none";
     }
-  })
+  });
 }
 
-function filterByCategory(category){
-  const drop = "drop-" + formatKebabCase(category)
-  const tag = "tag-" + formatKebabCase(category)
-  document.getElementById(drop).classList.toggle("is-active")
-  document.getElementById(tag).classList.toggle("is-tag-active")
+function filterByCategory(category) {
+  const drop = "drop-" + formatKebabCase(category);
+  const tag = "tag-" + formatKebabCase(category);
+  document.getElementById(drop).classList.toggle("is-active");
+  document.getElementById(tag).classList.toggle("is-tag-active");
 }
 
-function formatKebabCase(str){
-  let newString = str.toLowerCase()
-  return newString.replaceAll(" ", "-")
-}
-</script>
-<script>
-export default {
-  data() {
-    return {
-      restaurantsList: [],
-      index: 1,
-    }
-  },
-  mounted() {
-    window.addEventListener("scroll", this.handleScroll)
-  },
-  unmounted() {
-    window.removeEventListener("scroll", this.handleScroll)
-  },
-  methods: {
-    async getRestaurantByPage(index) {
-      await getRestaurantsByPage(index).then((response) => {
-        this.restaurantsList = response
-      })
-    },
-    async loadMoreRestaurants() {
-      if (this.index > 12) return;
-      let newPosts = await getRestaurantsByPage(this.index)
-      this.restaurantsList.items = this.restaurantsList.items.concat(
-        newPosts.items
-      )
-      this.index++
-    },
-    handleScroll(e) {
-      let element = this.$refs.restaurantListScroll
-      if (element.getBoundingClientRect().bottom < window.innerHeight) {
-        this.loadMoreRestaurants()
-      }
-    },
-  },
-
-  created() {
-    this.getRestaurantByPage(0)
-  },
+function formatKebabCase(str) {
+  let newString = str.toLowerCase();
+  return newString.replaceAll(" ", "-");
 }
 </script>
 <template>
@@ -195,24 +186,22 @@ export default {
         <button class="button" id="3" @click="rangeFilter('3')">$$$</button>
         <button class="button" id="4" @click="rangeFilter('4')">$$$$</button>
       </div>
-
-      
     </div>
     <!-- List of categories selected -->
-      <div class="categories-selected-container">
-        <div
-          class="categories-selected tags has-addons"
-          v-for="category in categories"
-          :key="category"
-          :id="'tag-' + formatKebabCase(category)"
-        >
-            <span class="tag is-info is-medium"
-              >{{category}}</span
-            >
-            <a @click="filterByCategory(category)" class="tag is-delete is-medium"></a>
-
-        </div>
+    <div class="categories-selected-container">
+      <div
+        class="categories-selected tags has-addons"
+        v-for="category in categories"
+        :key="category"
+        :id="'tag-' + formatKebabCase(category)"
+      >
+        <span class="tag is-info is-medium">{{ category }}</span>
+        <a
+          @click="filterByCategory(category)"
+          class="tag is-delete is-medium"
+        ></a>
       </div>
+    </div>
 
     <!-- Dynamically generated restaurants list -->
     <div class="restaurant-list" ref="restaurantListScroll">
@@ -272,7 +261,7 @@ export default {
   flex-wrap: nowrap;
   flex-shrink: 1;
 }
-.dropdown-item.is-active{
+.dropdown-item.is-active {
   display: none;
 }
 .categories-selected-container {
@@ -288,20 +277,20 @@ export default {
   margin: 6px;
   display: none;
 }
-.is-tag-active{
-display: flex;
+.is-tag-active {
+  display: flex;
 }
 .tags .tag {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
-.tags{
-    margin-bottom: 6px;
+.tags {
+  margin-bottom: 6px;
 }
 .tags:not(:last-child) {
-    margin-bottom: 6px;
+  margin-bottom: 6px;
 }
 .tags:last-child {
-    margin-bottom: 6px;
+  margin-bottom: 6px;
 }
 .is-active {
   background-color: rgb(220, 220, 220);

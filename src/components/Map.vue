@@ -35,7 +35,6 @@ onMounted(() => {
       function (position) {
         // Get the latitude and longitude coordinates
         const { latitude, longitude } = position.coords;
-        console.log(latitude, longitude);
         // Use Mapbox's Geocoding API to get the address
         fetch(
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=pk.eyJ1IjoicGFsZXg5OTkiLCJhIjoiY2xlMDl4YWMwMG42OTN2bzgwbjd1bW82aCJ9.fH1lEdpJsNacjxdL8RlYog`

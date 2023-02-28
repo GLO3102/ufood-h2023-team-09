@@ -3,6 +3,8 @@ import { defineComponent } from "vue";
 import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
 import { useUserStore } from "@/stores/user";
 import { computed } from "vue";
+import userVisitsJson from "@/dummy_jsons/hardcoded_userVisits.json";
+import userJson from "@/dummy_jsons/hardcoded_user.json";
 import "vue3-carousel/dist/carousel.css";
 
 export default defineComponent({
@@ -13,10 +15,28 @@ export default defineComponent({
     Pagination,
     Navigation,
   },
-});
+  data: () => ({
+    userInfo: userJson,
+    userVisited: userVisitsJson,
+  }),
 
-data: () => ({
-  //carousel settings
+  methods: {
+    getRestaurantPicture(){
+      console.log("get picture.com")
+    },
+    
+    calculNumberVisits(){
+      array.forEach(this.userVisited => {
+        
+      });
+      
+      const restauID = userVisited.restaurant_id
+      const 
+    },
+
+    
+  }
+
 });
 </script>
 <script setup>
@@ -60,28 +80,6 @@ const breakpoints = {
   },
 };
 
-function UserInfo() {
-  return {
-    id: "23455",
-    firstName: "Valorie",
-    lastName: "Deployed",
-    email: "1234@gmail.com",
-    picture:
-      "https://i.pinimg.com/564x/15/a8/bc/15a8bc7417bb5583b96c24a359fd5dfe.jpg",// "https://i.pinimg.com/564x/71/d9/cb/71d9cb057643ad9194c4e8807fa22c08.jpg"
-    score: "800",
-  };
-}
-
-const activeUser = new UserInfo();
-console.log(activeUser.picture);
-/*props: [
-  activeUser.firstName,
-  activeUser.lastName,
-  activeUser.id,
-  activeUser.email,
-  activeUser.picture,
-  activeUser.score,
-];*/
 </script>
 
 <template>
@@ -92,19 +90,15 @@ console.log(activeUser.picture);
         <nav class="level">
           <div class="level-item has-text-centered">
             <figure class="image is-4by4">
-              <img
-                class="is-rounded"
-                src="activeUser.picture"
-                alt="UserPicture"
-              />
+              <img class="is-rounded" src="" alt="UserPicture" />
             </figure>
           </div>
 
           <div class="level-item">
             <div class="is-6 is-offset-32 has-text-centered">
-              <h1 class="title is-2">{{ activeUser.firstName }} {{ activeUser.lastName }}<br /></h1>
+              <h1 class="title is-2">{{ userInfo.name }} <br /></h1>
               <h2 class="subtitle is-1 has-text-primary has-text-weight-bold">
-                <br />{{activeUser.score}}
+                <br />{{ userVisited.total }}
               </h2>
             </div>
           </div>
@@ -128,96 +122,27 @@ console.log(activeUser.picture);
             :settings="settings"
             :breakpoints="breakpoints"
           >
-            <Slide key="slide">
+            <!--debut card1-->
+            <Slide v-for="visited in userVisited.items" :key="visited">
               <div class="carousel__item">
                 <div class="card">
-                  <figure class="image is-4by3">
-                    <img
-                      src="https://i.pinimg.com/236x/83/c1/e7/83c1e7c64211f263f588a2f74dd309c6.jpg"
-                      alt=""
-                    />
-                  </figure>
-                </div>
-                <div class="card-content is-overlay">
-                  <span class="tag is-primary is-size-5">20</span>
-                </div>
-                <div class="card-content slider-text">
-                  <div class="is-size-5 box">RESTAURANT_NAME</div>
-                </div>
-              </div>
-            </Slide>
-            <Slide key="slide">
-              <div class="carousel__item">
-                <div class="card">
-                  <figure class="image is-4by3">
-                    <img
-                      src="https://i.pinimg.com/564x/08/25/38/082538afc45124898e4a792a5250d352.jpg"
-                      alt=""
-                    />
-                  </figure>
-                </div>
-                <div class="card-content is-overlay">
-                  <span class="tag is-primary is-size-5">9</span>
-                </div>
-                <div class="card-content slider-text">
-                  <div class="is-size-5 box">RESTAURANT_NAME</div>
+                  <div class="card-image">
+                    <figure class="image is-4by3">
+                      <img
+                        src="https://i.pinimg.com/236x/83/c1/e7/83c1e7c64211f263f588a2f74dd309c6.jpg"
+                        alt="restaurant picture"
+                      />
+                    </figure>
+                  </div>
+                  <div class="card-content is-overlay">
+                    <span class="tag is-primary is-size-5">20</span>
+                  </div>
+                  <div class="card-content slider-text">
+                    <div class="is-size-5 box">RESE</div>
+                  </div>
                 </div>
               </div>
-            </Slide>
-            <Slide key="slide">
-              <div class="carousel__item">
-                <div class="card">
-                  <figure class="image is-4by3">
-                    <img
-                      src="https://i.pinimg.com/564x/95/19/fb/9519fb6c2a9576b4017356c29fb15f93.jpg"
-                      alt=""
-                    />
-                  </figure>
-                </div>
-                <div class="card-content is-overlay">
-                  <span class="tag is-primary is-size-5">15</span>
-                </div>
-                <div class="card-content slider-text">
-                  <div class="is-size-5 box">RESTAURANT_NAME</div>
-                </div>
-              </div>
-            </Slide>
-            <Slide key="slide">
-              <div class="carousel__item">
-                <div class="card">
-                  <figure class="image is-4by3">
-                    <img
-                      src="https://i.pinimg.com/564x/9f/2f/6b/9f2f6bd333752f91e23514ea1a946e3c.jpg"
-                      alt=""
-                    />
-                  </figure>
-                </div>
-                <div class="card-content is-overlay">
-                  <span class="tag is-primary is-size-5">10</span>
-                </div>
-                <div class="card-content slider-text">
-                  <div class="is-size-5 box">RESTAURANT_NAME</div>
-                </div>
-              </div>
-            </Slide>
-            <Slide key="slide">
-              <div class="carousel__item">
-                <div class="card">
-                  <figure class="image is-4by3">
-                    <img
-                      src="https://i.pinimg.com/564x/98/10/2c/98102cbaf0d75501f968ece02a83482f.jpg"
-                      alt=""
-                    />
-                  </figure>
-                </div>
-                <div class="card-content is-overlay">
-                  <span class="tag is-primary is-size-5">8</span>
-                </div>
-                <div class="card-content slider-text">
-                  <div class="is-size-5 box">RESTAURANT_NAME</div>
-                </div>
-              </div>
-            </Slide>
+           </Slide>
             <template #addons>
               <Navigation />
               <Pagination />
@@ -284,5 +209,19 @@ div {
 label {
   display: inline-block;
   width: 100px;
+}
+
+.card {
+  width: 300px;
+  max-width: 300px;
+  height: 350px;
+}
+
+.card-content {
+  white-space: pre-wrap; /* CSS3 */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -pre-wrap; /* Opera <7 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word;
 }
 </style>

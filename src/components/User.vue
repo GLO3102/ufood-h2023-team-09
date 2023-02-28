@@ -5,6 +5,7 @@ import { useUserStore } from "@/stores/user";
 import { computed } from "vue";
 import userVisitsJson from "@/dummy_jsons/hardcoded_userVisits.json";
 import userJson from "@/dummy_jsons/hardcoded_user.json";
+import restaurantJson from "@/dummy_jsons/hardcoded_resto.json";
 import "vue3-carousel/dist/carousel.css";
 
 export default defineComponent({
@@ -17,26 +18,46 @@ export default defineComponent({
   },
   data: () => ({
     userInfo: userJson,
-    userVisited: userVisitsJson,
+    userVisites: userVisitsJson,
+    restaurantInfo: restaurantJson,
   }),
 
   methods: {
-    getRestaurantPicture(){
-      console.log("get picture.com")
-    },
-    
-    calculNumberVisits(){
-      array.forEach(this.userVisited => {
-        
+    getListRestaurantID() {
+      let listID = [];
+      this.userVisitsJson.items.forEach((element) => {
+        if (!listID.includes(element.restaurant_id)) {
+          listID.push(element.restaurant_id);
+        }
       });
-      
-      const restauID = userVisited.restaurant_id
-      const 
+      return listID;
     },
 
-    
-  }
+    getRestaurantPicture() {
+      console.log("get picture.com");
+    },
 
+    calculNumberVisits(restaurentID) {
+      let counter = 0;
+      this.userVisitsJson.items.forEach((element) => {
+        if (element.restaurant_id == restaurentID) {
+          counter = counter + 1;
+        }
+      });
+      return counter;
+    },
+
+    getRestaurantName(restaurantID) {
+      const name = "";
+      this.restaurantJson.items.forEach((element) => {
+        console.log(element.id, " ", restaurantID);
+        if (element.id == restaurantID) {
+          console.log(element.name);
+          return element.name;
+        }
+      });
+    },
+  },
 });
 </script>
 <script setup>
@@ -79,7 +100,6 @@ const breakpoints = {
     itemsToShow: 3.5,
   },
 };
-
 </script>
 
 <template>
@@ -98,7 +118,7 @@ const breakpoints = {
             <div class="is-6 is-offset-32 has-text-centered">
               <h1 class="title is-2">{{ userInfo.name }} <br /></h1>
               <h2 class="subtitle is-1 has-text-primary has-text-weight-bold">
-                <br />{{ userVisited.total }}
+                <br />{{ userVisites.total }}
               </h2>
             </div>
           </div>
@@ -123,9 +143,10 @@ const breakpoints = {
             :breakpoints="breakpoints"
           >
             <!--debut card1-->
-            <Slide v-for="visited in userVisited.items" :key="visited">
+            <Slide v-for="visited in getListRestaurantID()" :key="visited">
               <div class="carousel__item">
                 <div class="card">
+                  <!--image-->
                   <div class="card-image">
                     <figure class="image is-4by3">
                       <img
@@ -134,15 +155,24 @@ const breakpoints = {
                       />
                     </figure>
                   </div>
+                  <!--fin image-->
+                  <!-- debut number visits-->
                   <div class="card-content is-overlay">
-                    <span class="tag is-primary is-size-5">20</span>
+                    <span class="tag is-primary is-size-5">
+                      {{ calculNumberVisits(visited) }}
+                    </span>
                   </div>
+                  <!--end number visits-->
+                  <!-- debut name -->
                   <div class="card-content slider-text">
-                    <div class="is-size-5 box">RESE</div>
+                    <div class="is-size-5 box">
+                      {{ getRestaurantName(visited) }}
+                    </div>
                   </div>
+                  <!--end name-->
                 </div>
               </div>
-           </Slide>
+            </Slide>
             <template #addons>
               <Navigation />
               <Pagination />

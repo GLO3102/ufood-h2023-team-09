@@ -8,7 +8,7 @@ const color_map = ["success", "primary", "danger", "black"];
   <div class="card">
     <div class="card-image">
       <figure class="image is-4by3">
-        <router-link to="/restaurant">
+        <router-link :to="`/restaurant/${id}`">
           <img :src="pictures[0]" alt="Placeholder image" />
         </router-link>
       </figure>
@@ -17,7 +17,7 @@ const color_map = ["success", "primary", "danger", "black"];
       <div class="media">
         <div class="media-left"></div>
         <div class="media-content">
-          <router-link to="/restaurant"
+          <router-link :to="`/restaurant/${id}`"
             ><span class="title is-3">{{
               name.slice(0, 50)
             }}</span></router-link

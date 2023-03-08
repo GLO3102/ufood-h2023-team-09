@@ -1,6 +1,17 @@
 <template>
-  <div class="resto">
-    <div class="container is-max-widescreen">
+
+  <div>
+    <slot v-if="displayError">
+      <div class="box is-flex is-align-items-center is-justify-content-center is-flex-direction-column">
+        <figure>
+          <img src="../assets/something_went_wrong.png" alt="" />
+        </figure>
+        <p class="title is-3">{{displayErrorMsg}}</p>
+        <p class="title is-3">Try again later...</p>
+      </div>
+    </slot>
+    <slot v-else-if="resto_data" class="resto">
+      <div class="container is-max-widescreen">
       <br /><br />
       <div
         class="box is-flex is-justify-content-space-between"
@@ -80,7 +91,7 @@
                 <thead>
                   <th><abbr title="Tags">Tags </abbr></th>
                 </thead>
-                <tbody v-for="tag in json.genres" :key="tag">
+                <tbody v-for="tag in resto_data.genres" :key="tag">
                   <tr>
                     <th id="tags" class="tag is-info is-medium">{{ tag }}</th>
                   </tr>
@@ -106,11 +117,11 @@
               v-model="currentSlide"
               :settings="settings"
             >
-              <Slide v-for="index in json.pictures.length" :key="index">
+              <Slide v-for="index in resto_data.pictures.length" :key="index">
                 <div class="carousel__item">
                   <div class="card">
                     <figure class="image is-4by3">
-                      <img :src="json.pictures[index - 1]" alt="" />
+                      <img :src="resto_data.pictures[index - 1]" alt="" />
                     </figure>
                   </div>
                 </div>
@@ -131,10 +142,10 @@
         ref="carousel"
         v-model="currentSlide"
       >
-        <Slide v-for="index in json.pictures.length" :key="index">
+        <Slide v-for="index in resto_data.pictures.length" :key="index">
           <div class="carousel__item" @click="slideTo(index - 1)">
             <figure class="image is-4by3">
-              <img :src="json.pictures[index - 1]" alt="" />
+              <img :src="resto_data.pictures[index - 1]" alt="" />
             </figure>
           </div>
         </Slide>
@@ -150,12 +161,13 @@
         <Map />
       </div>
     </div>
+    </slot>
+
   </div>
 </template>
 
 <script setup>
 import Map from "./Map.vue";
-const color_map = ["black", "warning", "primary"];
 
 const settings = {
   itemsToShow: 1,
@@ -182,15 +194,16 @@ const breakpoints = {
   },
 };
 </script>
+
+
 <script>
 import { defineComponent } from "vue";
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel";
+import {getRestaurantByID}  from "../api/restaurantApi.js";
 import Schedule from "./Schedule.vue";
 import MapLocation from "./MapLocation.vue";
-import json from "../dummy_jsons/hardcoded_resto.json";
 import "vue3-carousel/dist/carousel.css";
 
-json = json.items[0];
 
 export default defineComponent({
   name: "Basic",
@@ -200,8 +213,19 @@ export default defineComponent({
   },
   data: () => ({
     currentSlide: 0,
-    resto_data: json,
+    resto_data: null,
+    displayError : false,
+    displayErrorMsg : null,
+    color_map : ["success", "primary", "danger", "black"],
   }),
+  async created() {
+    try {
+      this.resto_data = await getRestaurantByID(this.$route.params.id);
+    } catch (e) {
+      this.displayError = true;
+      this.displayErrorMsg = e.message;
+    } finally {
+    }},
   methods: {
     slideTo(val) {
       this.currentSlide = val;

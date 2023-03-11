@@ -24,39 +24,46 @@ export default defineComponent({
     userVisites: getUserVisits("5f998ff0d4ade30004a658ef"),
     userName: "",
     userRating: "",
-    listRestaurantID: [],
+    listRestaurant: [],
     restaurantNumberVisits: "",
     restaurantPic: "",
     restaurantName: "",
   }),
 
   methods: {
-    async getUser() {
-      const user = await getUserById("619c57e4fe6e16000458adf4");
-      this.userName = user.name;
-      this.userRating = user.rating;
+    async getRestaurant(listId) {
+      const listRestaurant = [];
+      const restaurant = await getRestaurantById(id);
+      return restaurant;
     },
 
-    async getListRestaurantID() {
+    async getListRestaurant() {
       let listID = [];
+      let listRestau = [];
       const visits = await this.userVisites;
       visits.forEach((element) => {
         if (!listID.includes(element.restaurant_id)) {
           listID.push(element.restaurant_id);
+          const restaurant = getRestaurantById(element.restaurant_id);
+          console.log(restaurant);
+          listRestau.push(restaurant);
         }
       });
-      this.listRestaurantID = listID;
-      console.log(listID);
+
       return listID;
     },
 
-    setRestaurant(id) {
-      console.log(id);
+    async getUser() {
+      const user = await getUserById("619c57e4fe6e16000458adf4");
+      this.userName = user.name;
+      this.userRating = user.rating;
+      this.listRestaurant = await this.getListRestaurant();
     },
 
+    /* setRestaurant(id) {},
+    <!-- DONT WORK DIRECTLY IN CAROUSSEL -->
     async calculNumberVisits(restaurentID) {
       let counter = 0;
-      console.log(restaurentID);
       const visits = await this.userVisites;
       visits.forEach((element) => {
         if (element.restaurant_id === restaurentID) {
@@ -68,20 +75,19 @@ export default defineComponent({
     },
 
     async getRestaurantName(restaurantID) {
-      const name = await getRestaurantById(restaurantID).name;
-      this.restaurantName = name;
-      return name;
+      const name = await getRestaurantById(restaurantID);
+      this.restaurantName = name.name;
+      return name.name;
     },
 
     async getRestaurantsPicture(restaurantID) {
       const picture = await getRestaurantById(restaurantID).picture[0];
       this.restaurantPic = picture;
       return picture;
-    },
+    },*/
   },
 });
 </script>
-
 
 <script setup>
 //TO REMOVE
@@ -174,7 +180,7 @@ const breakpoints = {
             :breakpoints="breakpoints"
           >
             <!--debut card1-->
-            <Slide v-for="visited in getListRestaurantID()" :key="visited">
+            <Slide v-for="visited in listRestaurant" :key="visited">
               <div class="carousel__item">
                 <div class="card">
                   <!--image-->
@@ -186,12 +192,12 @@ const breakpoints = {
                   <!--fin image-->
                   <!-- debut number visits-->
                   <div class="card-content is-overlay">
-                    <span class="tag is-primary is-size-5">{{calculNumberVisits(visited)}} </span>
+                    <span class="tag is-primary is-size-5">0 </span>
                   </div>
                   <!--end number visits-->
                   <!-- debut name -->
                   <div class="card-content slider-text">
-                    <div class="is-size-5 box">{{getRestaurantName(visited) }}</div>
+                    <div class="is-size-5 box">restau Name</div>
                   </div>
                   <!--end name-->
                 </div>

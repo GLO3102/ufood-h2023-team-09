@@ -3,9 +3,11 @@ import { defineComponent } from "vue";
 import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
 import { useUserStore } from "@/stores/user";
 import { computed } from "vue";
-import userVisitsJson from "@/dummy_jsons/hardcoded_userVisits.json";
-import userJson from "@/dummy_jsons/hardcoded_user.json";
-import restaurantJson from "@/dummy_jsons/hardcoded_resto.json";
+import { getUserById } from "../api/userApi.js";
+import { getUserVisits } from "../api/userApi.js";
+import { getUsersList } from "../api/userApi.js";
+import { getRestaurantById } from "../api/userApi.js";
+
 import "vue3-carousel/dist/carousel.css";
 
 export default defineComponent({
@@ -16,50 +18,71 @@ export default defineComponent({
     Pagination,
     Navigation,
   },
+
   data: () => ({
-    userInfo: userJson,
-    userVisites: userVisitsJson,
-    restaurantInfo: restaurantJson,
+    userInfo: getUserById("5f998ff0d4ade30004a658ef"),
+    userVisites: getUserVisits("5f998ff0d4ade30004a658ef"),
+    userName: "",
+    userRating: "",
+    listRestaurantID: [],
+    restaurantNumberVisits: "",
+    restaurantPic: "",
+    restaurantName: "",
   }),
 
   methods: {
-    getListRestaurantID() {
+    async getUser() {
+      const user = await getUserById("619c57e4fe6e16000458adf4");
+      this.userName = user.name;
+      this.userRating = user.rating;
+    },
+
+    async getListRestaurantID() {
       let listID = [];
-      this.userVisitsJson.items.forEach((element) => {
+      const visits = await this.userVisites;
+      visits.forEach((element) => {
         if (!listID.includes(element.restaurant_id)) {
           listID.push(element.restaurant_id);
         }
       });
+      this.listRestaurantID = listID;
+      console.log(listID);
       return listID;
     },
 
-    getRestaurantPicture() {
-      console.log("get picture.com");
+    setRestaurant(id) {
+      console.log(id);
     },
 
-    calculNumberVisits(restaurentID) {
+    async calculNumberVisits(restaurentID) {
       let counter = 0;
-      this.userVisitsJson.items.forEach((element) => {
-        if (element.restaurant_id == restaurentID) {
+      console.log(restaurentID);
+      const visits = await this.userVisites;
+      visits.forEach((element) => {
+        if (element.restaurant_id === restaurentID) {
           counter = counter + 1;
         }
       });
+      this.restaurantNumberVisits = counter;
       return counter;
     },
 
-    getRestaurantName(restaurantID) {
-      const name = "";
-      this.restaurantJson.items.forEach((element) => {
-        console.log(element.id, " ", restaurantID);
-        if (element.id == restaurantID) {
-          console.log(element.name);
-          return element.name;
-        }
-      });
+    async getRestaurantName(restaurantID) {
+      const name = await getRestaurantById(restaurantID).name;
+      this.restaurantName = name;
+      return name;
+    },
+
+    async getRestaurantsPicture(restaurantID) {
+      const picture = await getRestaurantById(restaurantID).picture[0];
+      this.restaurantPic = picture;
+      return picture;
     },
   },
 });
 </script>
+
+
 <script setup>
 //TO REMOVE
 const toggleViews = () => {
@@ -76,6 +99,10 @@ const toggleViews = () => {
 const isFavoriteRestaurantsEmpty = computed(() => {
   return useUserStore().favoriteRestaurants.length === 0;
 });
+
+/*const isUserEmpty = computed(() => {
+  return getUser();
+ });*/
 
 const settings = {
   itemsToShow: 1,
@@ -107,18 +134,22 @@ const breakpoints = {
     <div class="hero-body">
       <!-- Begin user info-->
       <div>
+        <div v-show="false">{{ getUser() }}</div>
         <nav class="level">
           <div class="level-item has-text-centered">
             <figure class="image is-4by4">
-              <img class="is-rounded" src="" alt="UserPicture" />
+              <img
+                class="is-rounded"
+                src="https://i.pinimg.com/564x/05/a8/b9/05a8b9eea5a348454da598c4895c0ebc.jpg"
+                alt="UserPicture"
+              />
             </figure>
           </div>
-
           <div class="level-item">
             <div class="is-6 is-offset-32 has-text-centered">
-              <h1 class="title is-2">{{ userInfo.name }} <br /></h1>
+              <h1 class="title is-2">{{ userName }}<br /></h1>
               <h2 class="subtitle is-1 has-text-primary has-text-weight-bold">
-                <br />{{ userVisites.total }}
+                <br />{{ userRating }}
               </h2>
             </div>
           </div>
@@ -149,25 +180,18 @@ const breakpoints = {
                   <!--image-->
                   <div class="card-image">
                     <figure class="image is-4by3">
-                      <img
-                        src="https://i.pinimg.com/236x/83/c1/e7/83c1e7c64211f263f588a2f74dd309c6.jpg"
-                        alt="restaurant picture"
-                      />
+                      <img src="" alt="restaurant picture" />
                     </figure>
                   </div>
                   <!--fin image-->
                   <!-- debut number visits-->
                   <div class="card-content is-overlay">
-                    <span class="tag is-primary is-size-5">
-                      {{ calculNumberVisits(visited) }}
-                    </span>
+                    <span class="tag is-primary is-size-5">{{calculNumberVisits(visited)}} </span>
                   </div>
                   <!--end number visits-->
                   <!-- debut name -->
                   <div class="card-content slider-text">
-                    <div class="is-size-5 box">
-                      {{ getRestaurantName(visited) }}
-                    </div>
+                    <div class="is-size-5 box">{{getRestaurantName(visited) }}</div>
                   </div>
                   <!--end name-->
                 </div>

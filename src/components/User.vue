@@ -7,6 +7,7 @@ import { getUserById } from "../api/userApi.js";
 import { getUserVisits } from "../api/userApi.js";
 import { getUsersList } from "../api/userApi.js";
 import { getRestaurantById } from "../api/userApi.js";
+import { getRestaurants } from "../api/userApi.js";
 
 import "vue3-carousel/dist/carousel.css";
 
@@ -39,17 +40,20 @@ export default defineComponent({
 
     async getListRestaurant() {
       let listID = [];
-      let listRestau = [];
+      let listRestau = await getRestaurants();
       const visits = await this.userVisites;
       visits.forEach((element) => {
         if (!listID.includes(element.restaurant_id)) {
           listID.push(element.restaurant_id);
-          const restaurant = getRestaurantById(element.restaurant_id);
-          console.log(restaurant);
-          listRestau.push(restaurant);
         }
       });
-
+      listRestau.items.forEach((restau) => {
+        if (!listID.includes(restau.id)) {
+          const index = listRestau.indexOf(restau);
+          listRestau.splice(index, 1);
+        }
+      });
+      console.log(listRestau);
       return listID;
     },
 

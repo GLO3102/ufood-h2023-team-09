@@ -7,6 +7,7 @@ import userVisitsJson from "@/dummy_jsons/hardcoded_userVisits.json";
 import userJson from "@/dummy_jsons/hardcoded_user.json";
 import restaurantJson from "@/dummy_jsons/hardcoded_resto.json";
 import "vue3-carousel/dist/carousel.css";
+import FavoriteLists from "./FavoriteLists.vue";
 
 export default defineComponent({
   name: "Basic",
@@ -15,11 +16,14 @@ export default defineComponent({
     Slide,
     Pagination,
     Navigation,
+    FavoriteLists,
   },
   data: () => ({
     userInfo: userJson,
     userVisites: userVisitsJson,
     restaurantInfo: restaurantJson,
+    userId: "633730caa2b5d64b72b51110",
+    user: Object,
   }),
 
   methods: {
@@ -104,6 +108,7 @@ const breakpoints = {
 
 <template>
   <div class="hero" id="user-entire-page">
+    <FavoriteLists :user-id="userId"/>
     <div class="hero-body">
       <!-- Begin user info-->
       <div>

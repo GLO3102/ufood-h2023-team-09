@@ -5,9 +5,7 @@ import { useUserStore } from "@/stores/user";
 import { computed } from "vue";
 import { getUserById } from "../api/userApi.js";
 import { getUserVisits } from "../api/userApi.js";
-import { getUsersList } from "../api/userApi.js";
-import { getRestaurantById } from "../api/userApi.js";
-import { getRestaurants } from "../api/userApi.js";
+import UserRestaurantVisitedCard from "../components/UserRestaurantVisitedCard.vue";
 
 import "vue3-carousel/dist/carousel.css";
 
@@ -21,39 +19,23 @@ export default defineComponent({
   },
 
   data: () => ({
-    userInfo: getUserById("5f998ff0d4ade30004a658ef"),
-    userVisites: getUserVisits("5f998ff0d4ade30004a658ef"),
+    userVisites: "",
     userName: "",
     userRating: "",
-    listRestaurant: [],
-    restaurantNumberVisits: "",
-    restaurantPic: "",
-    restaurantName: "",
+    listRestaurantID: [],
   }),
 
   methods: {
-    async getRestaurant(listId) {
-      const listRestaurant = [];
-      const restaurant = await getRestaurantById(id);
-      return restaurant;
-    },
-
+ 
     async getListRestaurant() {
       let listID = [];
-      let listRestau = await getRestaurants();
-      const visits = await this.userVisites;
+      this.userVisites = await getUserVisits("619c57e4fe6e16000458adf4");
+      const visits = this.userVisites;
       visits.forEach((element) => {
         if (!listID.includes(element.restaurant_id)) {
           listID.push(element.restaurant_id);
         }
       });
-      listRestau.items.forEach((restau) => {
-        if (!listID.includes(restau.id)) {
-          const index = listRestau.indexOf(restau);
-          listRestau.splice(index, 1);
-        }
-      });
-      console.log(listRestau);
       return listID;
     },
 
@@ -61,34 +43,20 @@ export default defineComponent({
       const user = await getUserById("619c57e4fe6e16000458adf4");
       this.userName = user.name;
       this.userRating = user.rating;
-      this.listRestaurant = await this.getListRestaurant();
+      this.listRestaurantID = await this.getListRestaurant();
     },
 
-    /* setRestaurant(id) {},
-    <!-- DONT WORK DIRECTLY IN CAROUSSEL -->
-    async calculNumberVisits(restaurentID) {
+    calculNumberVisits(restaurentID) {
       let counter = 0;
-      const visits = await this.userVisites;
+      const visits = this.userVisites;
       visits.forEach((element) => {
         if (element.restaurant_id === restaurentID) {
           counter = counter + 1;
         }
       });
-      this.restaurantNumberVisits = counter;
       return counter;
     },
 
-    async getRestaurantName(restaurantID) {
-      const name = await getRestaurantById(restaurantID);
-      this.restaurantName = name.name;
-      return name.name;
-    },
-
-    async getRestaurantsPicture(restaurantID) {
-      const picture = await getRestaurantById(restaurantID).picture[0];
-      this.restaurantPic = picture;
-      return picture;
-    },*/
   },
 });
 </script>
@@ -184,27 +152,12 @@ const breakpoints = {
             :breakpoints="breakpoints"
           >
             <!--debut card1-->
-            <Slide v-for="visited in listRestaurant" :key="visited">
+            <Slide v-for="visited in listRestaurantID" :key="visited">
               <div class="carousel__item">
-                <div class="card">
-                  <!--image-->
-                  <div class="card-image">
-                    <figure class="image is-4by3">
-                      <img src="" alt="restaurant picture" />
-                    </figure>
-                  </div>
-                  <!--fin image-->
-                  <!-- debut number visits-->
-                  <div class="card-content is-overlay">
-                    <span class="tag is-primary is-size-5">0 </span>
-                  </div>
-                  <!--end number visits-->
-                  <!-- debut name -->
-                  <div class="card-content slider-text">
-                    <div class="is-size-5 box">restau Name</div>
-                  </div>
-                  <!--end name-->
-                </div>
+                <UserRestaurantVisitedCard
+                  :numberVisits="calculNumberVisits(visited)"
+                  :restaurantId="visited"
+                ></UserRestaurantVisitedCard>
               </div>
             </Slide>
             <template #addons>

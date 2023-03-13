@@ -23,9 +23,9 @@ function handleScroll(e) {
     loadMoreRestaurants();
   }
 }
-async function load1morePage() {
-  let newPosts = await getRestaurantsByPage(1);
-}
+// async function load1morePage() {
+//   let newPosts = await getRestaurantsByPage(1);
+// }
 async function getRestaurantByPage(index) {
   await getRestaurantsByPage(index).then((response) => {
     restaurantsList.value = response;
@@ -64,8 +64,6 @@ let categories = [
   "cuisine moléculaire",
   "vietnamien",
   "indien",
-  "européen",
-];
   "européen",
 ];
 

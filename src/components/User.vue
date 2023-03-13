@@ -65,6 +65,7 @@ export default defineComponent({
 });
 </script>
 
+
 <script setup>
 //TO REMOVE
 const toggleViews = () => {
@@ -81,6 +82,10 @@ const toggleViews = () => {
 const isFavoriteRestaurantsEmpty = computed(() => {
   return useUserStore().favoriteRestaurants.length === 0;
 });
+
+/*const isUserEmpty = computed(() => {
+  return getUser();
+ });*/
 
 /*const isUserEmpty = computed(() => {
   return getUser();
@@ -125,12 +130,19 @@ const breakpoints = {
                 src="https://i.pinimg.com/564x/05/a8/b9/05a8b9eea5a348454da598c4895c0ebc.jpg"
                 alt="UserPicture"
               />
+              <img
+                class="is-rounded"
+                src="https://i.pinimg.com/564x/05/a8/b9/05a8b9eea5a348454da598c4895c0ebc.jpg"
+                alt="UserPicture"
+              />
             </figure>
           </div>
           <div class="level-item">
             <div class="is-6 is-offset-32 has-text-centered">
               <h1 class="title is-2">{{ userName }}<br /></h1>
+              <h1 class="title is-2">{{ userName }}<br /></h1>
               <h2 class="subtitle is-1 has-text-primary has-text-weight-bold">
+                <br />{{ userRating }}
                 <br />{{ userRating }}
               </h2>
             </div>

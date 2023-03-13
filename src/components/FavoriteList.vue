@@ -17,7 +17,11 @@ export default defineComponent({
     props: {
         listId: String
     },
-    emits: ['deleteList'],
+    emits: [
+        'deleteList',
+        'moveUp',
+        'moveDown',
+    ],
     methods: {
         async removeItem(restaurantId) {
             const response = await removeFavoriteListItem(restaurantId, this.listId)
@@ -41,7 +45,7 @@ export default defineComponent({
             if (restaurantId !== this.list.restaurants[0].id) {
                 let temp = []
                 for (let i = this.list.restaurants.length - 1; i >= 0; i--) {
-                    if (this.list.restaurants[i].id != restaurantId) {
+                    if (this.list.restaurants[i].id !== restaurantId) {
                         temp.push(this.list.restaurants[i].id)
                         await removeFavoriteListItem(this.list.restaurants[i].id, this.list.id)
                     } else {
@@ -86,11 +90,10 @@ export default defineComponent({
 </script>
 
 <template>
-    <div>
+    <div class="card">
         <div class="card-header">
-            <span>List : {{ list.name }}</span>
-            <div class="tags has-addons">
-                <input
+            <span v-if="!isInputReady">{{ list.name }}</span>
+            <input
                     ref="rename"
                     @focus="$event.target.select()"
                     :id="list.id" @keyup.enter="modifyName(null)"
@@ -98,7 +101,11 @@ export default defineComponent({
                     v-model="list.name"
                     class="tag is-small"
                 />
-                <a @click="modifyName($event)" class="tag is-small">Rename</a>
+            <div class="tags has-addons">
+                
+                <a v-if="!isInputReady" class="tag is-small has-background-grey-lighter" @click="$emit('moveUp', listId)">&#8593;</a>
+                <a v-if="!isInputReady" class="tag is-small has-background-grey-lighter" @click="$emit('moveDown', listId)">&#8595;</a>
+                <a @click="modifyName($event)" class="tag is-small has-background-grey-lighter">Rename</a>
                 <a @click="$emit('deleteList', listId)" v-if="!isInputReady" class="tag is-small is-danger">Delete</a>
             </div>
         </div> 
@@ -124,5 +131,11 @@ export default defineComponent({
 span{
     max-width: 50%;
     overflow-wrap: break-word;
+}
+.card{
+    width: 480px;
+    margin-inline: 1vw;
+    margin-bottom: 2vw;
+    flex-shrink: 1;
 }
 </style>

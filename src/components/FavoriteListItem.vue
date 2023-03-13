@@ -26,9 +26,9 @@ export default defineComponent({
 
 <template>
     <div class="tags has-addons">
-        <a class="tag is-small" @click="$emit('moveUp', restaurant.id)">Up</a>
-        <a class="tag is-small" @click="$emit('moveDown', restaurant.id)">Down</a>
+        <a class="tag is-small has-background-grey-lighter" @click="$emit('moveUp', restaurant.id)">&#8593;</a>
+        <a class="tag is-small has-background-grey-lighter" @click="$emit('moveDown', restaurant.id)">&#8595;</a>
         <span class="tag is-info is-small">{{ restaurant.name }}</span>
-        <a @click="$emit('removeItem', restaurant.id)" class="tag is-delete is-small"></a>
+        <a @click="$emit('removeItem', restaurant.id)" class="tag is-delete is-small is-danger"></a>
     </div>
 </template>

@@ -1,6 +1,6 @@
 <script>
 import { defineComponent } from 'vue'
-import FavoriteList from './FavoriteList.vue';
+import FavoriteList from './FavoriteList.vue'
 import { getFavoriteListsByUserId, deleteFavoriteListById, createFavoriteList, addFavoriteListItem } from "../api/favoriteListsApi"
 
 export default defineComponent({
@@ -126,5 +126,4 @@ export default defineComponent({
 .tags.has-addons{
     justify-content: center;
 }
-
 </style>

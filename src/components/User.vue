@@ -18,36 +18,34 @@ export default defineComponent({
     Pagination,
     Navigation,
     FavoriteLists,
+    UserRestaurantVisitedCard,
   },
-
   data: () => ({
     userVisites: "",
     userName: "",
     userRating: "",
     listRestaurantID: [],
+    userId: String,
   }),
-
   methods: {
- 
-    async getListRestaurant() {
-      let listID = [];
-      this.userVisites = await getUserVisits("619c57e4fe6e16000458adf4");
-      const visits = this.userVisites;
-      visits.forEach((element) => {
-        if (!listID.includes(element.restaurant_id)) {
-          listID.push(element.restaurant_id);
-        }
-      });
-      return listID;
-    },
-
-    async getUser() {
-      const user = await getUserById("619c57e4fe6e16000458adf4");
-      this.userName = user.name;
-      this.userRating = user.rating;
-      this.listRestaurantID = await this.getListRestaurant();
-    },
-
+    // À vérifier
+    // async getListRestaurant() {
+    //   let listID = [];
+    //   this.userVisites = await getUserVisits("619c57e4fe6e16000458adf4");
+    //   const visits = this.userVisites;
+    //   visits.forEach((element) => {
+    //     if (!listID.includes(element.restaurant_id)) {
+    //       listID.push(element.restaurant_id);
+    //     }
+    //   });
+    //   return listID;
+    // },
+    // async getUser() {
+    //   const user = await getUserById("619c57e4fe6e16000458adf4");
+    //   this.userName = user.name;
+    //   this.userRating = user.rating;
+    //   this.listRestaurantID = await this.getListRestaurant();
+    // },
     calculNumberVisits(restaurentID) {
       let counter = 0;
       const visits = this.userVisites;
@@ -59,12 +57,28 @@ export default defineComponent({
       return counter;
     },
   },
-  async created(){
-    this.getUser()
+  async created() {
+
+    // HARDCODED
+    this.userId = "619c57e4fe6e16000458adf4" 
+    //liste de id user interessant avec visites: 5f998ff0d4ade30004a658ef    619c57e4fe6e16000458adf4   61afd2fae29b0b000410e432
+    //liste de id user interessant sans visites: 639bbf092b5bb7844f430e47    639bbb9e2b5bb7844f42f171
+
+    const user = await getUserById(this.userId);
+    this.userName = user.name;
+    this.userRating = user.rating;
+    let listID = [];
+    this.userVisites = await getUserVisits(this.userId);
+    const visits = this.userVisites;
+    visits.forEach((element) => {
+      if (!listID.includes(element.restaurant_id)) {
+        listID.push(element.restaurant_id);
+      }
+    });
+    this.listRestaurantID = listID
   }
 });
 </script>
-
 
 <script setup>
 //TO REMOVE
@@ -82,10 +96,6 @@ const toggleViews = () => {
 const isFavoriteRestaurantsEmpty = computed(() => {
   return useUserStore().favoriteRestaurants.length === 0;
 });
-
-/*const isUserEmpty = computed(() => {
-  return getUser();
- });*/
 
 const settings = {
   itemsToShow: 1,
@@ -143,7 +153,7 @@ const breakpoints = {
       <div>
         <!-- Begin Work Content IF USER HAVE VISITED RESTAURANTS-->
         <!--Carousel setting set on page-->
-        <div v-show="!isFavoriteRestaurantsEmpty" class="box">
+        <div v-show="!isFavoriteRestaurantsEmpty" class="box mt-6">
           <!--carousel title-->
           <div class="has-text-centered">
             <div>
@@ -186,7 +196,10 @@ const breakpoints = {
           </div>
         </div>
       </div>
-      <FavoriteLists userId="619c57e4fe6e16000458adf4" />
+
+      <!-- Liste de liste de restaurants favories ou autre -->
+      <FavoriteLists :userId="userId"/>
+
       <!-- End Work Content IF USER DONT VISIT-->
     </div>
     <div class="hero-foot">
@@ -225,25 +238,23 @@ const breakpoints = {
   display: flex;
   flex-direction: column;
 }
-div {
-  margin: 3px;
-}
 label {
   display: inline-block;
   width: 100px;
 }
+</style>
 
+<!-- 
 .card {
   width: 300px;
   max-width: 300px;
   height: 350px;
-}
-
+}  
 .card-content {
   white-space: pre-wrap; /* CSS3 */
   white-space: -moz-pre-wrap; /* Firefox */
   white-space: -pre-wrap; /* Opera <7 */
   white-space: -o-pre-wrap; /* Opera 7 */
   word-wrap: break-word;
-}
-</style>
+} 
+-->

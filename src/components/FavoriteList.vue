@@ -9,6 +9,7 @@ export default defineComponent({
         return {
             list: [Object],
             isInputReady: false,
+            isOptionsReady: false
         }
     },
     components: {
@@ -23,6 +24,9 @@ export default defineComponent({
         'moveDown',
     ],
     methods: {
+        toggleOptions(){
+            this.isOptionsReady = !this.isOptionsReady
+        },
         async removeItem(restaurantId) {
             const response = await removeFavoriteListItem(restaurantId, this.listId)
             this.list = await getFavoriteListById(this.listId)
@@ -92,7 +96,7 @@ export default defineComponent({
 <template>
     <div class="card">
         <div class="card-header">
-            <span v-if="!isInputReady">{{ list.name }}</span>
+            <div class="list-name" v-if="!isInputReady">{{ list.name }}</div>
             <input
                     ref="rename"
                     @focus="$event.target.select()"
@@ -103,10 +107,12 @@ export default defineComponent({
                 />
             <div class="tags has-addons">
                 
-                <a v-if="!isInputReady" class="tag is-small has-background-grey-lighter" @click="$emit('moveUp', listId)">&#8593;</a>
-                <a v-if="!isInputReady" class="tag is-small has-background-grey-lighter" @click="$emit('moveDown', listId)">&#8595;</a>
-                <a @click="modifyName($event)" class="tag is-small has-background-grey-lighter">Rename</a>
-                <a @click="$emit('deleteList', listId)" v-if="!isInputReady" class="tag is-small is-danger">Delete</a>
+                <a v-if="!isInputReady && isOptionsReady" class="tag is-small has-background-grey-lighter" @click="$emit('moveUp', listId)">&#8593;</a>
+                <a v-if="!isInputReady && isOptionsReady" class="tag is-small has-background-grey-lighter" @click="$emit('moveDown', listId)">&#8595;</a>
+                <a v-if="isOptionsReady" @click="modifyName($event)" class="tag is-small has-background-grey-lighter">Rename</a>
+                <a v-if="!isInputReady && isOptionsReady" @click="$emit('deleteList', listId)" class="tag is-small is-danger">Delete</a>
+                <a @click="toggleOptions" class="tag is-small has-background-grey-lighter">&#8226;&#8226;&#8226;</a>
+                
             </div>
         </div> 
         <div class="card-content">
@@ -128,8 +134,8 @@ export default defineComponent({
     justify-content: space-between;
     flex-wrap: wrap;
 }
-span{
-    max-width: 50%;
+.list-name{
+    max-width: 100%;
     overflow-wrap: break-word;
 }
 .card{

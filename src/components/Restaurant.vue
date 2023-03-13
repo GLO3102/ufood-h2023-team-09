@@ -158,7 +158,7 @@
       <br /><br />
 
       <div class="container">
-        <Map />
+        <Map :restaurantCoordinates="resto_data.location.coordinates"/> 
       </div>
     </div>
     </slot>
@@ -201,7 +201,6 @@ import { defineComponent } from "vue";
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel";
 import {getRestaurantByID}  from "../api/restaurantApi.js";
 import Schedule from "./Schedule.vue";
-import MapLocation from "./MapLocation.vue";
 import "vue3-carousel/dist/carousel.css";
 
 

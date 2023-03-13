@@ -23,9 +23,9 @@ function handleScroll(e) {
     loadMoreRestaurants();
   }
 }
-async function load1morePage() {
-  let newPosts = await getRestaurantsByPage(1);
-}
+// async function load1morePage() {
+//   let newPosts = await getRestaurantsByPage(1);
+// }
 async function getRestaurantByPage(index) {
   await getRestaurantsByPage(index).then((response) => {
     restaurantsList.value = response;
@@ -140,6 +140,47 @@ function formatKebabCase(str) {
   let newString = str.toLowerCase();
   return newString.replaceAll(" ", "-");
 }
+</script>
+<script>
+export default {
+  data() {
+    return {
+      restaurantsList: [],
+      index: 1,
+    };
+  },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  unmounted() {
+    window.removeEventListener("scroll", this.handleScroll);
+  },
+  methods: {
+    async getRestaurantByPage(index) {
+      await getRestaurantsByPage(index).then((response) => {
+        this.restaurantsList = response;
+      });
+    },
+    async loadMoreRestaurants() {
+      if (this.index > 12) return;
+      let newPosts = await getRestaurantsByPage(this.index);
+      this.restaurantsList.items = this.restaurantsList.items.concat(
+        newPosts.items
+      );
+      this.index++;
+    },
+    handleScroll(e) {
+      let element = this.$refs.restaurantListScroll;
+      if (element.getBoundingClientRect().bottom < window.innerHeight) {
+        this.loadMoreRestaurants();
+      }
+    },
+  },
+
+  created() {
+    this.getRestaurantByPage(0);
+  },
+};
 </script>
 <template>
   <div class="home-container">

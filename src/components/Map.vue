@@ -5,30 +5,34 @@
 </template>
 
 <script setup>
-import json from "../dummy_jsons/hardcoded_resto.json";
-import { onMounted } from "vue";
-const restaurantCoordinates = json.items[0].location.coordinates;
+import { onMounted, defineProps } from "vue";
+
+const props = defineProps({
+  restaurantCoordinates : Array
+})
+
+
 onMounted(() => {
   mapboxgl.accessToken =
     "pk.eyJ1IjoicGFsZXg5OTkiLCJhIjoiY2xlMDl4YWMwMG42OTN2bzgwbjd1bW82aCJ9.fH1lEdpJsNacjxdL8RlYog";
   const map = new mapboxgl.Map({
     container: "map",
     style: "mapbox://styles/mapbox/streets-v12",
-    center: restaurantCoordinates,
+    center: props.restaurantCoordinates,
     zoom: 12,
   });
   const marker = new mapboxgl.Marker({
     color: "#8F3BDE",
   })
-    .setLngLat(restaurantCoordinates)
+    .setLngLat(props.restaurantCoordinates)
     .addTo(map);
   const directions = new MapboxDirections({
     accessToken: mapboxgl.accessToken,
   });
   map.addControl(directions, "top-left");
   directions.setDestination([
-    restaurantCoordinates[0],
-    restaurantCoordinates[1],
+  props.restaurantCoordinates[0],
+  props.restaurantCoordinates[1],
   ]);
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(

@@ -36,3 +36,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.card {
+  width: 300px;
+  max-width: 300px;
+  height: 350px;
+}  
+</style>

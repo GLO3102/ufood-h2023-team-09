@@ -74,18 +74,9 @@
 
       <!-- Liste de liste de restaurants favories ou autre -->
       <FavoriteLists :userId="userId" />
+      <VisitedList :visits="userVisites" />
 
       <!-- End Work Content IF USER DONT VISIT-->
-    </div>
-    <div class="hero-foot">
-      <div class="">
-        <div class="tabs is-centered">
-          <ul class="bottom-ul">
-            <li><a href="./User.vue">And this is the bottom</a></li>
-            <!--TO REMOVE-->
-          </ul>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -98,11 +89,13 @@ export default {
     let listID = [];
     this.userVisites = await getUserVisits(this.userId);
 
-    const visits = this.userVisites;
-    visits.forEach((element) => {
+    this.userVisites.forEach(async (element) => {
       if (!listID.includes(element.restaurant_id)) {
         listID.push(element.restaurant_id);
       }
+      const resto = await getRestaurantByID(element.restaurant_id);
+      element["restoName"] = resto.name;
+      this.userVisitesRestoNames.push(resto.name);
     });
     this.listRestaurantID = listID;
     if (listID.length === 0) {
@@ -115,16 +108,19 @@ export default {
 </script>
 
 <script setup>
+import { getRestaurantByID } from "../api/restaurantApi";
 import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
 import { useUserStore } from "@/stores/user";
 import { getUserById, getUserVisits } from "@/api/userApi.js";
 import UserRestaurantVisitedCard from "@/components/UserRestaurantVisitedCard.vue";
 import FavoriteLists from "./FavoriteLists.vue";
+import VisitedList from "./VisitedList.vue";
 import "vue3-carousel/dist/carousel.css";
 import { ref } from "vue";
 
 const userId = ref("619c57e4fe6e16000458adf4");
-const userVisites = ref("");
+const userVisites = ref([]);
+const userVisitesRestoNames = ref([]);
 const userName = ref("");
 const userRating = ref("");
 const listRestaurantID = ref([]);

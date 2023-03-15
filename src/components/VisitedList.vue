@@ -34,7 +34,6 @@ import { useUserStore } from "@/stores/user";
 import VisitModalReadOnly from "./VisitModalReadOnly.vue";
 
 let showVisitModal = ref(Array(useUserStore().visitedNumber).fill(false));
-console.log(showVisitModal);
 
 const openVisitModal = (index) => {
   showVisitModal.value[index] = true;

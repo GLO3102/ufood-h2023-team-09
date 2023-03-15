@@ -13,7 +13,7 @@
                 <span class="has-text-weight-bold"> {{ name }} </span>
               </div>
             </div>
-            <span>Rating:</span>
+            <span>Date:</span>
             <input
               class="input"
               max="2023-03-15"

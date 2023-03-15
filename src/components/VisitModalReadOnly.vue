@@ -15,7 +15,7 @@
                 </span>
               </div>
             </div>
-            <span>Rating:</span>
+            <span>Date:</span>
             <input
               class="input"
               max="2023-03-15"
@@ -54,25 +54,17 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
-import { useUserStore } from "@/stores/user";
-
-import { postVisit } from "@/api/userApi.js";
-
-const isSuccess = ref(false);
-const isError = ref(false);
-const errorValue = ref("");
 const props = defineProps(["visit"]);
 const emit = defineEmits(["close"]);
-const visitDate = ref("");
-const rating = ref(0);
-const comment = ref("");
 function close() {
   emit("close");
 }
 function formatDate(date) {
   const d = new Date(date);
-  return d.toLocaleDateString();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 </script>
 <style scoped></style>

@@ -22,7 +22,6 @@ const isNotHome = computed(() => {
 onMounted(async () => {
   let user = await getUserById("619c57e4fe6e16000458adf4");
   let visitedNumber = await getUserVisits("619c57e4fe6e16000458adf4");
-  console.log(visitedNumber.length);
   userStore.setUser(user, visitedNumber.length);
 });
 </script>

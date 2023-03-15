@@ -172,7 +172,7 @@
         <br /><br />
 
         <div class="container">
-          <Map :restaurantCoordinates="resto_data.location.coordinates" />
+          <Map :restaurantCoordinates="resto_data.location.coordinates"  :address="resto_data.address" />
         </div>
       </div>
     </slot>

@@ -59,10 +59,6 @@ onMounted(async () => {
             placeholder="Search..."
           />
         </div>
-        <router-link class="navbar-item" to="/restaurant"
-          >Restaurant</router-link
-        >
-        <router-link class="navbar-item" to="/user">User</router-link>
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
@@ -85,7 +81,7 @@ onMounted(async () => {
             <router-link
               v-show="userStore.isLoggedIn"
               class="button is-light"
-              to="/user"
+              :to="`/user/${userStore.id}`"
             >
               <img src="@/assets/person.svg" width="40" height="40" />
               {{ userStore.name }}

@@ -68,8 +68,10 @@ async function save() {
   const res = await postVisit(visit);
   if (res.status === 201) {
     //afficher success
+    console.log("success");
     close();
   } else {
+    console.log("error");
     //afficher erreur
   }
 }

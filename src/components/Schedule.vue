@@ -9,7 +9,7 @@ const props = defineProps({
 
 <template>
   <div>
-    <div class="box is-responsive" style="width: 275px; margin-right: 10px">
+    <div class="box" style="width: 275px; margin-right: 10px">
       <table class="table is-hoverable">
         <thead>
           <th><abbr title="Weekday">Weekday</abbr></th>

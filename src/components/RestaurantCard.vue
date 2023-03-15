@@ -1,111 +1,133 @@
 <script setup>
+import { ref } from "vue";
+import VisitModal from "./VisitModal.vue";
+
+let showVisitModal = ref(false);
+
+const openVisitModal = () => {
+  showVisitModal.value = true;
+};
+const closeVisitModal = () => {
+  showVisitModal.value = false;
+};
 // Saves current day of the week as a number from 0 to 6, 0 being Sunday, into a variable
 let today = new Date().getDay();
 const color_map = ["success", "primary", "danger", "black"];
 </script>
 
 <template>
-  <div class="card">
-    <div class="card-image">
-      <figure class="image is-4by3">
-        <router-link :to="`/restaurant/${id}`">
-          <img :src="pictures[0]" alt="Placeholder image" />
-        </router-link>
-      </figure>
-    </div>
-    <div class="card-content">
-      <div class="media">
-        <div class="media-left"></div>
-        <div class="media-content">
-          <router-link :to="`/restaurant/${id}`"
-            ><span class="title is-3">{{
-              name.slice(0, 50)
-            }}</span></router-link
+  <div>
+    <VisitModal
+      v-if="showVisitModal"
+      @close="closeVisitModal"
+      :id="id"
+      :name="name"
+    />
+    <div class="card">
+      <div class="card-image">
+        <figure class="image is-4by3">
+          <router-link :to="`/restaurant/${id}`">
+            <img :src="pictures[0]" alt="Placeholder image" />
+          </router-link>
+        </figure>
+      </div>
+      <div class="card-content">
+        <div class="media">
+          <div class="media-left"></div>
+          <div class="media-content">
+            <router-link :to="`/restaurant/${id}`"
+              ><span class="title is-3">{{
+                name.slice(0, 50)
+              }}</span></router-link
+            >
+          </div>
+          <span
+            :class="'navbar-end is-medium tag is-' + color_map[price_range - 1]"
+            >{{ "$".repeat(price_range) }}</span
           >
         </div>
-        <span
-          :class="'navbar-end is-medium tag is-' + color_map[price_range - 1]"
-          >{{ "$".repeat(price_range) }}</span
-        >
-      </div>
 
-      <!-- Display the list of genres -->
-      <div class="genres-container block">
-        <div class="genres" v-for="genre in genres" :key="genre">
-          <span class="tag is-large is-info">{{ genre }}</span>
+        <!-- Display the list of genres -->
+        <div class="genres-container block">
+          <div class="genres" v-for="genre in genres" :key="genre">
+            <span class="tag is-large is-info">{{ genre }}</span>
+          </div>
         </div>
-      </div>
 
-      <!-- Displays today's opening hours -->
-      <div class="opening-hours mb-1">
-        <div v-if="today === 1">Today : {{ monday }}</div>
-        <div v-else-if="today === 2">Today : {{ tuesday }}</div>
-        <div v-else-if="today === 3">Today : {{ wednesday }}</div>
-        <div v-else-if="today === 4">Today : {{ thursday }}</div>
-        <div v-else-if="today === 5">Today : {{ friday }}</div>
-        <div v-else-if="today === 6">Today : {{ saturday }}</div>
-        <div v-else>Today : {{ sunday }}</div>
-      </div>
+        <!-- Displays today's opening hours -->
+        <div class="opening-hours mb-1">
+          <div v-if="today === 1">Today : {{ monday }}</div>
+          <div v-else-if="today === 2">Today : {{ tuesday }}</div>
+          <div v-else-if="today === 3">Today : {{ wednesday }}</div>
+          <div v-else-if="today === 4">Today : {{ thursday }}</div>
+          <div v-else-if="today === 5">Today : {{ friday }}</div>
+          <div v-else-if="today === 6">Today : {{ saturday }}</div>
+          <div v-else>Today : {{ sunday }}</div>
+        </div>
 
-      <!-- Direction button -->
-      <div class="tooltip mb-1">
-        <span class="tooltiptext">{{ address }}</span>
-        {{ address.slice(0, 49) + "..." }}
-      </div>
+        <!-- Direction button -->
+        <div class="tooltip mb-1">
+          <span class="tooltiptext">{{ address }}</span>
+          {{ address.slice(0, 49) + "..." }}
+        </div>
 
-      <!-- Phone button -->
-      <div class="mb-1">{{ tel }}</div>
+        <!-- Phone button -->
+        <div class="mb-1">{{ tel }}</div>
 
-      <!-- Display rating with stars -->
-      <div class="rating-container">
-        <svg style="display: none">
-          <defs>
-            <symbol id="fivestars">
-              <path
-                d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                fill="white"
-                fill-rule="evenodd"
-              />
-              <path
-                d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                fill="white"
-                fill-rule="evenodd"
-                transform="translate(24)"
-              />
-              <path
-                d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                fill="white"
-                fill-rule="evenodd"
-                transform="translate(48)"
-              />
-              <path
-                d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                fill="white"
-                fill-rule="evenodd"
-                transform="translate(72)"
-              />
-              <path
-                d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                fill="white"
-                fill-rule="evenodd"
-                transform="translate(96)"
-              />
-            </symbol>
-          </defs>
-        </svg>
+        <!-- Display rating with stars -->
+        <div class="rating-container">
+          <svg style="display: none">
+            <defs>
+              <symbol id="fivestars">
+                <path
+                  d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
+                  fill="white"
+                  fill-rule="evenodd"
+                />
+                <path
+                  d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
+                  fill="white"
+                  fill-rule="evenodd"
+                  transform="translate(24)"
+                />
+                <path
+                  d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
+                  fill="white"
+                  fill-rule="evenodd"
+                  transform="translate(48)"
+                />
+                <path
+                  d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
+                  fill="white"
+                  fill-rule="evenodd"
+                  transform="translate(72)"
+                />
+                <path
+                  d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
+                  fill="white"
+                  fill-rule="evenodd"
+                  transform="translate(96)"
+                />
+              </symbol>
+            </defs>
+          </svg>
 
-        
-        <div class="evaluation">
-          <div class="button is-primary mr-1">Rate</div>
-          <div class="button is-primary">Add to favorite</div>
-          <div class="navbar-end">
-            <div class="rating">
-              <progress class="rating-bg" :value="rating" max="5"></progress>
-              <svg>
-                <use xlink:href="#fivestars" />
-              </svg>
+          <div class="evaluation">
+            <div class="button is-primary mr-1" @click="openVisitModal">
+              Rate
             </div>
-            <div class="tag is-warning is-medium">{{ rating.toFixed(1) }}</div>
+            <div class="button is-primary">Add to favorite</div>
+            <div class="navbar-end">
+              <div class="rating">
+                <progress class="rating-bg" :value="rating" max="5"></progress>
+                <svg>
+                  <use xlink:href="#fivestars" />
+                </svg>
+              </div>
+              <div class="tag is-warning is-medium">
+                {{ rating.toFixed(1) }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -192,7 +214,7 @@ img:hover {
   display: flex;
   flex-direction: column;
 }
-.evaluation{
+.evaluation {
   flex-wrap: wrap;
 }
 </style>

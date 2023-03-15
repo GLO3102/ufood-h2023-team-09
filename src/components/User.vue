@@ -1,133 +1,8 @@
-<script>
-import { defineComponent } from "vue";
-import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
-import { useUserStore } from "@/stores/user";
-import { computed } from "vue";
-import { getUserById } from "../api/userApi.js";
-import { getUserVisits } from "../api/userApi.js";
-import UserRestaurantVisitedCard from "../components/UserRestaurantVisitedCard.vue";
-import FavoriteLists from "./FavoriteLists.vue";
-
-import "vue3-carousel/dist/carousel.css";
-
-export default defineComponent({
-  name: "Basic",
-  components: {
-    Carousel,
-    Slide,
-    Pagination,
-    Navigation,
-    FavoriteLists,
-    UserRestaurantVisitedCard,
-  },
-  data: () => ({
-    userVisites: "",
-    userName: "",
-    userRating: "",
-    listRestaurantID: [],
-    userId: String,
-  }),
-  methods: {
-    // À vérifier
-    // async getListRestaurant() {
-    //   let listID = [];
-    //   this.userVisites = await getUserVisits("619c57e4fe6e16000458adf4");
-    //   const visits = this.userVisites;
-    //   visits.forEach((element) => {
-    //     if (!listID.includes(element.restaurant_id)) {
-    //       listID.push(element.restaurant_id);
-    //     }
-    //   });
-    //   return listID;
-    // },
-    // async getUser() {
-    //   const user = await getUserById("619c57e4fe6e16000458adf4");
-    //   this.userName = user.name;
-    //   this.userRating = user.rating;
-    //   this.listRestaurantID = await this.getListRestaurant();
-    // },
-    calculNumberVisits(restaurentID) {
-      let counter = 0;
-      const visits = this.userVisites;
-      visits.forEach((element) => {
-        if (element.restaurant_id === restaurentID) {
-          counter = counter + 1;
-        }
-      });
-      return counter;
-    },
-  },
-  async created() {
-
-    // HARDCODED
-    this.userId = "619c57e4fe6e16000458adf4" 
-    //liste de id user interessant avec visites: 5f998ff0d4ade30004a658ef    619c57e4fe6e16000458adf4   61afd2fae29b0b000410e432
-    //liste de id user interessant sans visites: 639bbf092b5bb7844f430e47    639bbb9e2b5bb7844f42f171
-
-    const user = await getUserById(this.userId);
-    this.userName = user.name;
-    this.userRating = user.rating;
-    let listID = [];
-    this.userVisites = await getUserVisits(this.userId);
-    const visits = this.userVisites;
-    visits.forEach((element) => {
-      if (!listID.includes(element.restaurant_id)) {
-        listID.push(element.restaurant_id);
-      }
-    });
-    this.listRestaurantID = listID
-  }
-});
-</script>
-
-<script setup>
-//TO REMOVE
-const toggleViews = () => {
-  if (useUserStore().favoriteRestaurants.length === 0) {
-    useUserStore().$patch({ favoriteRestaurants: ["domino"] });
-  } else {
-    useUserStore().$patch({ favoriteRestaurants: [] });
-  }
-  let viewRestaurantsEmpty = document.getElementById("viewRestaurantsEmpty");
-  let viewRestaurants = document.getElementById("viewRestaurants");
-  viewRestaurantsEmpty.classList.toggle("is-hidden");
-  viewRestaurants.classList.toggle("is-hidden");
-};
-const isFavoriteRestaurantsEmpty = computed(() => {
-  return useUserStore().favoriteRestaurants.length === 0;
-});
-
-const settings = {
-  itemsToShow: 1,
-};
-
-const breakpoints = {
-  640: {
-    itemsToShow: 1.5,
-  },
-
-  750: {
-    itemsToShow: 1.8,
-  },
-
-  1000: {
-    itemsToShow: 2.5,
-  },
-  1200: {
-    itemsToShow: 3,
-  },
-  1500: {
-    itemsToShow: 3.5,
-  },
-};
-</script>
-
 <template>
   <div class="hero" id="user-entire-page">
     <div class="hero-body">
       <!-- Begin user info-->
       <div>
-
         <nav class="level">
           <div class="level-item has-text-centered">
             <figure class="image is-4by4">
@@ -198,7 +73,7 @@ const breakpoints = {
       </div>
 
       <!-- Liste de liste de restaurants favories ou autre -->
-      <FavoriteLists :userId="userId"/>
+      <FavoriteLists :userId="userId" />
 
       <!-- End Work Content IF USER DONT VISIT-->
     </div>
@@ -221,7 +96,92 @@ const breakpoints = {
     </div>
   </div>
 </template>
+<script>
+export default {
+  async created() {
+    const user = await getUserById(this.userId);
+    console.log(user);
+    this.userName = user.name;
+    this.userRating = user.rating;
+    let listID = [];
+    this.userVisites = await getUserVisits(this.userId);
+    const visits = this.userVisites;
+    visits.forEach((element) => {
+      if (!listID.includes(element.restaurant_id)) {
+        listID.push(element.restaurant_id);
+      }
+    });
+    this.listRestaurantID = listID;
+  },
+};
+</script>
 
+<script setup>
+import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
+import { useUserStore } from "@/stores/user";
+import { computed } from "vue";
+import { getUserById, getUserVisits } from "@/api/userApi.js";
+import UserRestaurantVisitedCard from "@/components/UserRestaurantVisitedCard.vue";
+import FavoriteLists from "./FavoriteLists.vue";
+import "vue3-carousel/dist/carousel.css";
+import { ref } from "vue";
+
+const userId = ref("619c57e4fe6e16000458adf4");
+const userVisites = ref("");
+const userName = ref("");
+const userRating = ref("");
+const listRestaurantID = ref([]);
+
+function calculNumberVisits(restaurentID) {
+  let counter = 0;
+  const visits = userVisites.value;
+  visits.forEach((element) => {
+    if (element.restaurant_id === restaurentID) {
+      counter = counter + 1;
+    }
+  });
+  return counter;
+}
+
+const toggleViews = () => {
+  if (useUserStore().favoriteRestaurants.length === 0) {
+    useUserStore().$patch({ favoriteRestaurants: ["domino"] });
+  } else {
+    useUserStore().$patch({ favoriteRestaurants: [] });
+  }
+  let viewRestaurantsEmpty = document.getElementById("viewRestaurantsEmpty");
+  let viewRestaurants = document.getElementById("viewRestaurants");
+  viewRestaurantsEmpty.classList.toggle("is-hidden");
+  viewRestaurants.classList.toggle("is-hidden");
+};
+const isFavoriteRestaurantsEmpty = computed(() => {
+  return useUserStore().favoriteRestaurants.length === 0;
+});
+
+const settings = {
+  itemsToShow: 1,
+};
+
+const breakpoints = {
+  640: {
+    itemsToShow: 1.5,
+  },
+
+  750: {
+    itemsToShow: 1.8,
+  },
+
+  1000: {
+    itemsToShow: 2.5,
+  },
+  1200: {
+    itemsToShow: 3,
+  },
+  1500: {
+    itemsToShow: 3.5,
+  },
+};
+</script>
 <style scoped>
 #user-entire-page {
   background: #fff;

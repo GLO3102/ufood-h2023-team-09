@@ -6,8 +6,8 @@
         <div class="card-content">
           <div class="content is-flex is-flex-direction-column">
             <div>
-              <span>Add a visit for :</span>
-              <span> name of resto</span>
+              <span>Add a visit for : </span>
+              <span class="has-text-weight-bold"> {{ name }}</span>
             </div>
             <span>Rating:</span>
             <input
@@ -34,7 +34,7 @@
               ></textarea>
             </div>
             <div class="is-align-self-center mt-2">
-              <button class="button is-primary">Save</button>
+              <button class="button is-primary" @click="save">Save</button>
             </div>
           </div>
         </div>
@@ -44,11 +44,26 @@
   </div>
 </template>
 <script setup>
+import { postVisit } from "@/api/userApi.js";
+const props = defineProps(["id", "name"]);
 const emit = defineEmits(["close"]);
 function close() {
-  console.log("close");
   emit("close");
 }
+function save() {
+  // make object
+  // call postVisit
+  // if success emit close
+  // else show error
+  //postVisit(visitModalObject);
+}
+const visitModalObject = {
+  user_id: 1,
+  resto_id: props.id,
+  visitDate: "",
+  rating: 0,
+  comment: "",
+};
 </script>
 <style scoped>
 .template {

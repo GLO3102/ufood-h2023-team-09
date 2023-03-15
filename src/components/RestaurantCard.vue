@@ -17,7 +17,12 @@ const color_map = ["success", "primary", "danger", "black"];
 
 <template>
   <div>
-    <VisitModal v-if="showVisitModal" @close="closeVisitModal" />
+    <VisitModal
+      v-if="showVisitModal"
+      @close="closeVisitModal"
+      :id="id"
+      :name="name"
+    />
     <div class="card">
       <div class="card-image">
         <figure class="image is-4by3">

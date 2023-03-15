@@ -83,14 +83,12 @@ async function save() {
   if (res.status === 201) {
     isSuccess.value = true;
     isError.value = false;
-    console.log("success");
     setTimeout(() => {
       close();
     }, 750);
   } else {
     isError.value = true;
     isSuccess.value = false;
-    console.log(res);
     const errorData = await res.json();
     errorValue.value = errorData.message;
   }

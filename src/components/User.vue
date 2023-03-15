@@ -28,7 +28,7 @@
       <div>
         <!-- Begin Work Content IF USER HAVE VISITED RESTAURANTS-->
         <!--Carousel setting set on page-->
-        <div v-show="!isFavoriteRestaurantsEmpty" class="box mt-6">
+        <div v-if="!isFavoriteRestaurantsEmpty" class="box mt-6">
           <!--carousel title-->
           <div class="has-text-centered">
             <div>
@@ -58,7 +58,7 @@
         </div>
         <!-- End Work Content IF USER HAVE VISITED RESTAURANTS-->
         <!-- Begin Work Content IF USER DONT VISIT//GOTTA SHOW INDICATION OF NON VISITED AND LINK TO HOME PAGE-->
-        <div v-show="isFavoriteRestaurantsEmpty" class="hero is-medium">
+        <div v-if="isFavoriteRestaurantsEmpty" class="hero is-medium">
           <div class="box">
             <div class="has-text-centered">
               <div>
@@ -83,13 +83,6 @@
           <ul class="bottom-ul">
             <li><a href="./User.vue">And this is the bottom</a></li>
             <!--TO REMOVE-->
-            <button
-              id="temporary"
-              class="button is-size-6"
-              v-on:click="toggleViews()"
-            >
-              CLICK TO SEE OTHER VIEW WITH RESTAURANTS
-            </button>
           </ul>
         </div>
       </div>
@@ -100,11 +93,11 @@
 export default {
   async created() {
     const user = await getUserById(this.userId);
-    console.log(user);
     this.userName = user.name;
     this.userRating = user.rating;
     let listID = [];
     this.userVisites = await getUserVisits(this.userId);
+
     const visits = this.userVisites;
     visits.forEach((element) => {
       if (!listID.includes(element.restaurant_id)) {
@@ -112,6 +105,11 @@ export default {
       }
     });
     this.listRestaurantID = listID;
+    if (listID.length === 0) {
+      this.isFavoriteRestaurantsEmpty = true;
+    } else {
+      this.isFavoriteRestaurantsEmpty = false;
+    }
   },
 };
 </script>
@@ -119,7 +117,6 @@ export default {
 <script setup>
 import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
 import { useUserStore } from "@/stores/user";
-import { computed } from "vue";
 import { getUserById, getUserVisits } from "@/api/userApi.js";
 import UserRestaurantVisitedCard from "@/components/UserRestaurantVisitedCard.vue";
 import FavoriteLists from "./FavoriteLists.vue";
@@ -131,6 +128,7 @@ const userVisites = ref("");
 const userName = ref("");
 const userRating = ref("");
 const listRestaurantID = ref([]);
+const isFavoriteRestaurantsEmpty = ref(false);
 
 function calculNumberVisits(restaurentID) {
   let counter = 0;
@@ -142,21 +140,6 @@ function calculNumberVisits(restaurentID) {
   });
   return counter;
 }
-
-const toggleViews = () => {
-  if (useUserStore().favoriteRestaurants.length === 0) {
-    useUserStore().$patch({ favoriteRestaurants: ["domino"] });
-  } else {
-    useUserStore().$patch({ favoriteRestaurants: [] });
-  }
-  let viewRestaurantsEmpty = document.getElementById("viewRestaurantsEmpty");
-  let viewRestaurants = document.getElementById("viewRestaurants");
-  viewRestaurantsEmpty.classList.toggle("is-hidden");
-  viewRestaurants.classList.toggle("is-hidden");
-};
-const isFavoriteRestaurantsEmpty = computed(() => {
-  return useUserStore().favoriteRestaurants.length === 0;
-});
 
 const settings = {
   itemsToShow: 1,

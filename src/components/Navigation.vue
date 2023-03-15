@@ -82,7 +82,7 @@ const isNotHome = computed(() => {
               to="/user"
             >
               <img src="@/assets/person.svg" width="40" height="40" />
-              {{ userStore.username }}
+              {{ userStore.name }}
             </router-link>
             <a
               class="button is-light"
@@ -102,10 +102,10 @@ const isNotHome = computed(() => {
 #logo-text {
   font-size: 2rem;
 }
-.navbar{
+.navbar {
   position: static;
 }
-.navbar-burger{
+.navbar-burger {
   align-self: center;
 }
 </style>

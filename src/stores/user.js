@@ -4,8 +4,12 @@ export const useUserStore = defineStore({
   id: "user",
   state: () => ({
     isLoggedIn: false,
-    username: "username",
-    favoriteRestaurants: ["McDonalds", "Burger King", "Wendys"],
+    id:"id",
+    name: "name",
+    email:"email",
+    rating: 170,
+    following: [],
+    followers: [],
   }),
   actions: {
     login() {

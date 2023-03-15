@@ -5,11 +5,15 @@
       <div class="card">
         <div class="card-content">
           <div class="content is-flex is-flex-direction-column">
-            <div>
-              <span>Add a visit for : </span>
-              <span class="has-text-weight-bold"> {{ name }}</span>
+            <div
+              class="is-flex is-flex-direction-row is-justify-content-space-between"
+            >
+              <div>
+                <span>Add a visit for : </span>
+                <span class="has-text-weight-bold"> {{ name }} </span>
+              </div>
             </div>
-            <span>Rating:</span>
+            <span>Date:</span>
             <input
               class="input"
               max="2023-03-15"
@@ -37,6 +41,12 @@
             <div class="is-align-self-center mt-2">
               <button class="button is-primary" @click="save">Save</button>
             </div>
+            <div class="is-align-self-center">
+              <span class="has-text-success" v-if="isSuccess">Success</span>
+              <span class="has-text-danger" v-if="isError">{{
+                errorValue
+              }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -49,6 +59,10 @@ import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 
 import { postVisit } from "@/api/userApi.js";
+
+const isSuccess = ref(false);
+const isError = ref(false);
+const errorValue = ref("");
 const props = defineProps(["id", "name"]);
 const emit = defineEmits(["close"]);
 const visitDate = ref("");
@@ -67,21 +81,17 @@ async function save() {
   };
   const res = await postVisit(visit);
   if (res.status === 201) {
-    //afficher success
-    console.log("success");
-    close();
+    isSuccess.value = true;
+    isError.value = false;
+    setTimeout(() => {
+      close();
+    }, 750);
   } else {
-    console.log("error");
-    //afficher erreur
+    isError.value = true;
+    isSuccess.value = false;
+    const errorData = await res.json();
+    errorValue.value = errorData.message;
   }
 }
-
-const visitModalObject = {
-  user_id: 1,
-  resto_id: props.id,
-  visitDate: "",
-  rating: 0,
-  comment: "",
-};
 </script>
 <style scoped></style>

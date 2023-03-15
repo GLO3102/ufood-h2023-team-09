@@ -10,6 +10,7 @@ export const useUserStore = defineStore({
     rating: 170,
     following: [],
     followers: [],
+    visitedNumber:0,
   }),
   actions: {
     login() {
@@ -18,7 +19,7 @@ export const useUserStore = defineStore({
     logout() {
       this.isLoggedIn = false;
     },
-    setUser(user){
+    setUser(user, visitedNumber){
       this.isLoggedIn = true;
       this.id = user.id;
       this.name = user.name;
@@ -26,6 +27,8 @@ export const useUserStore = defineStore({
       this.rating = user.rating;
       this.following = user.following;
       this.followers = user.followers;
+      this.visitedNumber = visitedNumber;
     }
   },
 });
+

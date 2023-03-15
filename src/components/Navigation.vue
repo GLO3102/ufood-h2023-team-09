@@ -1,5 +1,5 @@
 <script setup>
-import { getUserById } from "@/api/userApi";
+import { getUserById, getUserVisits } from "@/api/userApi";
 import { onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
@@ -21,7 +21,8 @@ const isNotHome = computed(() => {
 });
 onMounted(async () => {
   let user = await getUserById("619c57e4fe6e16000458adf4");
-  userStore.setUser(user);
+  let visitedNumber = await getUserVisits("619c57e4fe6e16000458adf4");
+  userStore.setUser(user, visitedNumber.length);
 });
 </script>
 

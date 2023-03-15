@@ -18,5 +18,14 @@ export const useUserStore = defineStore({
     logout() {
       this.isLoggedIn = false;
     },
+    setUser(user){
+      this.isLoggedIn = true;
+      this.id = user.id;
+      this.name = user.name;
+      this.email = user.email;
+      this.rating = user.rating;
+      this.following = user.following;
+      this.followers = user.followers;
+    }
   },
 });

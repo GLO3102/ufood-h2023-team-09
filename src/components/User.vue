@@ -88,7 +88,6 @@ export default {
     this.userRating = user.rating;
     let listID = [];
     this.userVisites = await getUserVisits(this.userId);
-
     this.userVisites.forEach(async (element) => {
       if (!listID.includes(element.restaurant_id)) {
         listID.push(element.restaurant_id);

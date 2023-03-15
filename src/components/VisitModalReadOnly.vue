@@ -1,0 +1,78 @@
+<template>
+  <div class="modal is-active">
+    <div class="modal-background" @click="close"></div>
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-content">
+          <div class="content is-flex is-flex-direction-column">
+            <div
+              class="is-flex is-flex-direction-row is-justify-content-space-between"
+            >
+              <div>
+                <span>Visit for : </span>
+                <span class="has-text-weight-bold">
+                  {{ visit.restoName }}
+                </span>
+              </div>
+            </div>
+            <span>Rating:</span>
+            <input
+              class="input"
+              max="2023-03-15"
+              type="date"
+              :value="formatDate(visit.date)"
+              disabled
+            />
+            <div>
+              <span>Rating:</span>
+              <input
+                class="input"
+                type="number"
+                min="0"
+                max="5"
+                :value="visit.rating"
+                disabled
+              />
+            </div>
+            <div>
+              <span>Comment:</span>
+              <textarea
+                class="textarea has-fixed-size"
+                placeholder="Add a comment"
+                :value="visit.comment"
+                disabled
+              ></textarea>
+            </div>
+            <div class="is-align-self-center mt-2">
+              <button class="button is-primary" @click="close">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="modal-close is-large" @click="close"></button>
+  </div>
+</template>
+<script setup>
+import { ref } from "vue";
+import { useUserStore } from "@/stores/user";
+
+import { postVisit } from "@/api/userApi.js";
+
+const isSuccess = ref(false);
+const isError = ref(false);
+const errorValue = ref("");
+const props = defineProps(["visit"]);
+const emit = defineEmits(["close"]);
+const visitDate = ref("");
+const rating = ref(0);
+const comment = ref("");
+function close() {
+  emit("close");
+}
+function formatDate(date) {
+  const d = new Date(date);
+  return d.toLocaleDateString();
+}
+</script>
+<style scoped></style>

@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import VisitModal from "./VisitModal.vue";
+import ListModal from "./ListModal.vue";
 
 let showVisitModal = ref(false);
 
@@ -9,6 +10,15 @@ const openVisitModal = () => {
 };
 const closeVisitModal = () => {
   showVisitModal.value = false;
+};
+
+let showListModal = ref(false);
+
+const openListModal = () => {
+  showListModal.value = true;
+};
+const closeListModal = () => {
+  showListModal.value = false;
 };
 // Saves current day of the week as a number from 0 to 6, 0 being Sunday, into a variable
 let today = new Date().getDay();
@@ -20,6 +30,12 @@ const color_map = ["success", "primary", "danger", "black"];
     <VisitModal
       v-if="showVisitModal"
       @close="closeVisitModal"
+      :id="id"
+      :name="name"
+    />
+    <ListModal
+      v-if="showListModal"
+      @close="closeListModal"
       :id="id"
       :name="name"
     />
@@ -116,7 +132,9 @@ const color_map = ["success", "primary", "danger", "black"];
             <div class="button is-primary mr-1" @click="openVisitModal">
               Rate
             </div>
-            <div class="button is-primary">Add to favorite</div>
+            <div class="button is-primary mr-1" @click="openListModal">
+              Add to favorites
+            </div>
             <div class="navbar-end">
               <div class="rating">
                 <progress class="rating-bg" :value="rating" max="5"></progress>

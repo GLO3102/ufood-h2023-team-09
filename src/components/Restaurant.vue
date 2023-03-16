@@ -6,6 +6,12 @@
       :id="resto_data.id"
       :name="resto_data.name"
     />
+    <ListModal
+      v-if="showListModal"
+      @close="closeListModal"
+      :id="resto_data.id"
+      :name="resto_data.name"
+    />
     <slot v-if="displayError">
       <div
         class="box is-flex is-align-items-center is-justify-content-center is-flex-direction-column"
@@ -90,7 +96,7 @@
             >
               Rate
             </button>
-            <button class="is-flex button is-primary is-large is-responsive">Add to favorite</button>
+            <button class="is-flex button is-primary is-large is-responsive" @click="openListModal">Add to favorites</button>
           </div>
         </div>
 
@@ -183,6 +189,7 @@
 import Map from "./Map.vue";
 import { ref } from "vue";
 import VisitModal from "./VisitModal.vue";
+import ListModal from "./ListModal.vue";
 
 let showVisitModal = ref(false);
 
@@ -191,6 +198,14 @@ const openVisitModal = () => {
 };
 const closeVisitModal = () => {
   showVisitModal.value = false;
+};
+
+let showListModal = ref(false);
+const openListModal = () => {
+  showListModal.value = true;
+};
+const closeListModal = () => {
+  showListModal.value = false;
 };
 
 const settings = {

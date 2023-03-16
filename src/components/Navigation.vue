@@ -84,7 +84,7 @@ onMounted(async () => {
               class="button is-light"
               :to="`/user/${userStore.id}`"
             >
-              <img src="@/assets/person.svg" width="40" height="40" />
+              <img class="pr-2" src="@/assets/person.svg" width="40" height="40" />
               {{ userStore.name }}
             </router-link>
             <a
@@ -110,5 +110,11 @@ onMounted(async () => {
 }
 .navbar-burger {
   align-self: center;
+}
+.navbar-brand, .navbar-menu, .navbar-item{
+  flex-shrink: 1;
+}
+.buttons{
+  flex-wrap: nowrap;
 }
 </style>

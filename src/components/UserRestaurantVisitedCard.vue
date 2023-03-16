@@ -42,6 +42,8 @@ export default {
   width: 300px;
   max-width: 300px;
   height: 350px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .card-content {
   white-space: pre-wrap; /* CSS3 */

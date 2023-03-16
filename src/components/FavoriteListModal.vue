@@ -2,7 +2,7 @@
 import { defineComponent} from "vue"
 import FavoriteList from './FavoriteList.vue'
 import FavoriteListItem from "./FavoriteListItem.vue"
-import { getFavoriteListById, removeFavoriteListItem, modifyFavoriteList, addFavoriteListItem } from "../api/favoriteListsApi"
+import { getFavoriteListById, addFavoriteListItem } from "../api/favoriteListsApi"
 import { getRestaurantByID } from "../api/restaurantApi"
 
 export default defineComponent({

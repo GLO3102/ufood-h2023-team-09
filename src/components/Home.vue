@@ -1,207 +1,132 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, computed, ref } from "vue"
+import { getRestaurants } from "../api/restaurantApi.js"
+import RestaurantCard from "./RestaurantCard.vue"
 
-import RestaurantCard from "./RestaurantCard.vue";
-import { getRestaurantsByPage } from "../api/restaurantApi.js";
+let restaurantsList = ref({total:0})
+const input = ref(null)
 
-// infinite scroll
-const restaurantListScroll = ref(null);
-let restaurantsList = ref([]);
-getRestaurantByPage(0);
-const index = ref(1);
-onMounted(() => {
-  getRestaurantByPage(0);
-  window.addEventListener("scroll", handleScroll);
-});
-onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll);
-});
+const page = ref(0)
+const pageLimit = ref(12)
+const searchFilter = ref('')
+const genreFilters = ref([])
+const rangeFilters = ref([])
+let lat = ref(0)
+let lon = ref(0)
 
-function handleScroll(e) {
-  let element = restaurantListScroll.value;
-  if (element.getBoundingClientRect().bottom < window.innerHeight) {
-    loadMoreRestaurants();
+const pagesTotal = computed(() => {
+  return Math.floor(restaurantsList.value.total / pageLimit.value) +1
+})
+
+async function resetList(newPage){
+  page.value = newPage
+  restaurantsList.value = await getRestaurants(page.value, pageLimit.value, searchFilter.value, genreFilters.value, rangeFilters.value, lat.value, lon.value)
+  window.scrollTo(0,0)
+}
+
+// Initialization
+onMounted(async () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(async position => {
+      lat.value = position.coords.latitude
+      lon.value = position.coords.longitude
+      await resetList(0)
+    }, showError)
+  } else {
+    alert("Geolocation is not supported by this browser.")
+    await resetList(0)
   }
-}
-// async function load1morePage() {
-//   let newPosts = await getRestaurantsByPage(1);
-// }
-async function getRestaurantByPage(index) {
-  await getRestaurantsByPage(index).then((response) => {
-    restaurantsList.value = response;
-  });
-}
-async function loadMoreRestaurants() {
-  if (index.value > 12) return;
-  let newPosts = await getRestaurantsByPage(index.value);
-  restaurantsList.value.items = restaurantsList.value.items.concat(
-    newPosts.items
-  );
-  index.value++;
-}
+  input.value.focus()
+})
 
-let categories = [
-  "desserts",
-  "bistro",
-  "ambiance",
-  "fast-food",
-  "fruits de mer",
-  "hamburgers",
-  "végétarien",
-  "santé",
-  "mexicain",
-  "café",
-  "libanais",
-  "italien",
-  "happy hour",
-  "japonais",
-  "asiatique",
-  "steakhouse",
-  "boulangerie",
-  "grec",
-  "charcuterie",
-  "pizzeria",
-  "cuisine moléculaire",
-  "vietnamien",
-  "indien",
-  "européen",
-];
-
-// Dropdown
-// Toggle dropdown menu
-function dropDownToggle() {
-  document.getElementById("dropdownCategories").classList.toggle("is-active");
-}
-// Close the dropdown menu when a click is made elswhere
-window.onclick = function (event) {
-  try {
-    document.getElementById("dropdownCategories").classList.remove("is-active");
-  } catch (error) {
-    // An error is thrown when we click on a link (this error doesn't have any impact)
-    // If the error is TypeError, ignore it, otherwise throw it
-    if (!(error instanceof TypeError)) {
-      throw error;
-    }
-  }
-};
-
-// Filter
+// Filter by Price Range ---------------------------------------------------
 // Defines the states of the buttons
-let is1Active = false;
-let is2Active = false;
-let is3Active = false;
-let is4Active = false;
-// Toggle the range filter buttons
-function rangeFilter(range) {
-  // Toggles the state of the buttons
-  switch (range) {
-    case "1":
-      is1Active = !is1Active;
+const ranges = ref({
+  1: false,
+  2: false,
+  3: false,
+  4: false
+})
+// Toggle the range filter buttons et refresh
+async function rangeFilter(button) {
+  ranges.value[button] = !ranges.value[button]
+  rangeFilters.value = Object.keys(ranges.value).filter(key => ranges.value[key])
+  await resetList(0)
+}
+
+// Filter by Genres ----------------------------------------
+const genres = ref({
+  "desserts": false,
+  "bistro": false,
+  "ambiance": false,
+  "fast-food": false,
+  "fruits de mer": false,
+  "hamburgers": false,
+  "végétarien": false,
+  "santé": false,
+  "mexicain": false,
+  "café": false,
+  "libanais": false,
+  "italien": false,
+  "happy hour": false,
+  "japonais": false,
+  "asiatique": false,
+  "steakhouse": false,
+  "boulangerie": false,
+  "grec": false,
+  "charcuterie": false,
+  "pizzeria": false,
+  "cuisine moléculaire": false,
+  "vietnamien": false,
+  "indien": false,
+  "européen": false,
+})
+// Dropdown genre menu
+let isDropdownActive = ref(false)
+function dropDownToggle() {
+  isDropdownActive.value = !isDropdownActive.value
+}
+function closeDropdown(){
+  isDropdownActive.value = false
+}
+async function genreFilter(genre){
+  genres.value[genre] = !genres.value[genre]
+  genreFilters.value = Object.keys(genres.value).filter(key => genres.value[key])
+  await resetList(0)
+}
+
+// Shows error getting current geolocation ------------------------
+async function showError(error) {
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      alert("User denied the request for Geolocation.");
       break;
-    case "2":
-      is2Active = !is2Active;
+    case error.POSITION_UNAVAILABLE:
+      alert("Location information is unavailable.");
       break;
-    case "3":
-      is3Active = !is3Active;
+    case error.TIMEOUT:
+      alert("The request to get user location timed out.");
       break;
-    case "4":
-      is4Active = !is4Active;
+    case error.UNKNOWN_ERROR:
+      alert("An unknown error occurred.");
       break;
   }
-  // Toggles class "isActive" to change background color between white and light grey
-  document.getElementById(range).classList.toggle("is-active");
-  // Gets all restaurants card
-  let list = [...document.getElementsByClassName("restaurant-card")];
-  // Iterate through all cards and evaluate if they show or disappear
-  list.forEach((card) => {
-    //range === card.dataset.range
-    if (
-      (!is1Active && !is2Active && !is3Active && !is4Active) || // All buttons are inactive OR
-      (is1Active && card.dataset.range === "1") || // Button 1 is active AND current card's range is 1 OR
-      (is2Active && card.dataset.range === "2") || // Button 2 is active AND current card's range is 2 OR
-      (is3Active && card.dataset.range === "3") || // Button 3 is active AND current card's range is 3 OR
-      (is4Active && card.dataset.range === "4") // Button 4 is active AND current card's range is 4 OR
-    ) {
-      card.style.display = "block";
-    } else {
-      card.style.display = "none";
-    }
-  });
-}
-
-function filterByCategory(category) {
-  const drop = "drop-" + formatKebabCase(category);
-  const tag = "tag-" + formatKebabCase(category);
-  document.getElementById(drop).classList.toggle("is-active");
-  document.getElementById(tag).classList.toggle("is-tag-active");
-}
-
-function formatKebabCase(str) {
-  let newString = str.toLowerCase();
-  return newString.replaceAll(" ", "-");
+  await resetList(0)
 }
 </script>
-<script>
-export default {
-  data() {
-    return {
-      restaurantsList: [],
-      index: 1,
-    };
-  },
-  mounted() {
-    window.addEventListener("scroll", this.handleScroll);
-  },
-  unmounted() {
-    window.removeEventListener("scroll", this.handleScroll);
-  },
-  methods: {
-    async getRestaurantByPage(index) {
-      await getRestaurantsByPage(index).then((response) => {
-        this.restaurantsList = response;
-      });
-    },
-    async loadMoreRestaurants() {
-      if (this.index > 12) return;
-      let newPosts = await getRestaurantsByPage(this.index);
-      this.restaurantsList.items = this.restaurantsList.items.concat(
-        newPosts.items
-      );
-      this.index++;
-    },
-    handleScroll(e) {
-      let element = this.$refs.restaurantListScroll;
-      if (element.getBoundingClientRect().bottom < window.innerHeight) {
-        this.loadMoreRestaurants();
-      }
-    },
-  },
 
-  created() {
-    this.getRestaurantByPage(0);
-  },
-};
-</script>
 <template>
-  <div class="home-container">
+  <div class="home-container" @click="closeDropdown()">
     <div class="search-filter">
       <div class="search">
-        <input class="input" type="search" placeholder="Search..." />
+        <input ref="input" @keyup.enter="resetList(0)" v-model="searchFilter" class="input" type="search" placeholder="Search..." />
       </div>
 
       <div class="filter">
         <!-- Dropdown menu -->
-        <div
-          class="dropdown"
-          id="dropdownCategories"
-          @click.stop="dropDownToggle()"
-        >
+        <div class="dropdown" :class="{ 'is-active': isDropdownActive }" @click.stop="dropDownToggle()">
           <div class="dropdown-trigger">
-            <button
-              class="button"
-              aria-haspopup="true"
-              aria-controls="dropdown-menu"
-            >
+            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
               <span>Categories</span>
               <span class="icon is-small">
                 <i class="fas fa-angle-down" aria-hidden="true"></i>
@@ -210,72 +135,60 @@ export default {
           </div>
           <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content">
-              <a
-                class="dropdown-item"
-                v-for="category in categories"
-                :key="category"
-                :id="'drop-' + formatKebabCase(category)"
-                @click="filterByCategory(category)"
-                >{{ category }}</a
-              >
+              <a v-for="(bool, genre) in genres" :key="genre" class="dropdown-item" :class="{ 'is-active': bool }"
+                @click="genreFilter(genre)">{{ genre }}</a>
             </div>
           </div>
         </div>
         <!-- Range filter buttons -->
-        <button class="button" id="1" @click="rangeFilter('1')">$</button>
-        <button class="button" id="2" @click="rangeFilter('2')">$$</button>
-        <button class="button" id="3" @click="rangeFilter('3')">$$$</button>
-        <button class="button" id="4" @click="rangeFilter('4')">$$$$</button>
+        <button class="button" :class="{ 'is-active': ranges[1] }" @click="rangeFilter(1)">$</button>
+        <button class="button" :class="{ 'is-active': ranges[2] }" @click="rangeFilter(2)">$$</button>
+        <button class="button" :class="{ 'is-active': ranges[3] }" @click="rangeFilter(3)">$$$</button>
+        <button class="button" :class="{ 'is-active': ranges[4] }" @click="rangeFilter(4)">$$$$</button>
       </div>
     </div>
     <!-- List of categories selected -->
     <div class="categories-selected-container">
-      <div
-        class="categories-selected tags has-addons"
-        v-for="category in categories"
-        :key="category"
-        :id="'tag-' + formatKebabCase(category)"
-      >
-        <span class="tag is-info is-medium">{{ category }}</span>
-        <a
-          @click="filterByCategory(category)"
-          class="tag is-delete is-medium"
-        ></a>
+      <div v-for="(bool, genre) in genres" :key="genre" class="categories-selected tags has-addons"
+        :class="{ 'is-tag-active': bool }">
+        <span class="tag is-info is-medium">{{ genre }}</span>
+        <a @click="genreFilter(genre)" class="tag is-delete is-medium"></a>
       </div>
     </div>
 
     <!-- Dynamically generated restaurants list -->
     <div class="restaurant-list" ref="restaurantListScroll">
-      <div
-        v-for="restaurant in restaurantsList.items"
-        :key="restaurant"
-        class="restaurant-card"
-        :id="restaurant.id"
-        :data-range="restaurant.price_range"
-      >
-        <RestaurantCard
-          :name="restaurant.name"
-          :id="restaurant.id"
-          :address="restaurant.address"
-          :tel="restaurant.tel"
-          :location="restaurant.location"
-          :opening_hours="restaurant.opening_hours"
-          :monday="restaurant.opening_hours.monday"
-          :tuesday="restaurant.opening_hours.tuesday"
-          :wednesday="restaurant.opening_hours.wednesday"
-          :thursday="restaurant.opening_hours.thursday"
-          :friday="restaurant.opening_hours.friday"
-          :saturday="restaurant.opening_hours.sturday"
-          :sunday="restaurant.opening_hours.sunday"
-          :pictures="restaurant.pictures"
-          :genres="restaurant.genres"
-          :price_range="restaurant.price_range"
-          :rating="restaurant.rating"
-        ></RestaurantCard>
-      </div>
+      <RestaurantCard :restaurant="restaurant" v-for="restaurant in restaurantsList.items" :key="restaurant" />
     </div>
-
-    <div class="search-filter">GLO-3102 Home</div>
+    <!-- Shows a message if no match is found -->
+    <h1 v-if="restaurantsList.total === 0" class="title is-3 has-text-centered">No match found</h1>
+    <!-- Pagination to help navigate -->
+    <nav v-if="pagesTotal > 1" class="pagination is-centered" role="navigation" aria-label="pagination">
+      <ul class="pagination-list">    
+        <li v-if="page>1">
+          <a class="pagination-link" aria-label="Goto page 1" @click="resetList(0)">1</a>
+        </li>
+        <li v-if="page>1">
+          <span class="pagination-ellipsis">&hellip;</span>
+        </li>
+        <li v-if="page>0">
+          <a class="pagination-link" :aria-label="`Goto page ${page}`" @click="resetList(page-1)">{{ page }}</a>
+        </li>
+        <li>
+          <a class="pagination-link is-current" :aria-label="`Goto page ${page+1}`" aria-current="page" @click="resetList(page)">{{ page+1 }}</a>
+        </li>
+        <li v-if="page+2 < pagesTotal">
+          <a class="pagination-link" :aria-label="`Goto page ${page+2}`" @click="resetList(page+1)">{{ page+2 }}</a>
+        </li>
+        <li v-if="page+2 < pagesTotal">
+          <span class="pagination-ellipsis">&hellip;</span>
+        </li>
+        <li v-if="page+1 < pagesTotal">
+          <a class="pagination-link" :aria-label="`Goto page ${pagesTotal}`" @click="resetList(pagesTotal-1)">{{ pagesTotal }}</a>
+        </li>
+      </ul>
+    </nav>
+    <div class="has-text-centered pb-5">GLO-3102 Home</div>
   </div>
 </template>
 
@@ -341,10 +254,78 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
 }
-.restaurant-card {
-  width: 480px;
-  margin-inline: 1vw;
-  margin-bottom: 2vw;
-  flex-shrink: 1;
-}
 </style>
+
+<!-- 
+  import { onMounted, onUnmounted, onBeforeMount, ref } from "vue";
+  import { getRestaurantsByPage, getRestaurantsBy } from "../api/restaurantApi.js";
+  const restaurantListScroll = ref(null);
+  const index = ref(1);
+  onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
+
+function handleScroll(e) {
+  let element = restaurantListScroll.value;
+  if (element.getBoundingClientRect().bottom < window.innerHeight) {
+    loadMoreRestaurants();
+  }
+}
+async function getRestaurantByPage(index) {
+  await getRestaurantsByPage(index).then((response) => {
+    restaurantsList.value = response;
+  });
+}
+async function loadMoreRestaurants() {
+  if (index.value > 12) return;
+  let newPosts = await getRestaurantsByPage(index.value);
+  restaurantsList.value.items = restaurantsList.value.items.concat(
+    newPosts.items
+  );
+  index.value++;
+} -->
+
+<!-- <script>
+export default {
+  data() {
+    return {
+      restaurantsList: [],
+      index: 1,
+    };
+  },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  unmounted() {
+    window.removeEventListener("scroll", this.handleScroll);
+  },
+  methods: {
+    async getRestaurantByPage(index) {
+      await getRestaurantsByPage(index).then((response) => {
+        this.restaurantsList = response;
+      });
+    },
+    async loadMoreRestaurants() {
+      if (this.index > 12) return;
+      let newPosts = await getRestaurantsByPage(this.index);
+      this.restaurantsList.items = this.restaurantsList.items.concat(
+        newPosts.items
+      );
+      this.index++;
+    },
+    handleScroll(e) {
+      let element = this.$refs.restaurantListScroll;
+      if (element.getBoundingClientRect().bottom < window.innerHeight) {
+        this.loadMoreRestaurants();
+      }
+    },
+  },
+
+  created() {
+    this.getRestaurantByPage(0);
+  },
+};
+</script> -->

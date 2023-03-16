@@ -1,9 +1,8 @@
-<script>
+#<script>
 import { defineComponent } from 'vue'
 import FavoriteLists from './FavoriteLists.vue'
 import FavoriteListModal from './FavoriteListModal.vue'
 import { getFavoriteListsByUserId } from "../api/favoriteListsApi"
-import moveDown from  './FavoriteLists.vue'
 
 
 export default defineComponent({

@@ -1,7 +1,7 @@
 const URL = "https://ufoodapi.herokuapp.com/unsecure"
 
 export const getFavoriteListsByUserId = async (id) => {
-    const response = await fetch(`${URL}/users/${id}/favorites`, {
+    const response = await fetch(`${URL}/users/${id}/favorites?limit=100`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

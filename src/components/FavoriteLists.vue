@@ -23,12 +23,14 @@ export default defineComponent({
         },
         async createNewList() {
             if (this.isInputReady) {
-                this.isInputReady = false
                 let email = this.userLists.items[0].owner.email
                 email = email.replace('/', '')
                 let name = this.$refs.inputName.value
-                const response = await createFavoriteList(name, email)
-                this.userLists = await getFavoriteListsByUserId(this.userId)
+                if(name.length > 0){
+                    const response = await createFavoriteList(name, email)
+                    this.userLists = await getFavoriteListsByUserId(this.userId)
+                    this.isInputReady = false
+                }
             } else {
                 this.isInputReady = true
                 this.$nextTick(() => {

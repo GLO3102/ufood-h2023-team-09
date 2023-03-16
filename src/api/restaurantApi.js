@@ -1,21 +1,39 @@
-const URL = "https://ufoodapi.herokuapp.com/unsecure/restaurants";
+const ENDPOINT = "https://ufoodapi.herokuapp.com/unsecure/restaurants";
 
-export const getRestaurantsByPage = async (page) => {
-    const response = await fetch(`${URL}?page=${page}`, {
-        Method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      })
-    if (response.status !== 200) {
-        throw new Error(`Something went wrong : request returned status ${response.status}...`);
-    }
-      return response.json();
+export const getRestaurants = async (page, limit, search, genres, price_ranges, lat, lon) => {
+  let genresStr = ''
+  if(genres.length !== 0){
+    genresStr = `&genres=${genres}`.replaceAll(' ', '')
+  }
+  let rangesStr = ''
+  if(price_ranges.length !== 0){
+    rangesStr = `&price_range=${price_ranges}`.replaceAll(' ', '')
+  }
+  let searchStr = ''
+  if(search.length !== 0){
+    searchStr = `&q=${search}`
+  }
+  let latStr = ''
+  let lonStr = ''
+  if(lon !== 0 && lat !== 0){
+    latStr = `&lat=${lat}`
+    lonStr = `&lon=${lon}`
+  }
+  const URL = `${ENDPOINT}?page=${page}&limit=${limit}${genresStr}${rangesStr}${searchStr}${latStr}${lonStr}`
+  const response = await fetch(URL, {
+    Method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  })
+  if (response.status !== 200) {
+    throw new Error(`Something went wrong : request returned status ${response.status}...`);
+  }
+  return response.json();
 }
 
-
 export const getRestaurantByID = async (id) => {
-  const response = await fetch(`${URL}/${id}`, {
+  const response = await fetch(`${ENDPOINT}/${id}`, {
       Method: 'GET',
     })
     if (response.status !== 200) {
@@ -24,3 +42,16 @@ export const getRestaurantByID = async (id) => {
     const data = await response.json();
     return data;
 }
+
+// export const getRestaurantsByPage = async (page) => {
+//     const response = await fetch(`${URL}?page=${page}`, {
+//         Method: 'GET',
+//         headers: {
+//           'Content-Type': 'application/json'
+//         },
+//       })
+//     if (response.status !== 200) {
+//         throw new Error(`Something went wrong : request returned status ${response.status}...`);
+//     }
+//       return response.json();
+// }

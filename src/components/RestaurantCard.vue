@@ -119,7 +119,7 @@ defineProps(['restaurant'])
             <div class="button is-primary mr-1" @click="openVisitModal">
               Rate
             </div>
-            <div class="button is-primary">Add to favorite</div>
+            <div class="button is-primary mr-5">Add to favorite</div>
             <div class="navbar-end">
               <div class="rating">
                 <progress class="rating-bg" :value="restaurant.rating" max="5"></progress>
@@ -200,5 +200,14 @@ img:hover {
 }
 .evaluation {
   flex-wrap: wrap;
+}
+.navbar-end{
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.evaluation > * {
+  margin-top: 10px;
+  margin-bottom: 0;
 }
 </style>

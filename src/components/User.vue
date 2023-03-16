@@ -4,7 +4,7 @@
       <!-- Begin user info-->
       <div>
         <nav class="level">
-          <div class="level-item has-text-centered">
+          <div class="level-item has-text-centered mb-5">
             <figure class="image is-4by4">
               <img
                 class="is-rounded"
@@ -15,9 +15,9 @@
           </div>
           <div class="level-item">
             <div class="is-6 is-offset-32 has-text-centered">
-              <h1 class="title is-2">{{ userName }}<br /></h1>
-              <h2 class="subtitle is-1 has-text-primary has-text-weight-bold">
-                <br />{{ userRating }}
+              <h1 class="title is-2 p-4">{{ userName }}</h1>
+              <h2 class="subtitle is-1 has-text-primary has-text-weight-bold p-4">
+                {{ userRating }}
               </h2>
             </div>
           </div>
@@ -28,7 +28,7 @@
       <div>
         <!-- Begin Work Content IF USER HAVE VISITED RESTAURANTS-->
         <!--Carousel setting set on page-->
-        <div v-if="!isFavoriteRestaurantsEmpty" class="box mt-6">
+        <div v-if="!isFavoriteRestaurantsEmpty" class="box my-5">
           <!--carousel title-->
           <div class="has-text-centered">
             <div>
@@ -179,6 +179,12 @@ const breakpoints = {
 label {
   display: inline-block;
   width: 100px;
+}
+.level{
+  flex-wrap: wrap;
+}
+.level-item{
+  padding: 10px;
 }
 </style>
 

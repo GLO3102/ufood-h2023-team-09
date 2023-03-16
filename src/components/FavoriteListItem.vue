@@ -34,7 +34,7 @@ export default defineComponent({
     <div class="tags has-addons">
         <a v-if="isOptionsReady" class="tag is-small has-background-grey-lighter" @click="$emit('moveUp', restaurant.id)">&#8593;</a>
         <a v-if="isOptionsReady" class="tag is-small has-background-grey-lighter" @click="$emit('moveDown', restaurant.id)">&#8595;</a>
-        <a class="tag is-info is-small">{{ restaurant.name }}</a>
+        <router-link class="tag is-info is-small" :to="`/restaurant/${restaurant.id}`">{{ restaurant.name }}</router-link>
         <a v-if="isOptionsReady" @click="$emit('removeItem', restaurant.id)" class="tag is-delete is-small is-danger"></a>
         <a @click="toggleOptions" class="tag is-small has-background-grey-lighter">&#8226;&#8226;&#8226;</a>
     </div>

@@ -29,10 +29,25 @@ export default {
     restaurantName: "",
     restaurantPic: "",
   }),
-  async created(){
+  async created() {
     const restaurant = await getRestaurantById(this.restaurantId);
-      this.restaurantName = restaurant.name;
-      this.restaurantPic = restaurant.pictures;
-  }
+    this.restaurantName = restaurant.name;
+    this.restaurantPic = restaurant.pictures;
+  },
 };
 </script>
+
+<style scoped>
+.card {
+  width: 300px;
+  max-width: 300px;
+  height: 350px;
+}
+.card-content {
+  white-space: pre-wrap; /* CSS3 */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -pre-wrap; /* Opera <7 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word;
+}
+</style>

@@ -1,19 +1,25 @@
 <script setup>
 import json from "../dummy_jsons/hardcoded_resto.json";
+
+const props = defineProps({
+  restaurantSchedule : Object
+})
+
 </script>
 
 <template>
   <div>
-    <div class="box" style="width: 250px; margin-right: 10px">
+    <div class="box" style="width: 275px; margin-right: 10px">
       <table class="table is-hoverable">
         <thead>
           <th><abbr title="Weekday">Weekday</abbr></th>
           <th><abbr title="Opening hours">Opened</abbr></th>
         </thead>
-        <tbody v-for="(hour, day) in json.items[0].opening_hours" :key="day">
+        <tbody v-for="(hour, day) in props.restaurantSchedule" :key="day">
           <tr>
             <th>{{ day }}</th>
-            <td>{{ hour }}</td>
+            <td v-if="hour !== null">{{ hour }}</td>
+            <td v-else>Closed</td>
           </tr>
         </tbody>
       </table>

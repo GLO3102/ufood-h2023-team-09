@@ -1,133 +1,8 @@
-<script>
-import { defineComponent } from "vue";
-import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
-import { useUserStore } from "@/stores/user";
-import { computed } from "vue";
-import { getUserById } from "../api/userApi.js";
-import { getUserVisits } from "../api/userApi.js";
-import UserRestaurantVisitedCard from "../components/UserRestaurantVisitedCard.vue";
-import FavoriteLists from "./FavoriteLists.vue";
-
-import "vue3-carousel/dist/carousel.css";
-
-export default defineComponent({
-  name: "Basic",
-  components: {
-    Carousel,
-    Slide,
-    Pagination,
-    Navigation,
-    FavoriteLists,
-    UserRestaurantVisitedCard,
-  },
-  data: () => ({
-    userVisites: "",
-    userName: "",
-    userRating: "",
-    listRestaurantID: [],
-    userId: String,
-  }),
-  methods: {
-    // À vérifier
-    // async getListRestaurant() {
-    //   let listID = [];
-    //   this.userVisites = await getUserVisits("619c57e4fe6e16000458adf4");
-    //   const visits = this.userVisites;
-    //   visits.forEach((element) => {
-    //     if (!listID.includes(element.restaurant_id)) {
-    //       listID.push(element.restaurant_id);
-    //     }
-    //   });
-    //   return listID;
-    // },
-    // async getUser() {
-    //   const user = await getUserById("619c57e4fe6e16000458adf4");
-    //   this.userName = user.name;
-    //   this.userRating = user.rating;
-    //   this.listRestaurantID = await this.getListRestaurant();
-    // },
-    calculNumberVisits(restaurentID) {
-      let counter = 0;
-      const visits = this.userVisites;
-      visits.forEach((element) => {
-        if (element.restaurant_id === restaurentID) {
-          counter = counter + 1;
-        }
-      });
-      return counter;
-    },
-  },
-  async created() {
-
-    // HARDCODED
-    this.userId = "619c57e4fe6e16000458adf4" 
-    //liste de id user interessant avec visites: 5f998ff0d4ade30004a658ef    619c57e4fe6e16000458adf4   61afd2fae29b0b000410e432
-    //liste de id user interessant sans visites: 639bbf092b5bb7844f430e47    639bbb9e2b5bb7844f42f171
-
-    const user = await getUserById(this.userId);
-    this.userName = user.name;
-    this.userRating = user.rating;
-    let listID = [];
-    this.userVisites = await getUserVisits(this.userId);
-    const visits = this.userVisites;
-    visits.forEach((element) => {
-      if (!listID.includes(element.restaurant_id)) {
-        listID.push(element.restaurant_id);
-      }
-    });
-    this.listRestaurantID = listID
-  }
-});
-</script>
-
-<script setup>
-//TO REMOVE
-const toggleViews = () => {
-  if (useUserStore().favoriteRestaurants.length === 0) {
-    useUserStore().$patch({ favoriteRestaurants: ["domino"] });
-  } else {
-    useUserStore().$patch({ favoriteRestaurants: [] });
-  }
-  let viewRestaurantsEmpty = document.getElementById("viewRestaurantsEmpty");
-  let viewRestaurants = document.getElementById("viewRestaurants");
-  viewRestaurantsEmpty.classList.toggle("is-hidden");
-  viewRestaurants.classList.toggle("is-hidden");
-};
-const isFavoriteRestaurantsEmpty = computed(() => {
-  return useUserStore().favoriteRestaurants.length === 0;
-});
-
-const settings = {
-  itemsToShow: 1,
-};
-
-const breakpoints = {
-  640: {
-    itemsToShow: 1.5,
-  },
-
-  750: {
-    itemsToShow: 1.8,
-  },
-
-  1000: {
-    itemsToShow: 2.5,
-  },
-  1200: {
-    itemsToShow: 3,
-  },
-  1500: {
-    itemsToShow: 3.5,
-  },
-};
-</script>
-
 <template>
   <div class="hero" id="user-entire-page">
     <div class="hero-body">
       <!-- Begin user info-->
       <div>
-
         <nav class="level">
           <div class="level-item has-text-centered">
             <figure class="image is-4by4">
@@ -153,7 +28,7 @@ const breakpoints = {
       <div>
         <!-- Begin Work Content IF USER HAVE VISITED RESTAURANTS-->
         <!--Carousel setting set on page-->
-        <div v-show="!isFavoriteRestaurantsEmpty" class="box mt-6">
+        <div v-if="!isFavoriteRestaurantsEmpty" class="box mt-6">
           <!--carousel title-->
           <div class="has-text-centered">
             <div>
@@ -183,7 +58,7 @@ const breakpoints = {
         </div>
         <!-- End Work Content IF USER HAVE VISITED RESTAURANTS-->
         <!-- Begin Work Content IF USER DONT VISIT//GOTTA SHOW INDICATION OF NON VISITED AND LINK TO HOME PAGE-->
-        <div v-show="isFavoriteRestaurantsEmpty" class="hero is-medium">
+        <div v-if="isFavoriteRestaurantsEmpty" class="hero is-medium">
           <div class="box">
             <div class="has-text-centered">
               <div>
@@ -198,30 +73,93 @@ const breakpoints = {
       </div>
 
       <!-- Liste de liste de restaurants favories ou autre -->
-      <FavoriteLists :userId="userId"/>
+      <FavoriteLists :userId="userId" />
+      <VisitedList :visits="userVisites" />
 
       <!-- End Work Content IF USER DONT VISIT-->
     </div>
-    <div class="hero-foot">
-      <div class="">
-        <div class="tabs is-centered">
-          <ul class="bottom-ul">
-            <li><a href="./User.vue">And this is the bottom</a></li>
-            <!--TO REMOVE-->
-            <button
-              id="temporary"
-              class="button is-size-6"
-              v-on:click="toggleViews()"
-            >
-              CLICK TO SEE OTHER VIEW WITH RESTAURANTS
-            </button>
-          </ul>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
+<script>
+export default {
+  async created() {
+    const user = await getUserById(this.userId);
+    this.userName = user.name;
+    this.userRating = user.rating;
+    let listID = [];
+    this.userVisites = await getUserVisits(this.userId);
+    this.userVisites.forEach(async (element) => {
+      if (!listID.includes(element.restaurant_id)) {
+        listID.push(element.restaurant_id);
+      }
+      const resto = await getRestaurantByID(element.restaurant_id);
+      element["restoName"] = resto.name;
+      this.userVisitesRestoNames.push(resto.name);
+    });
+    this.listRestaurantID = listID;
+    if (listID.length === 0) {
+      this.isFavoriteRestaurantsEmpty = true;
+    } else {
+      this.isFavoriteRestaurantsEmpty = false;
+    }
+  },
+};
+</script>
 
+<script setup>
+import { getRestaurantByID } from "../api/restaurantApi";
+import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
+import { useUserStore } from "@/stores/user";
+import { getUserById, getUserVisits } from "@/api/userApi.js";
+import UserRestaurantVisitedCard from "@/components/UserRestaurantVisitedCard.vue";
+import FavoriteLists from "./FavoriteLists.vue";
+import VisitedList from "./VisitedList.vue";
+import "vue3-carousel/dist/carousel.css";
+import { ref } from "vue";
+
+const userId = ref("619c57e4fe6e16000458adf4");
+const userVisites = ref([]);
+const userVisitesRestoNames = ref([]);
+const userName = ref("");
+const userRating = ref("");
+const listRestaurantID = ref([]);
+const isFavoriteRestaurantsEmpty = ref(false);
+
+function calculNumberVisits(restaurentID) {
+  let counter = 0;
+  const visits = userVisites.value;
+  visits.forEach((element) => {
+    if (element.restaurant_id === restaurentID) {
+      counter = counter + 1;
+    }
+  });
+  return counter;
+}
+
+const settings = {
+  itemsToShow: 1,
+};
+
+const breakpoints = {
+  640: {
+    itemsToShow: 1.5,
+  },
+
+  750: {
+    itemsToShow: 1.8,
+  },
+
+  1000: {
+    itemsToShow: 2.5,
+  },
+  1200: {
+    itemsToShow: 3,
+  },
+  1500: {
+    itemsToShow: 3.5,
+  },
+};
+</script>
 <style scoped>
 #user-entire-page {
   background: #fff;

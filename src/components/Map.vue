@@ -1,5 +1,12 @@
 <template>
   <div class="box mb-6">
+    <h1 class="title">Where to find us</h1>
+    <div class="container is-flex">
+      <span v-for="(item, index) in props.address.split(',')" :key="index" class="tag is-flex is-warning" :style="{margin: '5px'}">
+          {{ item }}
+      </span>
+    </div>
+    <br><br>
     <div id="map" style="height: 600px; width: 100%"></div>
   </div>
 </template>
@@ -8,7 +15,8 @@
 import { onMounted, defineProps } from "vue";
 
 const props = defineProps({
-  restaurantCoordinates : Array
+  restaurantCoordinates : Array,
+  address : String
 })
 
 
@@ -68,5 +76,11 @@ onMounted(() => {
 }
 .pb {
   padding-bottom: 1.25rem;
+}
+
+@media screen and (max-width: 500px) {
+  .container {
+    flex-wrap : wrap;
+  }
 }
 </style>

@@ -1,4 +1,6 @@
 <script setup>
+import { getUserById, getUserVisits } from "@/api/userApi";
+import { onMounted } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 import { computed } from "vue";
@@ -16,6 +18,11 @@ const logout = () => {
 };
 const isNotHome = computed(() => {
   return router.currentRoute.value.path != "/";
+});
+onMounted(async () => {
+  let user = await getUserById("619c57e4fe6e16000458adf4");
+  let visitedNumber = await getUserVisits("619c57e4fe6e16000458adf4");
+  userStore.setUser(user, visitedNumber.length);
 });
 </script>
 
@@ -53,10 +60,6 @@ const isNotHome = computed(() => {
             placeholder="Search..."
           />
         </div>
-        <router-link class="navbar-item" to="/restaurant"
-          >Restaurant</router-link
-        >
-        <router-link class="navbar-item" to="/user">User</router-link>
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
@@ -79,10 +82,10 @@ const isNotHome = computed(() => {
             <router-link
               v-show="userStore.isLoggedIn"
               class="button is-light"
-              to="/user"
+              :to="`/user/${userStore.id}`"
             >
               <img src="@/assets/person.svg" width="40" height="40" />
-              {{ userStore.username }}
+              {{ userStore.name }}
             </router-link>
             <a
               class="button is-light"
@@ -102,10 +105,10 @@ const isNotHome = computed(() => {
 #logo-text {
   font-size: 2rem;
 }
-.navbar{
+.navbar {
   position: static;
 }
-.navbar-burger{
+.navbar-burger {
   align-self: center;
 }
 </style>

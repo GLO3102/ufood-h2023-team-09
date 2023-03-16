@@ -1,173 +1,197 @@
 <template>
-
   <div>
+    <VisitModal
+      v-if="showVisitModal"
+      @close="closeVisitModal"
+      :id="resto_data.id"
+      :name="resto_data.name"
+    />
     <slot v-if="displayError">
-      <div class="box is-flex is-align-items-center is-justify-content-center is-flex-direction-column">
+      <div
+        class="box is-flex is-align-items-center is-justify-content-center is-flex-direction-column"
+      >
         <figure>
           <img src="../assets/something_went_wrong.png" alt="" />
         </figure>
-        <p class="title is-3">{{displayErrorMsg}}</p>
+        <p class="title is-3">{{ displayErrorMsg }}</p>
         <p class="title is-3">Try again later...</p>
       </div>
     </slot>
     <slot v-else-if="resto_data" class="resto">
       <div class="container is-max-widescreen">
-      <br /><br />
-      <div
-        class="box is-flex is-justify-content-space-between"
-        id="name-buttons"
-      >
-        <div>
-          <h1 class="title">{{ resto_data.name }}</h1>
-          <div class="rating-container">
-            <svg style="display: none">
-              <defs>
-                <symbol id="fivestars">
-                  <path
-                    d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                    fill="white"
-                    fill-rule="evenodd"
-                  />
-                  <path
-                    d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                    fill="white"
-                    fill-rule="evenodd"
-                    transform="translate(24)"
-                  />
-                  <path
-                    d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                    fill="white"
-                    fill-rule="evenodd"
-                    transform="translate(48)"
-                  />
-                  <path
-                    d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                    fill="white"
-                    fill-rule="evenodd"
-                    transform="translate(72)"
-                  />
-                  <path
-                    d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
-                    fill="white"
-                    fill-rule="evenodd"
-                    transform="translate(96)"
-                  />
-                </symbol>
-              </defs>
-            </svg>
-            <div class="evaluation">
-              <div class="rating">
-                <!--   <div class="rating-bg" style="width: 90%;"></div> -->
-                <progress
-                  class="rating-bg"
-                  :value="resto_data.rating"
-                  max="5"
-                ></progress>
-                <svg>
-                  <use xlink:href="#fivestars" />
-                </svg>
-              </div>
-              <span class="tag is-warning">{{ resto_data.rating }}</span>
-              <span :class="'tag is-' + color_map[resto_data.price_range - 1]">
-                {{ "$".repeat(resto_data.price_range) }}</span
-              >
-            </div>
-          </div>
-        </div>
-        <div class="is-flex is-flex is-align-items-center">
-          <button class="button is-primary mr-3 is-large">Rate</button>
-          <button class="button is-primary is-large">Add to favorite</button>
-        </div>
-      </div>
-
-      <div class="box" id="second-box">
-        <h1 class="title">About us</h1>
-
-        <div class="resto-info">
-          <div class="first-part">
-            <Schedule></Schedule>
-            <div class="box">
-              <table class="table is-hoverable">
-                <thead>
-                  <th><abbr title="Tags">Tags </abbr></th>
-                </thead>
-                <tbody v-for="tag in resto_data.genres" :key="tag">
-                  <tr>
-                    <th id="tags" class="tag is-info is-medium">{{ tag }}</th>
-                  </tr>
-                </tbody>
-              </table>
-              <table class="table is-hoverable">
-                <thead>
-                  <th><abbr title="Phone number">Phone Number </abbr></th>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th>{{ resto_data.tel }}</th>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="second-part">
-            <Carousel
-              id="gallery"
-              :items-to-show="1"
-              :wrap-around="true"
-              v-model="currentSlide"
-              :settings="settings"
-            >
-              <Slide v-for="index in resto_data.pictures.length" :key="index">
-                <div class="carousel__item">
-                  <div class="card">
-                    <figure class="image is-4by3">
-                      <img :src="resto_data.pictures[index - 1]" alt="" />
-                    </figure>
-                  </div>
+        <br /><br />
+        <div
+          class="box is-flex is-justify-content-space-between"
+          id="name-buttons"
+        >
+          <div>
+            <h1 class="title">{{ resto_data.name }}</h1>
+            <div class="rating-container">
+              <svg style="display: none">
+                <defs>
+                  <symbol id="fivestars">
+                    <path
+                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
+                      fill="white"
+                      fill-rule="evenodd"
+                    />
+                    <path
+                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
+                      fill="white"
+                      fill-rule="evenodd"
+                      transform="translate(24)"
+                    />
+                    <path
+                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
+                      fill="white"
+                      fill-rule="evenodd"
+                      transform="translate(48)"
+                    />
+                    <path
+                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
+                      fill="white"
+                      fill-rule="evenodd"
+                      transform="translate(72)"
+                    />
+                    <path
+                      d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z M0 0 h24 v24 h-24 v-24"
+                      fill="white"
+                      fill-rule="evenodd"
+                      transform="translate(96)"
+                    />
+                  </symbol>
+                </defs>
+              </svg>
+              <div class="evaluation">
+                <div class="rating">
+                  <!--   <div class="rating-bg" style="width: 90%;"></div> -->
+                  <progress
+                    class="rating-bg"
+                    :value="resto_data.rating"
+                    max="5"
+                  ></progress>
+                  <svg>
+                    <use xlink:href="#fivestars" />
+                  </svg>
                 </div>
-              </Slide>
-              <template #addons>
-                <Navigation />
-                <Pagination />
-              </template>
-            </Carousel>
+                <span class="tag is-warning">{{ resto_data.rating.toFixed(1)}}</span>
+                <span
+                  :class="'tag is-' + color_map[resto_data.price_range - 1]"
+                >
+                  {{ "$".repeat(resto_data.price_range) }}</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="is-flex is-align-items-center" :style="{padding: '10px'}">
+            <button
+              class="is-flex button is-primary mr-3 is-large is-responsive"
+              @click="openVisitModal"
+            >
+              Rate
+            </button>
+            <button class="is-flex button is-primary is-large is-responsive">Add to favorite</button>
           </div>
         </div>
-      </div>
-      <Carousel
-        id="thumbnails"
-        :wrap-around="true"
-        :settings="settings"
-        :breakpoints="breakpoints"
-        ref="carousel"
-        v-model="currentSlide"
-      >
-        <Slide v-for="index in resto_data.pictures.length" :key="index">
-          <div class="carousel__item" @click="slideTo(index - 1)">
-            <figure class="image is-4by3">
-              <img :src="resto_data.pictures[index - 1]" alt="" />
-            </figure>
+
+        <div class="box" id="second-box">
+          <h1 class="title">About us</h1>
+
+          <div class="resto-info">
+            <div class="first-part">
+              <Schedule :restaurantSchedule="resto_data.opening_hours"></Schedule>
+              <div class="box">
+                <table class="table is-hoverable">
+                  <thead>
+                    <th><abbr title="Tags">Tags </abbr></th>
+                  </thead>
+                  <tbody v-for="tag in resto_data.genres" :key="tag">
+                    <tr>
+                      <th id="tags" class="tag is-info is-medium">{{ tag }}</th>
+                    </tr>
+                  </tbody>
+                </table>
+                <table class="table is-hoverable">
+                  <thead>
+                    <th><abbr title="Phone number">Phone Number </abbr></th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>{{ resto_data.tel }}</th>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="second-part">
+              <Carousel
+                id="gallery"
+                :items-to-show="1"
+                :wrap-around="true"
+                v-model="currentSlide"
+                :settings="settings"
+              >
+                <Slide v-for="index in resto_data.pictures.length" :key="index">
+                  <div class="carousel__item">
+                    <div class="card">
+                      <figure class="image is-4by3">
+                        <img :src="resto_data.pictures[index - 1]" alt="" />
+                      </figure>
+                    </div>
+                  </div>
+                </Slide>
+                <template #addons>
+                  <Navigation />
+                  <Pagination />
+                </template>
+              </Carousel>
+            </div>
           </div>
-        </Slide>
+        </div>
+        <Carousel
+          id="thumbnails"
+          :wrap-around="true"
+          :settings="settings"
+          :breakpoints="breakpoints"
+          ref="carousel"
+          v-model="currentSlide"
+        >
+          <Slide v-for="index in resto_data.pictures.length" :key="index">
+            <div class="carousel__item" @click="slideTo(index - 1)">
+              <figure class="image is-4by3">
+                <img :src="resto_data.pictures[index - 1]" alt="" />
+              </figure>
+            </div>
+          </Slide>
 
-        <template #addons>
-          <Navigation />
-          <Pagination />
-        </template>
-      </Carousel>
-      <br /><br />
+          <template #addons>
+            <Navigation />
+            <Pagination />
+          </template>
+        </Carousel>
+        <br /><br />
 
-      <div class="container">
-        <Map :restaurantCoordinates="resto_data.location.coordinates"/> 
+        <div class="container">
+          <Map :restaurantCoordinates="resto_data.location.coordinates"  :address="resto_data.address" />
+        </div>
       </div>
-    </div>
     </slot>
-
   </div>
 </template>
 
 <script setup>
 import Map from "./Map.vue";
+import { ref } from "vue";
+import VisitModal from "./VisitModal.vue";
+
+let showVisitModal = ref(false);
+
+const openVisitModal = () => {
+  showVisitModal.value = true;
+};
+const closeVisitModal = () => {
+  showVisitModal.value = false;
+};
 
 const settings = {
   itemsToShow: 1,
@@ -195,14 +219,12 @@ const breakpoints = {
 };
 </script>
 
-
 <script>
 import { defineComponent } from "vue";
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel";
-import {getRestaurantByID}  from "../api/restaurantApi.js";
+import { getRestaurantByID } from "../api/restaurantApi.js";
 import Schedule from "./Schedule.vue";
 import "vue3-carousel/dist/carousel.css";
-
 
 export default defineComponent({
   name: "Basic",
@@ -213,9 +235,9 @@ export default defineComponent({
   data: () => ({
     currentSlide: 0,
     resto_data: null,
-    displayError : false,
-    displayErrorMsg : null,
-    color_map : ["success", "primary", "danger", "black"],
+    displayError: false,
+    displayErrorMsg: null,
+    color_map: ["success", "primary", "danger", "black"],
   }),
   async created() {
     try {
@@ -224,7 +246,8 @@ export default defineComponent({
       this.displayError = true;
       this.displayErrorMsg = e.message;
     } finally {
-    }},
+    }
+  },
   methods: {
     slideTo(val) {
       this.currentSlide = val;

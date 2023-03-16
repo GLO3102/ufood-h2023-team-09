@@ -77,16 +77,16 @@ export const getRestaurants = async function(){
   return await res.json();
 };
 
-export const postVisit = async function (visitModalObject) {
-  const req = new Request(`${endpoint}/users/${visitModalObject.user_id}/restaurants/visits`, {
+export const postVisit = async function (visit) {
+  const req = new Request(`${endpoint}/users/${visit.user_id}/restaurants/visits`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({restaurant_id: visitModalObject.resto_id, comment: visitModalObject.comment, rating: visitModalObject.rating, date: visitModalObject.visitDate}),
+    body: JSON.stringify({restaurant_id: visit.resto_id, comment: visit.comment, rating: visit.rating, date: visit.visitDate}),
   });
   const res = await fetch(req);
-  return await res.json();
+  return res;
 };
 //liste de id user interessant avec visites: 5f998ff0d4ade30004a658ef         619c57e4fe6e16000458adf4   61afd2fae29b0b000410e432
 //liste de id user interessant sans visites: 639bbf092b5bb7844f430e47    639bbb9e2b5bb7844f42f171

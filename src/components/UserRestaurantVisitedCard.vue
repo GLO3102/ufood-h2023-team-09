@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { getRestaurantById } from "../api/userApi.js";
+import { getRestaurantByID } from "../api/restaurantApi.js";
 export default {
   props: ["numberVisits", "restaurantId"],
 
@@ -30,7 +30,7 @@ export default {
     restaurantPic: "",
   }),
   async created() {
-    const restaurant = await getRestaurantById(this.restaurantId);
+    const restaurant = await getRestaurantByID(this.restaurantId);
     this.restaurantName = restaurant.name;
     this.restaurantPic = restaurant.pictures;
   },

@@ -3,7 +3,7 @@
 import { defineComponent } from "vue";
 import FavoriteLists from "./FavoriteLists.vue";
 import FavoriteListModal from "./FavoriteListModal.vue";
-import { getFavoriteListsByUserId } from "../api/favoriteListsApi";
+import { getFavoriteListsByUserId } from "../api/userApi";
 
 export default defineComponent({
   data: () => {

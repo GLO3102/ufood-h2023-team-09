@@ -1,4 +1,4 @@
-const ENDPOINT = "https://ufoodapi.herokuapp.com/unsecure/restaurants";
+const endpoint = "https://ufoodapi.herokuapp.com/unsecure/restaurants";
 
 export const getRestaurants = async (
   page,
@@ -27,7 +27,7 @@ export const getRestaurants = async (
     latStr = `&lat=${lat}`;
     lonStr = `&lon=${lon}`;
   }
-  const URL = `${ENDPOINT}?page=${page}&limit=${limit}${genresStr}${rangesStr}${searchStr}${latStr}${lonStr}`;
+  const URL = `${endpoint}?page=${page}&limit=${limit}${genresStr}${rangesStr}${searchStr}${latStr}${lonStr}`;
   const response = await fetch(URL, {
     Method: "GET",
     headers: {
@@ -43,7 +43,7 @@ export const getRestaurants = async (
 };
 
 export const getRestaurantByID = async (id) => {
-  const response = await fetch(`${ENDPOINT}/${id}`, {
+  const response = await fetch(`${endpoint}/${id}`, {
     Method: "GET",
   });
   if (response.status !== 200) {
@@ -54,16 +54,3 @@ export const getRestaurantByID = async (id) => {
   const data = await response.json();
   return data;
 };
-
-// export const getRestaurantsByPage = async (page) => {
-//     const response = await fetch(`${URL}?page=${page}`, {
-//         Method: 'GET',
-//         headers: {
-//           'Content-Type': 'application/json'
-//         },
-//       })
-//     if (response.status !== 200) {
-//         throw new Error(`Something went wrong : request returned status ${response.status}...`);
-//     }
-//       return response.json();
-// }

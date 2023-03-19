@@ -2,11 +2,11 @@
 import { defineComponent } from "vue";
 import FavoriteList from "./FavoriteList.vue";
 import {
-  getFavoriteListsByUserId,
   deleteFavoriteListById,
   createFavoriteList,
   addFavoriteListItem,
 } from "../api/favoriteListsApi";
+import { getFavoriteListsByUserId } from "../api/userApi";
 
 export default defineComponent({
   data: () => {

@@ -1,6 +1,4 @@
 <script setup>
-import json from "../dummy_jsons/hardcoded_resto.json";
-
 const props = defineProps({
   restaurantSchedule: Object,
 });

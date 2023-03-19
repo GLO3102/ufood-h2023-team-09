@@ -102,7 +102,9 @@
 
         <div class="box" id="second-box">
           <h1 class="title">About us</h1>
-
+          <div class="tooltip mb-1">
+            <span class="tooltiptext">{{ resto_data.address.split(',').slice(0, -1).join(',') }}</span>
+          </div>
           <div class="resto-info">
             <div class="first-part">
               <Schedule :restaurantSchedule="resto_data.opening_hours"></Schedule>

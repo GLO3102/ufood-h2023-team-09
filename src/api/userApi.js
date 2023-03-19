@@ -66,7 +66,7 @@ export const getRestaurantById = async function (id) {
   return await res.json();
 };
 
-export const getRestaurants = async function(){
+export const getRestaurants = async function () {
   const req = new Request(`${endpoint}/restaurants`, {
     method: "GET",
     headers: {
@@ -78,13 +78,21 @@ export const getRestaurants = async function(){
 };
 
 export const postVisit = async function (visit) {
-  const req = new Request(`${endpoint}/users/${visit.user_id}/restaurants/visits`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({restaurant_id: visit.resto_id, comment: visit.comment, rating: visit.rating, date: visit.visitDate}),
-  });
+  const req = new Request(
+    `${endpoint}/users/${visit.user_id}/restaurants/visits`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        restaurant_id: visit.resto_id,
+        comment: visit.comment,
+        rating: visit.rating,
+        date: visit.visitDate,
+      }),
+    }
+  );
   const res = await fetch(req);
   return res;
 };

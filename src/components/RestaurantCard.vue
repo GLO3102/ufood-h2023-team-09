@@ -24,7 +24,7 @@ const closeListModal = () => {
 let today = new Date().getDay();
 const color_map = ["success", "primary", "danger", "black"];
 
-defineProps(['restaurant'])
+defineProps(["restaurant"]);
 </script>
 
 <template>
@@ -45,8 +45,16 @@ defineProps(['restaurant'])
       <div class="card-image">
         <figure class="image is-4by3">
           <router-link :to="`/restaurant/${restaurant.id}`">
-            <img v-if="restaurant.pictures.length > 0" :src="restaurant.pictures[0]" alt="Placeholder image" />
-            <img v-if="restaurant.pictures.length === 0" src="../assets/placeholderimage.jpg" alt="Placeholder image" />
+            <img
+              v-if="restaurant.pictures.length > 0"
+              :src="restaurant.pictures[0]"
+              alt="Placeholder image"
+            />
+            <img
+              v-if="restaurant.pictures.length === 0"
+              src="../assets/placeholderimage.jpg"
+              alt="Placeholder image"
+            />
           </router-link>
         </figure>
       </div>
@@ -61,7 +69,10 @@ defineProps(['restaurant'])
             >
           </div>
           <span
-            :class="'navbar-end is-medium tag is-' + color_map[restaurant.price_range - 1]"
+            :class="
+              'navbar-end is-medium tag is-' +
+              color_map[restaurant.price_range - 1]
+            "
             >{{ "$".repeat(restaurant.price_range) }}</span
           >
         </div>
@@ -75,12 +86,24 @@ defineProps(['restaurant'])
 
         <!-- Displays today's opening hours -->
         <div class="opening-hours mb-1">
-          <div v-if="today === 1">Today : {{ restaurant.opening_hours.monday }}</div>
-          <div v-else-if="today === 2">Today : {{ restaurant.opening_hours.tuesday }}</div>
-          <div v-else-if="today === 3">Today : {{ restaurant.opening_hours.wednesday }}</div>
-          <div v-else-if="today === 4">Today : {{ restaurant.opening_hours.thursday }}</div>
-          <div v-else-if="today === 5">Today : {{ restaurant.opening_hours.friday }}</div>
-          <div v-else-if="today === 6">Today : {{ restaurant.opening_hours.saturday }}</div>
+          <div v-if="today === 1">
+            Today : {{ restaurant.opening_hours.monday }}
+          </div>
+          <div v-else-if="today === 2">
+            Today : {{ restaurant.opening_hours.tuesday }}
+          </div>
+          <div v-else-if="today === 3">
+            Today : {{ restaurant.opening_hours.wednesday }}
+          </div>
+          <div v-else-if="today === 4">
+            Today : {{ restaurant.opening_hours.thursday }}
+          </div>
+          <div v-else-if="today === 5">
+            Today : {{ restaurant.opening_hours.friday }}
+          </div>
+          <div v-else-if="today === 6">
+            Today : {{ restaurant.opening_hours.saturday }}
+          </div>
           <div v-else>Today : {{ restaurant.opening_hours.sunday }}</div>
         </div>
 
@@ -140,7 +163,11 @@ defineProps(['restaurant'])
             </div>
             <div class="navbar-end">
               <div class="rating">
-                <progress class="rating-bg" :value="restaurant.rating" max="5"></progress>
+                <progress
+                  class="rating-bg"
+                  :value="restaurant.rating"
+                  max="5"
+                ></progress>
                 <svg>
                   <use xlink:href="#fivestars" />
                 </svg>
@@ -219,7 +246,7 @@ img:hover {
 .evaluation {
   flex-wrap: wrap;
 }
-.navbar-end{
+.navbar-end {
   display: flex;
   align-items: center;
   flex-wrap: nowrap;

@@ -2,11 +2,16 @@
   <div class="box mb-6">
     <h1 class="title">Where to find us</h1>
     <div class="container is-flex">
-      <span v-for="(item, index) in props.address.split(',')" :key="index" class="tag is-flex is-warning" :style="{margin: '5px'}">
-          {{ item }}
+      <span
+        v-for="(item, index) in props.address.split(',')"
+        :key="index"
+        class="tag is-flex is-warning"
+        :style="{ margin: '5px' }"
+      >
+        {{ item }}
       </span>
     </div>
-    <br><br>
+    <br /><br />
     <div id="map" style="height: 600px; width: 100%"></div>
   </div>
 </template>
@@ -15,10 +20,9 @@
 import { onMounted, defineProps } from "vue";
 
 const props = defineProps({
-  restaurantCoordinates : Array,
-  address : String
-})
-
+  restaurantCoordinates: Array,
+  address: String,
+});
 
 onMounted(() => {
   mapboxgl.accessToken =
@@ -39,8 +43,8 @@ onMounted(() => {
   });
   map.addControl(directions, "top-left");
   directions.setDestination([
-  props.restaurantCoordinates[0],
-  props.restaurantCoordinates[1],
+    props.restaurantCoordinates[0],
+    props.restaurantCoordinates[1],
   ]);
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -80,7 +84,7 @@ onMounted(() => {
 
 @media screen and (max-width: 500px) {
   .container {
-    flex-wrap : wrap;
+    flex-wrap: wrap;
   }
 }
 </style>

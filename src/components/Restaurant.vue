@@ -127,7 +127,7 @@
                   </thead>
                   <tbody v-for="tag in resto_data.genres" :key="tag">
                     <tr>
-                      <th id="tags" class="tag is-info is-medium">{{ tag }}</th>
+                      <th id="tags" class="tag is-info is-medium">{{ format(tag) }}</th>
                     </tr>
                   </tbody>
                 </table>
@@ -249,6 +249,10 @@ const breakpoints = {
     itemsToShow: 3.5,
   },
 };
+function format(str){
+  let newStr = str[0].toUpperCase() + str.slice(1);
+  return newStr;
+}
 </script>
 
 <script>

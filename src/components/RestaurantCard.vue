@@ -25,6 +25,10 @@ let today = new Date().getDay();
 const color_map = ["success", "primary", "danger", "black"];
 
 defineProps(["restaurant"]);
+function format(str){
+  let newStr = str[0].toUpperCase() + str.slice(1);
+  return newStr;
+}
 </script>
 
 <template>
@@ -80,7 +84,7 @@ defineProps(["restaurant"]);
         <!-- Display the list of genres -->
         <div class="genres-container block">
           <div class="genres" v-for="genre in restaurant.genres" :key="genre">
-            <span class="tag is-large is-info">{{ genre }}</span>
+            <span class="tag is-large is-info">{{ format(genre) }}</span>
           </div>
         </div>
 

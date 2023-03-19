@@ -43,7 +43,7 @@ export default defineComponent({
                 <div class="tags has-addons">
                     <a v-if="!isInputReady" @click="createNewList" class="button is-primary"> + Create a new list</a>
                     <input v-if="isInputReady" ref="inputName" @focus="$event.target.select()" @keyup.enter="createNewList"
-                        type="text" class="tag title is-6" />
+                        type="text" class="tag title is-6" size="14" />
                     <a v-if="isInputReady" @click="createNewList" class="tag title is-6">Ok</a>
                 </div>
             </div>

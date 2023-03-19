@@ -80,7 +80,9 @@
                     <use xlink:href="#fivestars" />
                   </svg>
                 </div>
-                <span class="tag is-warning">{{ resto_data.rating.toFixed(1)}}</span>
+                <span class="tag is-warning">{{
+                  resto_data.rating.toFixed(1)
+                }}</span>
                 <span
                   :class="'tag is-' + color_map[resto_data.price_range - 1]"
                 >
@@ -89,14 +91,22 @@
               </div>
             </div>
           </div>
-          <div class="is-flex is-align-items-center" :style="{padding: '10px'}">
+          <div
+            class="is-flex is-align-items-center"
+            :style="{ padding: '10px' }"
+          >
             <button
               class="is-flex button is-primary mr-3 is-large is-responsive"
               @click="openVisitModal"
             >
               Rate
             </button>
-            <button class="is-flex button is-primary is-large is-responsive" @click="openListModal">Add to favorites</button>
+            <button
+              class="is-flex button is-primary is-large is-responsive"
+              @click="openListModal"
+            >
+              Add to favorites
+            </button>
           </div>
         </div>
 
@@ -107,7 +117,9 @@
           </div>
           <div class="resto-info">
             <div class="first-part">
-              <Schedule :restaurantSchedule="resto_data.opening_hours"></Schedule>
+              <Schedule
+                :restaurantSchedule="resto_data.opening_hours"
+              ></Schedule>
               <div class="box">
                 <table class="table is-hoverable">
                   <thead>
@@ -180,7 +192,10 @@
         <br /><br />
 
         <div class="container">
-          <Map :restaurantCoordinates="resto_data.location.coordinates"  :address="resto_data.address" />
+          <Map
+            :restaurantCoordinates="resto_data.location.coordinates"
+            :address="resto_data.address"
+          />
         </div>
       </div>
     </slot>

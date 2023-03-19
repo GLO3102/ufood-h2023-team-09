@@ -5,9 +5,14 @@
       <div class="card">
         <div class="card-content">
           <div class="content is-flex is-flex-direction-column">
-            <div class="is-flex is-flex-direction-row is-justify-content-space-between">   
-            </div>
-            <FavoriteListsModal :userId="userId" :restoId="props.id" :restoName="props.name"/> 
+            <div
+              class="is-flex is-flex-direction-row is-justify-content-space-between"
+            ></div>
+            <FavoriteListsModal
+              :userId="userId"
+              :restoId="props.id"
+              :restoName="props.name"
+            />
           </div>
         </div>
       </div>

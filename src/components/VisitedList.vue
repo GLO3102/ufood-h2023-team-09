@@ -28,8 +28,7 @@
   </div>
 </template>
 <script setup>
-import { onMounted, ref } from "vue";
-import { getRestaurantByID } from "../api/restaurantApi";
+import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import VisitModalReadOnly from "./VisitModalReadOnly.vue";
 

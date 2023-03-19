@@ -16,7 +16,9 @@
           <div class="level-item">
             <div class="is-6 is-offset-32 has-text-centered">
               <h1 class="title is-2 p-4">{{ userName }}</h1>
-              <h2 class="subtitle is-1 has-text-primary has-text-weight-bold p-4">
+              <h2
+                class="subtitle is-1 has-text-primary has-text-weight-bold p-4"
+              >
                 {{ userRating }}
               </h2>
             </div>
@@ -180,25 +182,10 @@ label {
   display: inline-block;
   width: 100px;
 }
-.level{
+.level {
   flex-wrap: wrap;
 }
-.level-item{
+.level-item {
   padding: 10px;
 }
 </style>
-
-<!-- 
-.card {
-  width: 300px;
-  max-width: 300px;
-  height: 350px;
-}  
-.card-content {
-  white-space: pre-wrap; /* CSS3 */
-  white-space: -moz-pre-wrap; /* Firefox */
-  white-space: -pre-wrap; /* Opera <7 */
-  white-space: -o-pre-wrap; /* Opera 7 */
-  word-wrap: break-word;
-} 
--->

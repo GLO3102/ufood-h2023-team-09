@@ -1,11 +1,12 @@
 <script setup>
 import { getUserById, getUserVisits } from "@/api/userApi";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 import { computed } from "vue";
 const router = useRouter();
 const userStore = useUserStore();
+const input = ref(null);
 const toggleBurger = () => {
   let burgerIcon = document.getElementById("burger");
   let dropMenu = document.getElementById("navbarBasicExample");
@@ -24,6 +25,9 @@ onMounted(async () => {
   let visitedNumber = await getUserVisits("619c57e4fe6e16000458adf4");
   userStore.setUser(user, visitedNumber.length);
 });
+function search(){
+  router.push({ path: '/', query:{search: input.value}});
+}
 </script>
 
 <template>
@@ -54,6 +58,8 @@ onMounted(async () => {
       <div class="navbar-start">
         <div class="navbar-item">
           <input
+            @keyup.enter="search()"
+            v-model="input"
             v-show="isNotHome"
             class="input"
             type="search"

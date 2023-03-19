@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, computed, ref } from "vue";
 import { getRestaurants } from "../api/restaurantApi.js";
+import { useRoute } from 'vue-router'
 import RestaurantCard from "./RestaurantCard.vue";
 
 let restaurantsList = ref({ total: 0 });
@@ -17,6 +18,10 @@ let lon = ref(0);
 const pagesTotal = computed(() => {
   return Math.floor(restaurantsList.value.total / pageLimit.value) + 1;
 });
+const search = useRoute().query.search;
+if (search !== undefined) {
+  searchFilter.value = search;
+}
 
 async function resetList(newPage) {
   page.value = newPage;
@@ -103,7 +108,7 @@ function format(str){
   return newStr;
 }
 
-// Shows error getting current geolocation ------------------------
+// Gets the current location ------------------------
 async function getLocation() {
   if (navigator.geolocation) {
     const position = await new Promise(function (resolve, reject) {
@@ -115,7 +120,6 @@ async function getLocation() {
     alert("Geolocation is not supported by this browser.");
   }
 }
-
 async function showGetLocationError(error) {
   switch (error.code) {
     case error.PERMISSION_DENIED:
@@ -133,7 +137,6 @@ async function showGetLocationError(error) {
   }
   await resetList(0);
 }
-
 async function toggleLocation(){
   if(lat.value === 0 && lon.value === 0){
     await getLocation();

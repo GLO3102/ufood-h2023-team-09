@@ -27,6 +27,7 @@ onMounted(async () => {
 });
 function search(){
   router.push({ path: '/', query:{search: input.value}});
+  input.value = '';
 }
 </script>
 

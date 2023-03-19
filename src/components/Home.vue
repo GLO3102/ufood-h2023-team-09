@@ -39,7 +39,6 @@ async function resetList(newPage) {
 
 // Initialization
 onMounted(async () => {
-  await getLocation();
   await resetList(0);
   input.value.focus();
 });

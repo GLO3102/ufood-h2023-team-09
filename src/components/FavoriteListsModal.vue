@@ -29,16 +29,15 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="box">
-    <div class="is-flex is-flex-direction-row is-justify-content-space-between">
-      <div>
-        <span class="title is-5">Add </span>
-        <span class="title is-5"> {{ this.restoName }} </span>
+  <div class="is-flex is-flex-direction-column">
+    <div class="is-flex is-flex-direction-column">
+      <div class="is-flex  is-justify-content-center">
+        <span class="title is-5">Add&nbsp;</span>
+        <span class="title is-5">{{ this.restoName }}&nbsp;</span>
         <span class="title is-5"> to a favorite list </span>
       </div>
       <div
-        class="is-flex is-align-items-center is-justify-content-flex-end"
-        style="padding-bottom: 20px"
+        class="is-flex is-justify-content-center pb-5"
       >
         <div class="tags has-addons">
           <a

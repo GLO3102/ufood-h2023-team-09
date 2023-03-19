@@ -120,6 +120,7 @@ export default defineComponent({
 .card-header {
   padding: 0.5rem;
   justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
 }
 .list-name {

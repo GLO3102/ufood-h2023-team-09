@@ -161,6 +161,11 @@ export default defineComponent({
         :key="item.id"
         :restaurant-id="item.id"
       />
+      <a
+          @click="$router.push('/')"
+          class="tag is-small has-background-grey-lighter"
+          >Add a restaurant</a
+        >
     </div>
   </div>
 </template>

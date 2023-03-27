@@ -1,9 +1,9 @@
 #
 <script>
 import { defineComponent } from "vue";
-import FavoriteLists from "./FavoriteLists.vue";
-import FavoriteListModal from "./FavoriteListModal.vue";
-import { getFavoriteListsByUserId } from "../api/userApi";
+import FavoriteLists from "../userComponents/FavoriteLists.vue";
+import FavoriteListModal from "./FavoriteListItemModal.vue";
+import { getFavoriteListsByUserId } from "../../api/userApi";
 
 export default defineComponent({
   data: () => {
@@ -31,14 +31,12 @@ export default defineComponent({
 <template>
   <div class="is-flex is-flex-direction-column">
     <div class="is-flex is-flex-direction-column">
-      <div class="is-flex  is-justify-content-center">
+      <div class="is-flex is-justify-content-center">
         <span class="title is-5">Add&nbsp;</span>
         <span class="title is-5">{{ this.restoName }}&nbsp;</span>
         <span class="title is-5"> to a favorite list </span>
       </div>
-      <div
-        class="is-flex is-justify-content-center pb-5"
-      >
+      <div class="is-flex is-justify-content-center pb-5">
         <div class="tags has-addons">
           <a
             v-if="!isInputReady"

@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
-import VisitModal from "./VisitModal.vue";
-import ListModal from "./ListModal.vue";
+import VisitModal from "../modals/VisitModal.vue";
+import ListModal from "../modals/FavoriteListModal.vue";
 
 let showVisitModal = ref(false);
 
@@ -25,7 +25,7 @@ let today = new Date().getDay();
 const color_map = ["success", "primary", "danger", "black"];
 
 defineProps(["restaurant"]);
-function format(str){
+function format(str) {
   let newStr = str[0].toUpperCase() + str.slice(1);
   return newStr;
 }
@@ -56,7 +56,7 @@ function format(str){
             />
             <img
               v-if="restaurant.pictures.length === 0"
-              src="../assets/placeholderimage.jpg"
+              src="@/assets/placeholderimage.jpg"
               alt="Placeholder image"
             />
           </router-link>

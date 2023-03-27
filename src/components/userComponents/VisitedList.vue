@@ -30,7 +30,7 @@
 <script setup>
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
-import VisitModalReadOnly from "./VisitModalReadOnly.vue";
+import VisitModalReadOnly from "../modals/VisitModalReadOnly.vue";
 
 let showVisitModal = ref(Array(useUserStore().visitedNumber).fill(false));
 

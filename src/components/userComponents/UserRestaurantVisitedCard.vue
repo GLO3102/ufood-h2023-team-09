@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { getRestaurantByID } from "../api/restaurantApi.js";
+import { getRestaurantByID } from "../../api/restaurantApi.js";
 export default {
   props: ["numberVisits", "restaurantId"],
 

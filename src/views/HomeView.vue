@@ -1,8 +1,8 @@
 <script setup>
 import { onMounted, computed, ref } from "vue";
 import { getRestaurants } from "../api/restaurantApi.js";
-import { useRoute } from 'vue-router'
-import RestaurantCard from "./RestaurantCard.vue";
+import { useRoute } from "vue-router";
+import RestaurantCard from "../components/homeComponents/RestaurantCard.vue";
 
 let restaurantsList = ref({ total: 0 });
 const input = ref(null);
@@ -102,7 +102,7 @@ async function genreFilter(genre) {
   );
   await resetList(0);
 }
-function format(str){
+function format(str) {
   let newStr = str[0].toUpperCase() + str.slice(1);
   return newStr;
 }
@@ -111,7 +111,7 @@ function format(str){
 async function getLocation() {
   if (navigator.geolocation) {
     const position = await new Promise(function (resolve, reject) {
-      navigator.geolocation.getCurrentPosition(resolve, showGetLocationError)
+      navigator.geolocation.getCurrentPosition(resolve, showGetLocationError);
     });
     lat.value = position.coords.latitude;
     lon.value = position.coords.longitude;
@@ -136,10 +136,10 @@ async function showGetLocationError(error) {
   }
   await resetList(0);
 }
-async function toggleLocation(){
-  if(lat.value === 0 && lon.value === 0){
+async function toggleLocation() {
+  if (lat.value === 0 && lon.value === 0) {
     await getLocation();
-  }else{
+  } else {
     lat.value = 0;
     lon.value = 0;
   }
@@ -162,19 +162,23 @@ async function toggleLocation(){
           />
         </p>
         <p class="control">
-          <button class="button" @click="resetList(0)">
-            &#x1F50E;
-          </button>
+          <button class="button" @click="resetList(0)">&#x1F50E;</button>
         </p>
       </div>
       <div class="filter">
         <div class="is-flex-wrap-nowrap">
           <!-- Geo-Location Toggle Button -->
-          <button 
-            class="button" 
+          <button
+            class="button"
             :class="{ 'is-active': lon !== 0 && lat !== 0 }"
             @click="toggleLocation()"
-          ><img src="../assets/location.png" width="20" height="20" alt="Location-Icon">
+          >
+            <img
+              src="../assets/location.png"
+              width="20"
+              height="20"
+              alt="Location-Icon"
+            />
           </button>
           <!-- Dropdown menu -->
           <div
@@ -208,45 +212,45 @@ async function toggleLocation(){
             </div>
           </div>
         </div>
-          <!-- Range filter buttons -->
+        <!-- Range filter buttons -->
         <div class="is-flex-wrap-nowrap field has-addons">
           <p class="control">
             <button
-            class="button"
-            :class="{ 'is-active': ranges[1] }"
-            @click="rangeFilter(1)"
-          >$</button>
+              class="button"
+              :class="{ 'is-active': ranges[1] }"
+              @click="rangeFilter(1)"
+            >
+              $
+            </button>
           </p>
-          
-           
+
           <p class="control">
             <button
-            class="button"
-            :class="{ 'is-active': ranges[2] }"
-            @click="rangeFilter(2)"
-          >
-            $$
-          </button>
-        </p>
+              class="button"
+              :class="{ 'is-active': ranges[2] }"
+              @click="rangeFilter(2)"
+            >
+              $$
+            </button>
+          </p>
           <p class="control">
             <button
-            class="button"
-            :class="{ 'is-active': ranges[3] }"
-            @click="rangeFilter(3)"
-          >
-            $$$
-          </button>
-        </p>
+              class="button"
+              :class="{ 'is-active': ranges[3] }"
+              @click="rangeFilter(3)"
+            >
+              $$$
+            </button>
+          </p>
           <p class="control">
             <button
-            class="button"
-            :class="{ 'is-active': ranges[4] }"
-            @click="rangeFilter(4)"
-          >
-            $$$$
-          </button>
-        </p>
-          
+              class="button"
+              :class="{ 'is-active': ranges[4] }"
+              @click="rangeFilter(4)"
+            >
+              $$$$
+            </button>
+          </p>
         </div>
       </div>
     </div>
@@ -334,11 +338,12 @@ async function toggleLocation(){
     </nav>
     <div class="has-text-centered pb-5">GLO-3102 Home</div>
     <div class="has-text-centered pb-5">
-      <a 
-        class="has-text-black" 
-        href="https://www.flaticon.com/free-icons/location" 
+      <a
+        class="has-text-black"
+        href="https://www.flaticon.com/free-icons/location"
         title="location icons"
-      >Location icon created by Freepik - Flaticon</a>
+        >Location icon created by Freepik - Flaticon</a
+      >
     </div>
   </div>
 </template>

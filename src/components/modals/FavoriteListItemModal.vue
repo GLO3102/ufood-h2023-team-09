@@ -1,12 +1,12 @@
 <script>
 import { defineComponent } from "vue";
-import FavoriteList from "./FavoriteList.vue";
-import FavoriteListItem from "./FavoriteListItem.vue";
+import FavoriteList from "../userComponents/FavoriteList.vue";
+import FavoriteListItem from "../userComponents/FavoriteListItem.vue";
 import {
   getFavoriteListById,
   addFavoriteListItem,
-} from "../api/favoriteListsApi";
-import { getRestaurantByID } from "../api/restaurantApi";
+} from "../../api/favoriteListsApi";
+import { getRestaurantByID } from "../../api/restaurantApi";
 
 export default defineComponent({
   name: "FavoriteList",

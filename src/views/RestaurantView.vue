@@ -113,7 +113,9 @@
         <div class="box" id="second-box">
           <h1 class="title">About us</h1>
           <div class="tooltip mb-1">
-            <span class="tooltiptext">{{ resto_data.address.split(',').slice(0, -1).join(',') }}</span>
+            <span class="tooltiptext">{{
+              resto_data.address.split(",").slice(0, -1).join(",")
+            }}</span>
           </div>
           <div class="resto-info">
             <div class="first-part">
@@ -127,7 +129,9 @@
                   </thead>
                   <tbody v-for="tag in resto_data.genres" :key="tag">
                     <tr>
-                      <th id="tags" class="tag is-info is-medium">{{ format(tag) }}</th>
+                      <th id="tags" class="tag is-info is-medium">
+                        {{ format(tag) }}
+                      </th>
                     </tr>
                   </tbody>
                 </table>
@@ -203,10 +207,10 @@
 </template>
 
 <script setup>
-import Map from "./Map.vue";
+import Map from "../components/restaurantComponents/Map.vue";
 import { ref } from "vue";
-import VisitModal from "./VisitModal.vue";
-import ListModal from "./ListModal.vue";
+import VisitModal from "../components/modals/VisitModal.vue";
+import ListModal from "../components/modals/FavoriteListModal.vue";
 
 let showVisitModal = ref(false);
 
@@ -249,7 +253,7 @@ const breakpoints = {
     itemsToShow: 3.5,
   },
 };
-function format(str){
+function format(str) {
   let newStr = str[0].toUpperCase() + str.slice(1);
   return newStr;
 }
@@ -259,11 +263,10 @@ function format(str){
 import { defineComponent } from "vue";
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel";
 import { getRestaurantByID } from "../api/restaurantApi.js";
-import Schedule from "./Schedule.vue";
+import Schedule from "../components/restaurantComponents/Schedule.vue";
 import "vue3-carousel/dist/carousel.css";
 
-export default defineComponent({
-  name: "Basic",
+export default {
   components: {
     Carousel,
     Slide,
@@ -289,7 +292,7 @@ export default defineComponent({
       this.currentSlide = val;
     },
   },
-});
+};
 </script>
 
 <style scoped>

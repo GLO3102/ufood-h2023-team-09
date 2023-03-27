@@ -1,6 +1,6 @@
 <script>
 import { defineComponent } from "vue";
-import { getRestaurantByID } from "../api/restaurantApi";
+import { getRestaurantByID } from "../../api/restaurantApi";
 
 export default defineComponent({
   name: "FavoriteListItem",

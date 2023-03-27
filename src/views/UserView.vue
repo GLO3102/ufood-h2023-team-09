@@ -111,11 +111,10 @@ export default {
 <script setup>
 import { getRestaurantByID } from "../api/restaurantApi";
 import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
-import { useUserStore } from "@/stores/user";
 import { getUserById, getUserVisits } from "@/api/userApi.js";
-import UserRestaurantVisitedCard from "@/components/UserRestaurantVisitedCard.vue";
-import FavoriteLists from "./FavoriteLists.vue";
-import VisitedList from "./VisitedList.vue";
+import UserRestaurantVisitedCard from "@/components/userComponents/UserRestaurantVisitedCard.vue";
+import FavoriteLists from "../components/userComponents/FavoriteLists.vue";
+import VisitedList from "../components/userComponents/VisitedList.vue";
 import "vue3-carousel/dist/carousel.css";
 import { ref } from "vue";
 

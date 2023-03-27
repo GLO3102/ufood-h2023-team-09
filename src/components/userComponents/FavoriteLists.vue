@@ -5,8 +5,8 @@ import {
   deleteFavoriteListById,
   createFavoriteList,
   addFavoriteListItem,
-} from "../api/favoriteListsApi";
-import { getFavoriteListsByUserId } from "../api/userApi";
+} from "../../api/favoriteListsApi";
+import { getFavoriteListsByUserId } from "../../api/userApi";
 
 export default defineComponent({
   data: () => {

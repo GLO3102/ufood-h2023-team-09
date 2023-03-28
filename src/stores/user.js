@@ -30,8 +30,6 @@ export const useUserStore = defineStore('user', () => {
   };
   const create = (_user) => {
     user.value = _user;
-    console.log(user.value)
-    console.log(_user)
     user.value.isLoggedIn = true;
   };
   const getToken = async (token) =>{

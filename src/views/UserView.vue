@@ -15,11 +15,11 @@
           </div>
           <div class="level-item">
             <div class="is-6 is-offset-32 has-text-centered">
-              <h1 class="title is-2 p-4">{{ userStore.getUser().name }}</h1>
+              <h1 class="title is-2 p-4">{{ user.name }}</h1>
               <h2
                 class="subtitle is-1 has-text-primary has-text-weight-bold p-4"
               >
-                {{ userStore.getUser().rating }}
+                {{ user.rating }}
               </h2>
             </div>
           </div>
@@ -44,10 +44,10 @@
             :breakpoints="breakpoints"
           >
             <!--debut card1-->
-            <Slide v-for="visited in listRestaurantID" :key="visited">
+            <Slide v-for="visited in restoPicturesInfo" :key="visited">
               <div class="carousel__item">
                 <UserRestaurantVisitedCard
-                  :numberVisits="calculNumberVisits(visited)"
+                  :numberVisits="calculateNumberVisits(visited)"
                   :restaurantId="visited"
                 ></UserRestaurantVisitedCard>
               </div>
@@ -67,7 +67,6 @@
                 <h1 class="title is-2">
                   There is no visited restaurants<br />
                 </h1>
-                <a href="./Home.vue">Back to Main Menu</a>
               </div>
             </div>
           </div>
@@ -75,8 +74,8 @@
       </div>
 
       <!-- Liste de liste de restaurants favories ou autre -->
-      <FavoriteLists :userId="userId" />
-      <VisitedList :visits="userVisites" />
+      <FavoriteLists :userId="route.params.id" />
+      <VisitedList :visits="userVisits" />
 
       <!-- End Work Content IF USER DONT VISIT-->
     </div>
@@ -93,43 +92,55 @@ import { useUserStore } from "../stores/user";
 import { useRoute } from "vue-router";
 import { getRestaurantByID } from "../api/restaurantApi";
 import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
-import { getUserVisits } from "@/api/userApi.js";
+import { getUserVisits, getUserById } from "@/api/userApi.js";
 
-const userId = ref("619c57e4fe6e16000458adf4");
 const userStore = useUserStore();
 const route = useRoute();
 const userVisites = ref([]);
 const listRestaurantID = ref([]);
 const isFavoriteRestaurantsEmpty = ref(false);
 
+//load user
+const user = ref({
+  id: "",
+  name: "",
+  email: "",
+  rating: 0,
+  followers: [],
+  following: [],
+});
 onBeforeMount(async () => {
-  let restaurantIdList = [];
-  userVisites.value = await getUserVisits(route.params.id);
-  userVisites.value.forEach(async (element) => {
-    if (!restaurantIdList.includes(element.restaurant_id)) {
-      restaurantIdList.push(element.restaurant_id);
-    }
-    const resto = await getRestaurantByID(element.restaurant_id);
-    element["restoName"] = resto.name;
-    userVisitesRestoNames.value.push(resto.name);
-  });
-  listRestaurantID.value = restaurantIdList;
-  if (restaurantIdList.length === 0) {
-    isFavoriteRestaurantsEmpty.value = true;
-  } else {
-    isFavoriteRestaurantsEmpty.value = false;
-  }
+  user.value = await getUserById(route.params.id);
 });
 
-function calculNumberVisits(restaurentID) {
-  let counter = 0;
-  const visits = userVisites.value;
-  visits.forEach((element) => {
-    if (element.restaurant_id === restaurentID) {
-      counter = counter + 1;
+//load visits and resto info
+const restoPicturesInfo = ref([]);
+
+const userVisits = ref({
+  items: [],
+  total: 0,
+});
+onBeforeMount(async () => {
+  userVisits.value = await getUserVisits(route.params.id);
+  userVisits.value.forEach(async (visit) => {
+    if (!restoPicturesInfo.value.includes(visit.restaurant_id)) {
+      restoPicturesInfo.value.push(visit.restaurant_id);
+    }
+    const resto = await getRestaurantByID(visit.restaurant_id);
+    visit["restoName"] = resto.name;
+  });
+});
+
+function calculateNumberVisits(restaurantID) {
+  let visitCounter = 0;
+
+  userVisits.value.forEach((visit) => {
+    if (visit.restaurant_id === restaurantID) {
+      visitCounter++;
     }
   });
-  return counter;
+
+  return visitCounter;
 }
 
 const settings = {

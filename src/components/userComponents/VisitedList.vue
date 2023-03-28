@@ -40,6 +40,7 @@ const openVisitModal = (index) => {
 const closeVisitModal = (index) => {
   showVisitModal.value[index] = false;
 };
+
 const props = defineProps(["visits"]);
 
 function formatDate(date) {

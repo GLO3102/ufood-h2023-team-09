@@ -73,7 +73,7 @@ function close() {
 }
 async function save() {
   const visit = {
-    user_id: useUserStore().id,
+    user_id: useUserStore().getUser().id,
     resto_id: props.id,
     visitDate: visitDate.value,
     rating: rating.value,

@@ -1,3 +1,67 @@
+<template>
+  <div class="card">
+    <div class="card-header">
+      <div class="list-name" v-if="!isInputReady">{{ list.name }}</div>
+      <input
+        ref="rename"
+        @focus="$event.target.select()"
+        :id="list.id"
+        @keyup.enter="modifyName(null)"
+        v-if="isInputReady"
+        type="text"
+        v-model="list.name"
+        class="tag is-small"
+      />
+      <div class="tags has-addons">
+        <a
+          v-if="!isInputReady && isOptionsReady"
+          class="tag is-small has-background-grey-lighter"
+          @click="$emit('moveUp', listId)"
+          >&#8593;</a
+        >
+        <a
+          v-if="!isInputReady && isOptionsReady"
+          class="tag is-small has-background-grey-lighter"
+          @click="$emit('moveDown', listId)"
+          >&#8595;</a
+        >
+        <a
+          v-if="isOptionsReady"
+          @click="modifyName($event)"
+          class="tag is-small has-background-grey-lighter"
+          >Rename</a
+        >
+        <a
+          v-if="!isInputReady && isOptionsReady"
+          @click="$emit('deleteList', listId)"
+          class="tag is-small is-danger"
+          >Delete</a
+        >
+        <a
+          @click="toggleOptions"
+          class="tag is-small has-background-grey-lighter"
+          >&#8226;&#8226;&#8226;</a
+        >
+      </div>
+    </div>
+    <div class="card-content">
+      <FavoriteListItem
+        @remove-item="removeItem"
+        @move-up="moveUp"
+        @move-down="moveDown"
+        v-for="item in list.restaurants"
+        :key="item.id"
+        :restaurant-id="item.id"
+      />
+      <a
+        @click="$router.push('/')"
+        class="tag is-small has-background-grey-lighter"
+        >Add a restaurant</a
+      >
+    </div>
+  </div>
+</template>
+
 <script>
 import { defineComponent } from "vue";
 import FavoriteListItem from "./FavoriteListItem.vue";
@@ -105,70 +169,6 @@ export default defineComponent({
   },
 });
 </script>
-
-<template>
-  <div class="card">
-    <div class="card-header">
-      <div class="list-name" v-if="!isInputReady">{{ list.name }}</div>
-      <input
-        ref="rename"
-        @focus="$event.target.select()"
-        :id="list.id"
-        @keyup.enter="modifyName(null)"
-        v-if="isInputReady"
-        type="text"
-        v-model="list.name"
-        class="tag is-small"
-      />
-      <div class="tags has-addons">
-        <a
-          v-if="!isInputReady && isOptionsReady"
-          class="tag is-small has-background-grey-lighter"
-          @click="$emit('moveUp', listId)"
-          >&#8593;</a
-        >
-        <a
-          v-if="!isInputReady && isOptionsReady"
-          class="tag is-small has-background-grey-lighter"
-          @click="$emit('moveDown', listId)"
-          >&#8595;</a
-        >
-        <a
-          v-if="isOptionsReady"
-          @click="modifyName($event)"
-          class="tag is-small has-background-grey-lighter"
-          >Rename</a
-        >
-        <a
-          v-if="!isInputReady && isOptionsReady"
-          @click="$emit('deleteList', listId)"
-          class="tag is-small is-danger"
-          >Delete</a
-        >
-        <a
-          @click="toggleOptions"
-          class="tag is-small has-background-grey-lighter"
-          >&#8226;&#8226;&#8226;</a
-        >
-      </div>
-    </div>
-    <div class="card-content">
-      <FavoriteListItem
-        @remove-item="removeItem"
-        @move-up="moveUp"
-        @move-down="moveDown"
-        v-for="item in list.restaurants"
-        :key="item.id"
-        :restaurant-id="item.id"
-      />
-      <a
-        @click="$router.push('/')"
-        class="tag is-small has-background-grey-lighter"
-        >Add a restaurant</a
-      >
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .card-header {

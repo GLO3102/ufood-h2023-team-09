@@ -1,3 +1,36 @@
+<template>
+  <div class="box">
+    <div class="title is-2">Favorite Lists</div>
+    <div class="tags has-addons">
+      <a
+        @click="createNewList"
+        class="tag title is-6 has-background-grey-lighter"
+        >Create a new list</a
+      >
+      <input
+        v-if="isInputReady"
+        ref="inputName"
+        @focus="$event.target.select()"
+        @keyup.enter="createNewList"
+        type="text"
+        class="tag title is-6"
+      />
+      <a v-if="isInputReady" @click="createNewList" class="tag title is-6"
+        >Ok</a
+      >
+    </div>
+    <div class="list">
+      <FavoriteList
+        v-for="list in userLists.items"
+        :key="list.id"
+        @move-up="moveUp"
+        @move-down="moveDown"
+        @delete-list="deleteList"
+        :listId="list.id"
+      />
+    </div>
+  </div>
+</template>
 <script>
 import { defineComponent } from "vue";
 import FavoriteList from "./FavoriteList.vue";
@@ -99,40 +132,6 @@ export default defineComponent({
   },
 });
 </script>
-
-<template>
-  <div class="box">
-    <div class="title is-2">Favorite Lists</div>
-    <div class="tags has-addons">
-      <a
-        @click="createNewList"
-        class="tag title is-6 has-background-grey-lighter"
-        >Create a new list</a
-      >
-      <input
-        v-if="isInputReady"
-        ref="inputName"
-        @focus="$event.target.select()"
-        @keyup.enter="createNewList"
-        type="text"
-        class="tag title is-6"
-      />
-      <a v-if="isInputReady" @click="createNewList" class="tag title is-6"
-        >Ok</a
-      >
-    </div>
-    <div class="list">
-      <FavoriteList
-        v-for="list in userLists.items"
-        :key="list.id"
-        @move-up="moveUp"
-        @move-down="moveDown"
-        @delete-list="deleteList"
-        :listId="list.id"
-      />
-    </div>
-  </div>
-</template>
 
 <style scoped>
 .list {

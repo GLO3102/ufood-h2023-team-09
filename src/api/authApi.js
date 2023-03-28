@@ -1,7 +1,6 @@
 const endpoint = "https://ufoodapi.herokuapp.com";
 
 export const loginApi = async (email, password) => {
-    console.log(email, password)
     const response = await fetch(`${endpoint}/login`, {
         method: "POST",
         headers: {

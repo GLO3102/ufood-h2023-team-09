@@ -1,39 +1,3 @@
-<script setup>
-import { ref } from "vue";
-import VisitModal from "../modals/VisitModal.vue";
-import ListModal from "../modals/FavoriteListModal.vue";
-import { useUserStore } from "@/stores/user";
-
-const userStore = useUserStore();
-
-let showVisitModal = ref(false);
-
-const openVisitModal = () => {
-  showVisitModal.value = true;
-};
-const closeVisitModal = () => {
-  showVisitModal.value = false;
-};
-
-let showListModal = ref(false);
-
-const openListModal = () => {
-  showListModal.value = true;
-};
-const closeListModal = () => {
-  showListModal.value = false;
-};
-// Saves current day of the week as a number from 0 to 6, 0 being Sunday, into a variable
-let today = new Date().getDay();
-const color_map = ["success", "primary", "danger", "black"];
-
-defineProps(["restaurant"]);
-function format(str) {
-  let newStr = str[0].toUpperCase() + str.slice(1);
-  return newStr;
-}
-</script>
-
 <template>
   <div class="restaurant-card">
     <VisitModal
@@ -197,6 +161,42 @@ function format(str) {
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref } from "vue";
+import VisitModal from "../modals/VisitModal.vue";
+import ListModal from "../modals/FavoriteListModal.vue";
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
+
+let showVisitModal = ref(false);
+
+const openVisitModal = () => {
+  showVisitModal.value = true;
+};
+const closeVisitModal = () => {
+  showVisitModal.value = false;
+};
+
+let showListModal = ref(false);
+
+const openListModal = () => {
+  showListModal.value = true;
+};
+const closeListModal = () => {
+  showListModal.value = false;
+};
+// Saves current day of the week as a number from 0 to 6, 0 being Sunday, into a variable
+let today = new Date().getDay();
+const color_map = ["success", "primary", "danger", "black"];
+
+defineProps(["restaurant"]);
+function format(str) {
+  let newStr = str[0].toUpperCase() + str.slice(1);
+  return newStr;
+}
+</script>
 
 <style scoped>
 .restaurant-card {

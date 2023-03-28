@@ -120,7 +120,6 @@ import { ref } from "vue";
 
 const userId = ref("619c57e4fe6e16000458adf4");
 const userVisites = ref([]);
-const userVisitesRestoNames = ref([]);
 const userName = ref("");
 const userRating = ref("");
 const listRestaurantID = ref([]);
@@ -142,23 +141,11 @@ const settings = {
 };
 
 const breakpoints = {
-  640: {
-    itemsToShow: 1.5,
-  },
-
-  750: {
-    itemsToShow: 1.8,
-  },
-
-  1000: {
-    itemsToShow: 2.5,
-  },
-  1200: {
-    itemsToShow: 3,
-  },
-  1500: {
-    itemsToShow: 3.5,
-  },
+  640: { itemsToShow: 1.5 },
+  750: { itemsToShow: 1.8 },
+  1000: { itemsToShow: 2.5 },
+  1200: { itemsToShow: 3 },
+  1500: { itemsToShow: 3.5 },
 };
 </script>
 <style scoped>

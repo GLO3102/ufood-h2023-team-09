@@ -1,9 +1,3 @@
-<script setup>
-const props = defineProps({
-  restaurantSchedule: Object,
-});
-</script>
-
 <template>
   <div>
     <div class="box" style="width: 275px; margin-right: 10px">
@@ -23,5 +17,11 @@ const props = defineProps({
     </div>
   </div>
 </template>
+
+<script setup>
+const props = defineProps({
+  restaurantSchedule: Object,
+});
+</script>
 
 <style scoped></style>

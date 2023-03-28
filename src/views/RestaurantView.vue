@@ -238,24 +238,11 @@ const settings = {
 };
 
 const breakpoints = {
-  640: {
-    itemsToShow: 1.5,
-  },
-
-  750: {
-    itemsToShow: 1.8,
-  },
-
-  1000: {
-    itemsToShow: 2,
-  },
-  1200: {
-    itemsToShow: 3,
-  },
-
-  1300: {
-    itemsToShow: 3.5,
-  },
+  640: { itemsToShow: 1.5 },
+  750: { itemsToShow: 1.8 },
+  1000: { itemsToShow: 2 },
+  1200: { itemsToShow: 3 },
+  1300: { itemsToShow: 3.5 },
 };
 function format(str) {
   let newStr = str[0].toUpperCase() + str.slice(1);
@@ -264,7 +251,6 @@ function format(str) {
 </script>
 
 <script>
-import { defineComponent } from "vue";
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel";
 import { getRestaurantByID } from "../api/restaurantApi.js";
 import Schedule from "../components/restaurantComponents/Schedule.vue";

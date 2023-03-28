@@ -1,33 +1,4 @@
 #
-<script>
-import { defineComponent } from "vue";
-import FavoriteLists from "../userComponents/FavoriteLists.vue";
-import FavoriteListModal from "./FavoriteListItemModal.vue";
-import { getFavoriteListsByUserId } from "../../api/userApi";
-
-export default defineComponent({
-  data: () => {
-    return {
-      userLists: {},
-      isInputReady: false,
-    };
-  },
-  extends: FavoriteLists,
-  components: {
-    FavoriteListModal,
-  },
-  props: {
-    userId: String,
-    restoId: String,
-    restoName: String,
-  },
-  methods: {},
-  async created() {
-    this.userLists = await getFavoriteListsByUserId(this.userId);
-  },
-});
-</script>
-
 <template>
   <div class="is-flex is-flex-direction-column">
     <div class="is-flex is-flex-direction-column">
@@ -73,6 +44,35 @@ export default defineComponent({
     </div>
   </div>
 </template>
+
+<script>
+import { defineComponent } from "vue";
+import FavoriteLists from "../userComponents/FavoriteLists.vue";
+import FavoriteListModal from "./FavoriteListItemModal.vue";
+import { getFavoriteListsByUserId } from "../../api/userApi";
+
+export default defineComponent({
+  data: () => {
+    return {
+      userLists: {},
+      isInputReady: false,
+    };
+  },
+  extends: FavoriteLists,
+  components: {
+    FavoriteListModal,
+  },
+  props: {
+    userId: String,
+    restoId: String,
+    restoName: String,
+  },
+  methods: {},
+  async created() {
+    this.userLists = await getFavoriteListsByUserId(this.userId);
+  },
+});
+</script>
 
 <style scoped>
 .list {

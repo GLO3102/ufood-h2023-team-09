@@ -1,152 +1,3 @@
-<script setup>
-import { onMounted, computed, ref } from "vue";
-import { getRestaurants } from "../api/restaurantApi.js";
-import { useRoute } from "vue-router";
-import RestaurantCard from "../components/homeComponents/RestaurantCard.vue";
-
-let restaurantsList = ref({ total: 0 });
-const input = ref(null);
-
-const page = ref(0);
-const pageLimit = ref(12);
-const searchFilter = ref("");
-const genreFilters = ref([]);
-const rangeFilters = ref([]);
-let lat = ref(0);
-let lon = ref(0);
-
-const pagesTotal = computed(() => {
-  return Math.floor(restaurantsList.value.total / pageLimit.value) + 1;
-});
-const search = useRoute().query.search;
-if (search !== undefined) {
-  searchFilter.value = search;
-}
-
-async function resetList(newPage) {
-  page.value = newPage;
-  restaurantsList.value = await getRestaurants(
-    page.value,
-    pageLimit.value,
-    searchFilter.value,
-    genreFilters.value,
-    rangeFilters.value,
-    lat.value,
-    lon.value
-  );
-  window.scrollTo(0, 0);
-}
-
-// Initialization
-onMounted(async () => {
-  await resetList(0);
-  input.value.focus();
-});
-
-// Filter by Price Range ---------------------------------------------------
-// Defines the states of the buttons
-const ranges = ref({
-  1: false,
-  2: false,
-  3: false,
-  4: false,
-});
-// Toggle the range filter buttons et refresh
-async function rangeFilter(button) {
-  ranges.value[button] = !ranges.value[button];
-  rangeFilters.value = Object.keys(ranges.value).filter(
-    (key) => ranges.value[key]
-  );
-  await resetList(0);
-}
-
-// Filter by Genres ----------------------------------------
-const genres = ref({
-  desserts: false,
-  bistro: false,
-  ambiance: false,
-  "fast-food": false,
-  "fruits de mer": false,
-  hamburgers: false,
-  végétarien: false,
-  santé: false,
-  mexicain: false,
-  café: false,
-  libanais: false,
-  italien: false,
-  "happy hour": false,
-  japonais: false,
-  asiatique: false,
-  steakhouse: false,
-  boulangerie: false,
-  grec: false,
-  charcuterie: false,
-  pizzeria: false,
-  "cuisine moléculaire": false,
-  vietnamien: false,
-  indien: false,
-  européen: false,
-});
-// Dropdown genre menu
-let isDropdownActive = ref(false);
-function dropDownToggle() {
-  isDropdownActive.value = !isDropdownActive.value;
-}
-function closeDropdown() {
-  isDropdownActive.value = false;
-}
-async function genreFilter(genre) {
-  genres.value[genre] = !genres.value[genre];
-  genreFilters.value = Object.keys(genres.value).filter(
-    (key) => genres.value[key]
-  );
-  await resetList(0);
-}
-function format(str) {
-  let newStr = str[0].toUpperCase() + str.slice(1);
-  return newStr;
-}
-
-// Gets the current location ------------------------
-async function getLocation() {
-  if (navigator.geolocation) {
-    const position = await new Promise(function (resolve, reject) {
-      navigator.geolocation.getCurrentPosition(resolve, showGetLocationError);
-    });
-    lat.value = position.coords.latitude;
-    lon.value = position.coords.longitude;
-  } else {
-    alert("Geolocation is not supported by this browser.");
-  }
-}
-async function showGetLocationError(error) {
-  switch (error.code) {
-    case error.PERMISSION_DENIED:
-      alert("User denied the request for Geolocation.");
-      break;
-    case error.POSITION_UNAVAILABLE:
-      alert("Location information is unavailable.");
-      break;
-    case error.TIMEOUT:
-      alert("The request to get user location timed out.");
-      break;
-    case error.UNKNOWN_ERROR:
-      alert("An unknown error occurred.");
-      break;
-  }
-  await resetList(0);
-}
-async function toggleLocation() {
-  if (lat.value === 0 && lon.value === 0) {
-    await getLocation();
-  } else {
-    lat.value = 0;
-    lon.value = 0;
-  }
-  await resetList(0);
-}
-</script>
-
 <template>
   <div class="home-container" @click="closeDropdown()">
     <div class="search-filter">
@@ -347,6 +198,155 @@ async function toggleLocation() {
     </div>
   </div>
 </template>
+
+<script setup>
+import { onMounted, computed, ref } from "vue";
+import { getRestaurants } from "../api/restaurantApi.js";
+import { useRoute } from "vue-router";
+import RestaurantCard from "../components/homeComponents/RestaurantCard.vue";
+
+let restaurantsList = ref({ total: 0 });
+const input = ref(null);
+
+const page = ref(0);
+const pageLimit = ref(12);
+const searchFilter = ref("");
+const genreFilters = ref([]);
+const rangeFilters = ref([]);
+let lat = ref(0);
+let lon = ref(0);
+
+const pagesTotal = computed(() => {
+  return Math.floor(restaurantsList.value.total / pageLimit.value) + 1;
+});
+const search = useRoute().query.search;
+if (search !== undefined) {
+  searchFilter.value = search;
+}
+
+async function resetList(newPage) {
+  page.value = newPage;
+  restaurantsList.value = await getRestaurants(
+    page.value,
+    pageLimit.value,
+    searchFilter.value,
+    genreFilters.value,
+    rangeFilters.value,
+    lat.value,
+    lon.value
+  );
+  window.scrollTo(0, 0);
+}
+
+// Initialization
+onMounted(async () => {
+  await resetList(0);
+  input.value.focus();
+});
+
+// Filter by Price Range ---------------------------------------------------
+// Defines the states of the buttons
+const ranges = ref({
+  1: false,
+  2: false,
+  3: false,
+  4: false,
+});
+// Toggle the range filter buttons et refresh
+async function rangeFilter(button) {
+  ranges.value[button] = !ranges.value[button];
+  rangeFilters.value = Object.keys(ranges.value).filter(
+    (key) => ranges.value[key]
+  );
+  await resetList(0);
+}
+
+// Filter by Genres ----------------------------------------
+const genres = ref({
+  desserts: false,
+  bistro: false,
+  ambiance: false,
+  "fast-food": false,
+  "fruits de mer": false,
+  hamburgers: false,
+  végétarien: false,
+  santé: false,
+  mexicain: false,
+  café: false,
+  libanais: false,
+  italien: false,
+  "happy hour": false,
+  japonais: false,
+  asiatique: false,
+  steakhouse: false,
+  boulangerie: false,
+  grec: false,
+  charcuterie: false,
+  pizzeria: false,
+  "cuisine moléculaire": false,
+  vietnamien: false,
+  indien: false,
+  européen: false,
+});
+// Dropdown genre menu
+let isDropdownActive = ref(false);
+function dropDownToggle() {
+  isDropdownActive.value = !isDropdownActive.value;
+}
+function closeDropdown() {
+  isDropdownActive.value = false;
+}
+async function genreFilter(genre) {
+  genres.value[genre] = !genres.value[genre];
+  genreFilters.value = Object.keys(genres.value).filter(
+    (key) => genres.value[key]
+  );
+  await resetList(0);
+}
+function format(str) {
+  let newStr = str[0].toUpperCase() + str.slice(1);
+  return newStr;
+}
+
+// Gets the current location ------------------------
+async function getLocation() {
+  if (navigator.geolocation) {
+    const position = await new Promise(function (resolve, reject) {
+      navigator.geolocation.getCurrentPosition(resolve, showGetLocationError);
+    });
+    lat.value = position.coords.latitude;
+    lon.value = position.coords.longitude;
+  } else {
+    alert("Geolocation is not supported by this browser.");
+  }
+}
+async function showGetLocationError(error) {
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      alert("User denied the request for Geolocation.");
+      break;
+    case error.POSITION_UNAVAILABLE:
+      alert("Location information is unavailable.");
+      break;
+    case error.TIMEOUT:
+      alert("The request to get user location timed out.");
+      break;
+    case error.UNKNOWN_ERROR:
+      alert("An unknown error occurred.");
+      break;
+  }
+  await resetList(0);
+}
+async function toggleLocation() {
+  if (lat.value === 0 && lon.value === 0) {
+    await getLocation();
+  } else {
+    lat.value = 0;
+    lon.value = 0;
+  }
+  await resetList(0);
+}
+</script>
 
 <style scoped>
 .home-container {

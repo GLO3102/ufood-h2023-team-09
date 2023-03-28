@@ -1,59 +1,3 @@
-<script>
-import { defineComponent } from "vue";
-import FavoriteList from "../userComponents/FavoriteList.vue";
-import FavoriteListItem from "../userComponents/FavoriteListItem.vue";
-import {
-  getFavoriteListById,
-  addFavoriteListItem,
-} from "../../api/favoriteListsApi";
-import { getRestaurantByID } from "../../api/restaurantApi";
-
-export default defineComponent({
-  name: "FavoriteList",
-  data: () => {
-    return {
-      list: [Object],
-      isInputReady: false,
-      isOptionsReady: false,
-    };
-  },
-  extends: FavoriteList,
-  components: {
-    FavoriteListItem,
-  },
-  props: {
-    listId: String,
-    restoId: String,
-  },
-  emits: ["deleteList", "moveUp", "moveDown"],
-  methods: {
-    toggleOptions() {
-      this.isOptionsReady = !this.isOptionsReady;
-    },
-    async addRestaurantToList(listId) {
-      try {
-        const restaurantId = this.restoId;
-        const restaurant = await getRestaurantByID(restaurantId);
-        const existingRestaurant = this.list.restaurants.find(
-          (r) => r.id === restaurant.id
-        );
-        if (existingRestaurant) {
-          console.log(`Restaurant ${restaurantId} is already in the list`);
-          return;
-        }
-        await addFavoriteListItem(restaurantId, listId);
-        this.list.restaurants.push(restaurant);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-  },
-  async created() {
-    this.list = await getFavoriteListById(this.listId);
-  },
-});
-</script>
-
 <template>
   <div class="card">
     <div class="card-header">
@@ -115,6 +59,62 @@ export default defineComponent({
     </div>
   </div>
 </template>
+
+<script>
+import { defineComponent } from "vue";
+import FavoriteList from "../userComponents/FavoriteList.vue";
+import FavoriteListItem from "../userComponents/FavoriteListItem.vue";
+import {
+  getFavoriteListById,
+  addFavoriteListItem,
+} from "../../api/favoriteListsApi";
+import { getRestaurantByID } from "../../api/restaurantApi";
+
+export default defineComponent({
+  name: "FavoriteList",
+  data: () => {
+    return {
+      list: [Object],
+      isInputReady: false,
+      isOptionsReady: false,
+    };
+  },
+  extends: FavoriteList,
+  components: {
+    FavoriteListItem,
+  },
+  props: {
+    listId: String,
+    restoId: String,
+  },
+  emits: ["deleteList", "moveUp", "moveDown"],
+  methods: {
+    toggleOptions() {
+      this.isOptionsReady = !this.isOptionsReady;
+    },
+    async addRestaurantToList(listId) {
+      try {
+        const restaurantId = this.restoId;
+        const restaurant = await getRestaurantByID(restaurantId);
+        const existingRestaurant = this.list.restaurants.find(
+          (r) => r.id === restaurant.id
+        );
+        if (existingRestaurant) {
+          console.log(`Restaurant ${restaurantId} is already in the list`);
+          return;
+        }
+        await addFavoriteListItem(restaurantId, listId);
+        this.list.restaurants.push(restaurant);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
+  async created() {
+    this.list = await getFavoriteListById(this.listId);
+  },
+});
+</script>
 
 <style scoped>
 .card-header {

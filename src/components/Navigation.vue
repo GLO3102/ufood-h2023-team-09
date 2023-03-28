@@ -1,36 +1,3 @@
-<script setup>
-import { getUserById, getUserVisits } from "@/api/userApi";
-import { onMounted, ref } from "vue";
-import { useUserStore } from "@/stores/user";
-import { useRouter } from "vue-router";
-import { computed } from "vue";
-const router = useRouter();
-const userStore = useUserStore();
-const input = ref(null);
-
-const isNotHome = computed(() => {
-  return router.currentRoute.value.path != "/";
-});
-
-const toggleBurger = () => {
-  let burgerIcon = document.getElementById("burger");
-  let dropMenu = document.getElementById("navbarBasicExample");
-  burgerIcon.classList.toggle("is-active");
-  dropMenu.classList.toggle("is-active");
-};
-
-const logout = () => {
-  userStore.logout();
-  router.push("/");
-  console.log(userStore.getIsLoggedIn());
-};
-
-function search() {
-  router.push({ path: "/", query: { search: input.value } });
-  input.value = "";
-}
-</script>
-
 <template>
   <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
@@ -112,6 +79,38 @@ function search() {
     </div>
   </nav>
 </template>
+
+<script setup>
+import { ref } from "vue";
+import { useUserStore } from "@/stores/user";
+import { useRouter } from "vue-router";
+import { computed } from "vue";
+const router = useRouter();
+const userStore = useUserStore();
+const input = ref(null);
+
+const isNotHome = computed(() => {
+  return router.currentRoute.value.path != "/";
+});
+
+const toggleBurger = () => {
+  let burgerIcon = document.getElementById("burger");
+  let dropMenu = document.getElementById("navbarBasicExample");
+  burgerIcon.classList.toggle("is-active");
+  dropMenu.classList.toggle("is-active");
+};
+
+const logout = () => {
+  userStore.logout();
+  router.push("/");
+  console.log(userStore.getIsLoggedIn());
+};
+
+function search() {
+  router.push({ path: "/", query: { search: input.value } });
+  input.value = "";
+}
+</script>
 
 <style scoped>
 #logo-text {

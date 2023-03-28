@@ -103,7 +103,6 @@ const toggleBurger = () => {
 const logout = () => {
   userStore.logout();
   router.push("/");
-  console.log(userStore.getIsLoggedIn());
 };
 
 function search() {

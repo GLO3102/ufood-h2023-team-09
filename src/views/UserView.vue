@@ -15,11 +15,11 @@
           </div>
           <div class="level-item">
             <div class="is-6 is-offset-32 has-text-centered">
-              <h1 class="title is-2 p-4">{{ userName }}</h1>
+              <h1 class="title is-2 p-4">{{ userStore.getUser().name }}</h1>
               <h2
                 class="subtitle is-1 has-text-primary has-text-weight-bold p-4"
               >
-                {{ userRating }}
+                {{ userStore.getUser().rating }}
               </h2>
             </div>
           </div>
@@ -82,48 +82,44 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  async created() {
-    const user = await getUserById(this.userId);
-    this.userName = user.name;
-    this.userRating = user.rating;
-    let listID = [];
-    this.userVisites = await getUserVisits(this.userId);
-    this.userVisites.forEach(async (element) => {
-      if (!listID.includes(element.restaurant_id)) {
-        listID.push(element.restaurant_id);
-      }
-      const resto = await getRestaurantByID(element.restaurant_id);
-      element["restoName"] = resto.name;
-      this.userVisitesRestoNames.push(resto.name);
-    });
-    this.listRestaurantID = listID;
-    if (listID.length === 0) {
-      this.isFavoriteRestaurantsEmpty = true;
-    } else {
-      this.isFavoriteRestaurantsEmpty = false;
-    }
-  },
-};
-</script>
 
 <script setup>
-import { getRestaurantByID } from "../api/restaurantApi";
-import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
-import { getUserById, getUserVisits } from "@/api/userApi.js";
 import UserRestaurantVisitedCard from "@/components/userComponents/UserRestaurantVisitedCard.vue";
 import FavoriteLists from "../components/userComponents/FavoriteLists.vue";
 import VisitedList from "../components/userComponents/VisitedList.vue";
 import "vue3-carousel/dist/carousel.css";
-import { ref } from "vue";
+import { ref, onBeforeMount } from "vue";
+import { useUserStore } from "../stores/user";
+import { useRoute } from "vue-router";
+import { getRestaurantByID } from "../api/restaurantApi";
+import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
+import { getUserVisits } from "@/api/userApi.js";
 
 const userId = ref("619c57e4fe6e16000458adf4");
+const userStore = useUserStore();
+const route = useRoute();
 const userVisites = ref([]);
-const userName = ref("");
-const userRating = ref("");
 const listRestaurantID = ref([]);
 const isFavoriteRestaurantsEmpty = ref(false);
+
+onBeforeMount(async () => {
+  let restaurantIdList = [];
+  userVisites.value = await getUserVisits(route.params.id);
+  userVisites.value.forEach(async (element) => {
+    if (!restaurantIdList.includes(element.restaurant_id)) {
+      restaurantIdList.push(element.restaurant_id);
+    }
+    const resto = await getRestaurantByID(element.restaurant_id);
+    element["restoName"] = resto.name;
+    userVisitesRestoNames.value.push(resto.name);
+  });
+  listRestaurantID.value = restaurantIdList;
+  if (restaurantIdList.length === 0) {
+    isFavoriteRestaurantsEmpty.value = true;
+  } else {
+    isFavoriteRestaurantsEmpty.value = false;
+  }
+});
 
 function calculNumberVisits(restaurentID) {
   let counter = 0;

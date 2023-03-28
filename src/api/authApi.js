@@ -13,7 +13,7 @@ export const loginApi = async (email, password) => {
     });
     if (response.status !== 200) {
         throw new Error(
-        `Something went wrong : request returned status ${response.status}...`
+        `Something went wrong in login: request returned status ${response.status}...`
         );
     }
     return response;
@@ -32,7 +32,7 @@ export const signupApi = async (name, email, password) => {
     });
     if (response.status !== 200) {
         throw new Error(
-        `Something went wrong : request returned status ${response.status}...`
+        `Something went wrong in signup: request returned status ${response.status}...`
         );
     }
     return response;
@@ -47,7 +47,23 @@ export const logoutApi = async () => {
     });
     if (response.status !== 200) {
         throw new Error(
-        `Something went wrong : request returned status ${response.status}...`
+        `Something went wrong in logout: request returned status ${response.status}...`
+        );
+    }
+    return response;
+}
+
+export const getTokenApi = async (token) => {
+    const response = await fetch(`${endpoint}/tokeninfo`, {
+        method: "GET",
+        headers: {
+        "Content-Type": "application/json",
+        "Authorization": token,
+        },
+    });
+    if (response.status !== 200) {
+        throw new Error(
+        `Something went wrong in get token: request returned status ${response.status}...`
         );
     }
     return response;

@@ -1,43 +1,50 @@
 import { defineStore } from "pinia";
-import {ref, ssrContextKey } from "vue";
-import { loginApi, signupApi, logoutApi } from "../api/authApi";
+import {ref, watch} from "vue";
+import { loginApi, signupApi, logoutApi, getTokenApi } from "../api/authApi";
+import { useCookies } from "vue3-cookies";
 
 
-export const useUserStore = defineStore("user", () =>{
+export const useUserStore = defineStore('user', () => {
+  const { cookies } = useCookies();
+  const user = ref({
+    id: "",
+    name: "",
+    email: "",
+    followers: [],
+    following: [],
+    token: "",
+    rating: 0,
+    isLoggedIn: false,
+  });
 
-  const id = ref("");
-  const name = ref("");
-  const email = ref("");
-  const followers = ref([]);
-  const following = ref([]);
-  const token = ref("");
-  const rating = ref(0);
-  const isLoggedIn = ref(false);
+  watch(user, (newUser) => {
+    cookies.set("ufood-token", user.value.token);
+  },
+  {deep: true});
 
   const getUser = () => {
-    return {
-      id: id.value,
-      name: name.value,
-      email: email.value,
-      followers: followers.value,
-      following: following.value,
-      token: token.value,
-      rating: rating.value,
-    };
+    return user.value
   };
   const getIsLoggedIn = () => {
-    return isLoggedIn.value;
+    return user.value.isLoggedIn;
   };
-  const create = (user) => {
-    id.value = user.id;
-    name.value = user.name;
-    email.value = user.email;
-    followers.value = user.followers;
-    following.value = user.following;
-    token.value = user.token;
-    rating.value = user.rating;
-    isLoggedIn.value = true;
+  const create = (_user) => {
+    user.value = _user;
+    console.log(user.value)
+    console.log(_user)
+    user.value.isLoggedIn = true;
   };
+  const getToken = async (token) =>{
+    const res = await getTokenApi(token);
+    if (res.status !== 200) {
+      return false;
+    }else{
+      const user = await res.json();
+      create(user);
+      return true;
+    }
+  }
+
   const login = async (email, password) => {
     const res = await loginApi(email, password);
     if (res.status !== 200) {
@@ -67,18 +74,18 @@ export const useUserStore = defineStore("user", () =>{
       console.log(res.status);
       return false;
     }else{
-      id.value = "";
-      name.value = "";
-      email.value = "";
-      followers.value = [];
-      following.value = [];
-      token.value = "";
-      rating.value = 0;
-      isLoggedIn.value = false;
+      user.value.id = "";
+      user.value.name = "";
+      user.value.email = "";
+      user.value.followers = [];
+      user.value.following = [];
+      user.value.token = "";
+      user.value.rating = 0;
+      user.value.isLoggedIn = false;
       return true;
     }
   };
 
-  return {getUser, create, login, signup, logout, getIsLoggedIn}
+  return {getUser, create, login, signup, logout, getIsLoggedIn, getToken}
 
 });

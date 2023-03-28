@@ -57,6 +57,7 @@ const router = useRouter();
 const userStore = useUserStore();
 const email = ref("");
 const password = ref("");
+
 const login = async () => {
   await userStore.login(email.value, password.value);
   if (userStore.getIsLoggedIn()) {

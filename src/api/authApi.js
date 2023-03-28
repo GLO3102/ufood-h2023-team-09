@@ -31,7 +31,7 @@ export const signupApi = async (name, email, password) => {
         password: password,
         }),
     });
-    if (response.status !== 201) {
+    if (response.status !== 200) {
         throw new Error(
         `Something went wrong : request returned status ${response.status}...`
         );

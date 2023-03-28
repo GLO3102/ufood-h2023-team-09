@@ -51,7 +51,7 @@ export const useUserStore = defineStore("user", () =>{
   };
   const signup = async (name, email, password) => {
     const res = await signupApi(name, email, password);
-    if (res.status !== 201) {
+    if (res.status !== 200) {
       console.log(res.status);
       return false;
     }else{

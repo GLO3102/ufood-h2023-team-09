@@ -9,7 +9,7 @@
           <figure class="avatar">
             <img src="@/assets/person.svg" width="55" />
           </figure>
-          <form>
+          <div>
             <div class="field">
               <div class="control has-icons-left">
                 <input
@@ -42,7 +42,7 @@
             >
               Login
             </button>
-          </form>
+          </div>
         </div>
       </div>
     </div>
@@ -57,10 +57,12 @@ const router = useRouter();
 const userStore = useUserStore();
 const email = ref("");
 const password = ref("");
-const login = () => {
-  console.log(email, password);
-  if (userStore.login(email.value, password.value)) {
+const login = async () => {
+  await userStore.login(email.value, password.value);
+  if (userStore.getIsLoggedIn()) {
     router.push("/");
+  } else {
+    alert("Login failed");
   }
 };
 </script>

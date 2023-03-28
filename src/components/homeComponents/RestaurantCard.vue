@@ -126,18 +126,10 @@
           </svg>
 
           <div class="evaluation">
-            <button
-              class="button is-primary mr-1"
-              @click="openVisitModal"
-              :disabled="!userStore.getIsLoggedIn()"
-            >
+            <button class="button is-primary mr-1" @click="clickRate()">
               Rate
             </button>
-            <button
-              class="button is-primary mr-1"
-              @click="openListModal"
-              :disabled="!userStore.getIsLoggedIn()"
-            >
+            <button class="button is-primary mr-1" @click="clickFavorite()">
               Add to favorites
             </button>
             <div class="navbar-end">
@@ -167,9 +159,25 @@ import { ref } from "vue";
 import VisitModal from "../modals/VisitModal.vue";
 import ListModal from "../modals/FavoriteListModal.vue";
 import { useUserStore } from "@/stores/user";
+import { useRouter } from "vue-router";
 
 const userStore = useUserStore();
+const router = useRouter();
 
+function clickRate() {
+  if (userStore.getIsLoggedIn()) {
+    openVisitModal();
+  } else {
+    router.push("/log-in");
+  }
+}
+function clickFavorite() {
+  if (userStore.getIsLoggedIn()) {
+    openListModal();
+  } else {
+    router.push("/log-in");
+  }
+}
 let showVisitModal = ref(false);
 
 const openVisitModal = () => {

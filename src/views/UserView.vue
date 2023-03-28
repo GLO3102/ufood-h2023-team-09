@@ -21,6 +21,18 @@
               >
                 {{ user.rating }}
               </h2>
+              <button
+                class="button is-primary m-1"
+                @click="openFollowModal(true)"
+              >
+                Show followers
+              </button>
+              <button
+                class="button is-primary m-1"
+                @click="openFollowModal(false)"
+              >
+                Show following
+              </button>
             </div>
           </div>
         </nav>
@@ -30,7 +42,7 @@
       <div>
         <!-- Begin Work Content IF USER HAVE VISITED RESTAURANTS-->
         <!--Carousel setting set on page-->
-        <div v-if="!isFavoriteRestaurantsEmpty" class="box my-5">
+        <div v-if="!isVisitsEmpty" class="box my-5">
           <!--carousel title-->
           <div class="has-text-centered">
             <div>
@@ -60,7 +72,7 @@
         </div>
         <!-- End Work Content IF USER HAVE VISITED RESTAURANTS-->
         <!-- Begin Work Content IF USER DONT VISIT//GOTTA SHOW INDICATION OF NON VISITED AND LINK TO HOME PAGE-->
-        <div v-if="isFavoriteRestaurantsEmpty" class="hero is-medium">
+        <div v-if="isVisitsEmpty" class="hero is-medium">
           <div class="box">
             <div class="has-text-centered">
               <div>
@@ -76,7 +88,13 @@
       <!-- Liste de liste de restaurants favories ou autre -->
       <FavoriteLists :userId="route.params.id" />
       <VisitedList :visits="userVisits" />
-
+      <!-- Follow Modal -->
+      <FollowModal
+        :id="route.params.id"
+        v-if="isFollowModalActive"
+        @close="closeFollowModal"
+        :is-followers="isFollowers"
+      />
       <!-- End Work Content IF USER DONT VISIT-->
     </div>
   </div>
@@ -93,12 +111,22 @@ import { useRoute } from "vue-router";
 import { getRestaurantByID } from "../api/restaurantApi";
 import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
 import { getUserVisits, getUserById } from "@/api/userApi.js";
+import FollowModal from "../components/modals/FollowModal.vue";
 
 const userStore = useUserStore();
 const route = useRoute();
-const userVisites = ref([]);
-const listRestaurantID = ref([]);
-const isFavoriteRestaurantsEmpty = ref(false);
+const isVisitsEmpty = ref(true);
+
+//follow modal
+const isFollowers = ref(true);
+const isFollowModalActive = ref(false);
+function openFollowModal(isFollower) {
+  isFollowers.value = isFollower;
+  isFollowModalActive.value = true;
+}
+function closeFollowModal() {
+  isFollowModalActive.value = false;
+}
 
 //load user
 const user = ref({
@@ -115,7 +143,6 @@ onBeforeMount(async () => {
 
 //load visits and resto info
 const restoPicturesInfo = ref([]);
-
 const userVisits = ref({
   items: [],
   total: 0,
@@ -123,6 +150,7 @@ const userVisits = ref({
 onBeforeMount(async () => {
   userVisits.value = await getUserVisits(route.params.id);
   userVisits.value.forEach(async (visit) => {
+    isVisitsEmpty.value = false;
     if (!restoPicturesInfo.value.includes(visit.restaurant_id)) {
       restoPicturesInfo.value.push(visit.restaurant_id);
     }

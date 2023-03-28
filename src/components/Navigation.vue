@@ -7,27 +7,27 @@ import { computed } from "vue";
 const router = useRouter();
 const userStore = useUserStore();
 const input = ref(null);
+
+const isNotHome = computed(() => {
+  return router.currentRoute.value.path != "/";
+});
+
 const toggleBurger = () => {
   let burgerIcon = document.getElementById("burger");
   let dropMenu = document.getElementById("navbarBasicExample");
   burgerIcon.classList.toggle("is-active");
   dropMenu.classList.toggle("is-active");
 };
+
 const logout = () => {
   userStore.logout();
   router.push("/");
+  console.log(userStore.getIsLoggedIn());
 };
-const isNotHome = computed(() => {
-  return router.currentRoute.value.path != "/";
-});
-onMounted(async () => {
-  let user = await getUserById("619c57e4fe6e16000458adf4");
-  let visitedNumber = await getUserVisits("619c57e4fe6e16000458adf4");
-  userStore.setUser(user, visitedNumber.length);
-});
-function search(){
-  router.push({ path: '/', query:{search: input.value}});
-  input.value = '';
+
+function search() {
+  router.push({ path: "/", query: { search: input.value } });
+  input.value = "";
 }
 </script>
 
@@ -72,7 +72,7 @@ function search(){
         <div class="navbar-item">
           <div class="buttons">
             <router-link
-              v-show="!userStore.isLoggedIn"
+              v-if="!userStore.getIsLoggedIn()"
               class="button is-light"
               to="/log-in"
             >
@@ -80,16 +80,16 @@ function search(){
               Log in
             </router-link>
             <router-link
-              v-show="!userStore.isLoggedIn"
+              v-if="!userStore.getIsLoggedIn()"
               class="button is-primary"
               to="/sign-up"
             >
               Sign-up
             </router-link>
             <router-link
-              v-show="userStore.isLoggedIn"
+              v-if="userStore.getIsLoggedIn()"
               class="button is-light"
-              :to="`/user/${userStore.id}`"
+              :to="`/user/${userStore.getUser().id}`"
             >
               <img
                 class="pr-2"
@@ -97,11 +97,11 @@ function search(){
                 width="40"
                 height="40"
               />
-              {{ userStore.name }}
+              {{ userStore.getUser().name }}
             </router-link>
             <a
               class="button is-light"
-              v-show="userStore.isLoggedIn"
+              v-if="userStore.getIsLoggedIn()"
               @click="logout()"
             >
               <img src="@/assets/log-out.svg" width="40" height="40" />

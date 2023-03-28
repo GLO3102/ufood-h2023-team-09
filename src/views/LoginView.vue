@@ -1,14 +1,3 @@
-<script setup>
-import { useUserStore } from "@/stores/user";
-import { useRouter } from "vue-router";
-const router = useRouter();
-const userStore = useUserStore();
-const login = () => {
-  userStore.login();
-  router.push("/");
-};
-</script>
-
 <template>
   <section class="hero">
     <div class="hero-body has-text-centered">
@@ -27,7 +16,7 @@ const login = () => {
                   class="input is-medium"
                   type="email"
                   placeholder="Email"
-                  autofocus="true"
+                  v-model="email"
                 />
                 <span class="icon is-small is-left">
                   <img src="@/assets/envelope.svg" width="20" />
@@ -40,6 +29,7 @@ const login = () => {
                   class="input is-medium"
                   type="password"
                   placeholder="Password"
+                  v-model="password"
                 />
                 <span class="icon is-small is-left">
                   <img src="@/assets/lock.svg" width="20" />
@@ -58,6 +48,22 @@ const login = () => {
     </div>
   </section>
 </template>
+
+<script setup>
+import { ref } from "vue";
+import { useUserStore } from "@/stores/user";
+import { useRouter } from "vue-router";
+const router = useRouter();
+const userStore = useUserStore();
+const email = ref("");
+const password = ref("");
+const login = () => {
+  console.log(email, password);
+  if (userStore.login(email.value, password.value)) {
+    router.push("/");
+  }
+};
+</script>
 
 <style scoped>
 #loginBox {

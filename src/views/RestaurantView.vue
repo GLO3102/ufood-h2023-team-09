@@ -98,12 +98,14 @@
             <button
               class="is-flex button is-primary mr-3 is-large is-responsive"
               @click="openVisitModal"
+              :disabled="!userStore.getIsLoggedIn()"
             >
               Rate
             </button>
             <button
               class="is-flex button is-primary is-large is-responsive"
               @click="openListModal"
+              :disabled="!userStore.getIsLoggedIn()"
             >
               Add to favorites
             </button>
@@ -211,8 +213,10 @@ import Map from "../components/restaurantComponents/Map.vue";
 import { ref } from "vue";
 import VisitModal from "../components/modals/VisitModal.vue";
 import ListModal from "../components/modals/FavoriteListModal.vue";
+import { useUserStore } from "../stores/user";
 
 let showVisitModal = ref(false);
+const userStore = useUserStore();
 
 const openVisitModal = () => {
   showVisitModal.value = true;

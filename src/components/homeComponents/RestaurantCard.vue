@@ -2,6 +2,9 @@
 import { ref } from "vue";
 import VisitModal from "../modals/VisitModal.vue";
 import ListModal from "../modals/FavoriteListModal.vue";
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore();
 
 let showVisitModal = ref(false);
 
@@ -159,12 +162,20 @@ function format(str) {
           </svg>
 
           <div class="evaluation">
-            <div class="button is-primary mr-1" @click="openVisitModal">
+            <button
+              class="button is-primary mr-1"
+              @click="openVisitModal"
+              :disabled="!userStore.getIsLoggedIn()"
+            >
               Rate
-            </div>
-            <div class="button is-primary mr-1" @click="openListModal">
+            </button>
+            <button
+              class="button is-primary mr-1"
+              @click="openListModal"
+              :disabled="!userStore.getIsLoggedIn()"
+            >
               Add to favorites
-            </div>
+            </button>
             <div class="navbar-end">
               <div class="rating">
                 <progress

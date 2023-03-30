@@ -12,9 +12,7 @@ export const loginApi = async (email, password) => {
         }),
     });
     if (response.status !== 200) {
-        throw new Error(
-        `Something went wrong in login: request returned status ${response.status}...`
-        );
+        console.log('login failed')
     }
     return response;
 }
@@ -31,9 +29,7 @@ export const signupApi = async (name, email, password) => {
         }),
     });
     if (response.status !== 200) {
-        throw new Error(
-        `Something went wrong in signup: request returned status ${response.status}...`
-        );
+        console.log('signup failed')
     }
     return response;
 };
@@ -46,9 +42,7 @@ export const logoutApi = async () => {
         },
     });
     if (response.status !== 200) {
-        throw new Error(
-        `Something went wrong in logout: request returned status ${response.status}...`
-        );
+        console.log('logout failed');
     }
     return response;
 }
@@ -62,9 +56,7 @@ export const getTokenApi = async (token) => {
         },
     });
     if (response.status !== 200) {
-        throw new Error(
-        `Something went wrong in get token: request returned status ${response.status}...`
-        );
+        console.log('get token failed');
     }
     return response;
 }

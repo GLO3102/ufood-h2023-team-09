@@ -59,7 +59,7 @@ const email = ref("");
 const password = ref("");
 
 const login = async () => {
-  await userStore.login(email.value, password.value);
+  const res = await userStore.login(email.value, password.value);
   if (userStore.getIsLoggedIn()) {
     router.push("/");
   } else {

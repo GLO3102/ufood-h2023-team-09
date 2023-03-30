@@ -46,23 +46,21 @@ export const useUserStore = defineStore('user', () => {
   const login = async (email, password) => {
     const res = await loginApi(email, password);
     if (res.status !== 200) {
-      console.log(res.status);
-      return false;
+      return res;
     }else{
       const user = await res.json();
       create(user);
-      return true;
+      return res;
     }
   };
   const signup = async (name, email, password) => {
     const res = await signupApi(name, email, password);
     if (res.status !== 200) {
-      console.log(res.status);
-      return false;
+      return res;
     }else{
       const user = await res.json();
       create(user);
-      return true;
+      return res;
     }
   };
 

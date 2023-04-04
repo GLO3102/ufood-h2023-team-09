@@ -18,7 +18,7 @@
       >{{ restaurant.name }}</router-link
     >
     <a
-      v-if="isOptionsReady"
+      v-if="isOptionsReady && route.params.id === userStore.getUser().id"
       @click="$emit('removeItem', restaurant.id)"
       class="tag is-delete is-small is-danger"
     ></a>
@@ -53,4 +53,11 @@ export default defineComponent({
     this.restaurant = await getRestaurantByID(this.restaurantId);
   },
 });
+</script>
+<script setup>
+import { useRoute } from "vue-router";
+import { useUserStore } from "../../stores/user";
+
+const userStore = useUserStore();
+const route = useRoute();
 </script>

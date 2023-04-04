@@ -5,6 +5,7 @@
       <a
         @click="createNewList"
         class="tag title is-6 has-background-grey-lighter"
+        v-if="route.params.id === userStore.getUser().id"
         >Create a new list</a
       >
       <input
@@ -61,7 +62,7 @@ export default defineComponent({
     },
     async createNewList() {
       if (this.isInputReady) {
-        let email = this.userLists.items[0].owner.email;
+        let email = useUserStore().getUser().email;
         email = email.replace("/", "");
         let name = this.$refs.inputName.value;
         if (name.length > 0) {
@@ -132,7 +133,13 @@ export default defineComponent({
   },
 });
 </script>
+<script setup>
+import { useRoute } from "vue-router";
+import { useUserStore } from "../../stores/user";
 
+const userStore = useUserStore();
+const route = useRoute();
+</script>
 <style scoped>
 .list {
   display: block;

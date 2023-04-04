@@ -224,6 +224,7 @@ function calculateNumberVisits(restaurantID) {
   return visitCounter;
 }
 
+//css settings
 const settings = {
   itemsToShow: 1,
 };

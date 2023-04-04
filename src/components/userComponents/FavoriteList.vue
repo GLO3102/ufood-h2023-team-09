@@ -26,13 +26,17 @@
           >&#8595;</a
         >
         <a
-          v-if="isOptionsReady"
+          v-if="isOptionsReady && route.params.id === userStore.getUser().id"
           @click="modifyName($event)"
           class="tag is-small has-background-grey-lighter"
           >Rename</a
         >
         <a
-          v-if="!isInputReady && isOptionsReady"
+          v-if="
+            !isInputReady &&
+            isOptionsReady &&
+            route.params.id === userStore.getUser().id
+          "
           @click="$emit('deleteList', listId)"
           class="tag is-small is-danger"
           >Delete</a
@@ -54,6 +58,7 @@
         :restaurant-id="item.id"
       />
       <a
+        v-if="route.params.id === userStore.getUser().id"
         @click="$router.push('/')"
         class="tag is-small has-background-grey-lighter"
         >Add a restaurant</a
@@ -169,7 +174,13 @@ export default defineComponent({
   },
 });
 </script>
+<script setup>
+import { useRoute } from "vue-router";
+import { useUserStore } from "../../stores/user";
 
+const userStore = useUserStore();
+const route = useRoute();
+</script>
 <style scoped>
 .card-header {
   padding: 0.5rem;

@@ -52,6 +52,9 @@
         </nav>
       </div>
       <!-- End user info-->
+      <div class="container is-flex is-justify-content-center">
+        <SearchUser />
+      </div>
 
       <div>
         <!-- Begin Work Content IF USER HAVE VISITED RESTAURANTS-->
@@ -115,6 +118,7 @@
 </template>
 
 <script setup>
+import SearchUser from "../components/userComponents/SearchUserComponent.vue";
 import UserRestaurantVisitedCard from "@/components/userComponents/UserRestaurantVisitedCard.vue";
 import FavoriteLists from "../components/userComponents/FavoriteLists.vue";
 import VisitedList from "../components/userComponents/VisitedList.vue";

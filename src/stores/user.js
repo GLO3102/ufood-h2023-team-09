@@ -1,10 +1,9 @@
 import { defineStore } from "pinia";
-import {ref, watch} from "vue";
+import { ref, watch } from "vue";
 import { loginApi, signupApi, logoutApi, getTokenApi } from "../api/authApi";
 import { useCookies } from "vue3-cookies";
 
-
-export const useUserStore = defineStore('user', () => {
+export const useUserStore = defineStore("user", () => {
   const { cookies } = useCookies();
   const user = ref({
     id: "",
@@ -17,13 +16,16 @@ export const useUserStore = defineStore('user', () => {
     isLoggedIn: false,
   });
 
-  watch(user, (newUser) => {
-    cookies.set("ufood-token", user.value.token);
-  },
-  {deep: true});
+  watch(
+    user,
+    (newUser) => {
+      cookies.set("ufood-token", user.value.token);
+    },
+    { deep: true }
+  );
 
   const getUser = () => {
-    return user.value
+    return user.value;
   };
   const getIsLoggedIn = () => {
     return user.value.isLoggedIn;
@@ -32,22 +34,22 @@ export const useUserStore = defineStore('user', () => {
     user.value = _user;
     user.value.isLoggedIn = true;
   };
-  const getToken = async (token) =>{
+  const getToken = async (token) => {
     const res = await getTokenApi(token);
     if (res.status !== 200) {
       return false;
-    }else{
+    } else {
       const user = await res.json();
       create(user);
       return true;
     }
-  }
+  };
 
   const login = async (email, password) => {
     const res = await loginApi(email, password);
     if (res.status !== 200) {
       return res;
-    }else{
+    } else {
       const user = await res.json();
       create(user);
       return res;
@@ -57,7 +59,7 @@ export const useUserStore = defineStore('user', () => {
     const res = await signupApi(name, email, password);
     if (res.status !== 200) {
       return res;
-    }else{
+    } else {
       const user = await res.json();
       create(user);
       return res;
@@ -69,7 +71,7 @@ export const useUserStore = defineStore('user', () => {
     if (res.status !== 200) {
       console.log(res.status);
       return false;
-    }else{
+    } else {
       user.value.id = "";
       user.value.name = "";
       user.value.email = "";
@@ -82,6 +84,5 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
-  return {getUser, create, login, signup, logout, getIsLoggedIn, getToken}
-
+  return { getUser, create, login, signup, logout, getIsLoggedIn, getToken };
 });

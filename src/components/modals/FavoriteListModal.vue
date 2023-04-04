@@ -22,10 +22,11 @@
 </template>
 <script setup>
 import { ref } from "vue";
+import { useUserStore } from "../../stores/user";
 import FavoriteListsModal from "./FavoriteListsModal.vue";
 import "vue3-carousel/dist/carousel.css";
 
-const userId = ref("619c57e4fe6e16000458adf4");
+const userId = ref(useUserStore().getUser().id);
 const props = defineProps(["id", "name"]);
 const emit = defineEmits(["close"]);
 function close() {

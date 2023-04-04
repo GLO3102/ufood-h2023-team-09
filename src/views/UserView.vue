@@ -33,6 +33,20 @@
               >
                 Show following
               </button>
+              <button
+                v-if="!isSameUser && !isFollowing"
+                class="button is-primary is-light m-1"
+                @click="followUser"
+              >
+                Follow
+              </button>
+              <button
+                v-if="!isSameUser && isFollowing"
+                class="button is-primary is-light m-1"
+                @click="unFollowUser"
+              >
+                Unfollow
+              </button>
             </div>
           </div>
         </nav>
@@ -111,11 +125,46 @@ import { useRoute } from "vue-router";
 import { getRestaurantByID } from "../api/restaurantApi";
 import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
 import { getUserVisits, getUserById } from "@/api/userApi.js";
+import { followUserApi, unFollowUserApi } from "@/api/followApi.js";
 import FollowModal from "../components/modals/FollowModal.vue";
 
 const userStore = useUserStore();
 const route = useRoute();
 const isVisitsEmpty = ref(true);
+
+//follow/unfollow button
+const isSameUser = ref(false);
+const isFollowing = ref(false);
+onBeforeMount(() => {
+  isSameUser.value = userStore.getUser().id === route.params.id;
+  if (isSameUser.value) {
+    isFollowing.value = false;
+  } else {
+    for (let i = 0; i < userStore.getUser().following.length; i++) {
+      if (userStore.getUser().following[i].id === route.params.id) {
+        isFollowing.value = true;
+        break;
+      }
+    }
+  }
+});
+async function followUser() {
+  const res = await followUserApi(route.params.id, userStore.getUser().token);
+  if (res.status === 201) {
+    isFollowing.value = true;
+  } else {
+    alert("error in follow user");
+  }
+}
+async function unFollowUser() {
+  const res = await unFollowUserApi(route.params.id, userStore.getUser().token);
+  if (res.status === 200) {
+    isFollowing.value = false;
+  } else {
+    console.log(res);
+    alert("error in unfollow user");
+  }
+}
 
 //follow modal
 const isFollowers = ref(true);

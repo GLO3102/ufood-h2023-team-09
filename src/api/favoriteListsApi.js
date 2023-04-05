@@ -98,7 +98,7 @@ export const removeFavoriteListItem = async (token, restaurantId, listId) => {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-      Authorization: token,
+        Authorization: token,
       },
     }
   );

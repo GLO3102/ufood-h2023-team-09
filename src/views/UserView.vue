@@ -5,10 +5,10 @@
       <div>
         <nav class="level">
           <div class="level-item has-text-centered mb-5">
-            <figure class="image is-4by4">
+            <figure class="image">
               <img
-                class="is-rounded"
-                src="https://i.pinimg.com/564x/05/a8/b9/05a8b9eea5a348454da598c4895c0ebc.jpg"
+                class=""
+                :src="`https://api.dicebear.com/6.x/adventurer/svg?seed=${route.params.id}`"
                 alt="UserPicture"
               />
             </figure>

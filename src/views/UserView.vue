@@ -7,7 +7,7 @@
           <div class="level-item has-text-centered mb-5">
             <figure class="image">
               <img
-                class=""
+                class="box is-rounded has-background-primary"
                 :src="`https://api.dicebear.com/6.x/adventurer/svg?seed=${route.params.id}`"
                 alt="UserPicture"
               />

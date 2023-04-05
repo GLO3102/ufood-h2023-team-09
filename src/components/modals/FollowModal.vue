@@ -30,11 +30,12 @@
 </template>
 <script setup>
 import { ref, onBeforeMount } from "vue";
+import { useUserStore } from "../../stores/user";
 import { getUserById } from "../../api/userApi";
 const followList = ref([]);
 
 onBeforeMount(async () => {
-  let user = await getUserById(props.id);
+  let user = await getUserById(useUserStore().getUser().token, props.id);
   if (props.isFollowers) {
     followList.value = user.followers;
   } else {

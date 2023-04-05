@@ -1,21 +1,11 @@
-const endpoint = "https://ufoodapi.herokuapp.com/unsecure/users";
+const endpoint = "https://ufoodapi.herokuapp.com/users";
 
-export const getUsersList = async function () {
-  const req = new Request(`${endpoint}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const res = await fetch(req);
-  return (await res.json()).items;
-};
-
-export const getFavoriteListsByUserId = async (id) => {
+export const getFavoriteListsByUserId = async (token, id) => {
   const response = await fetch(`${endpoint}/${id}/favorites?limit=100`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
     },
   });
   if (response.status !== 200) {
@@ -26,55 +16,36 @@ export const getFavoriteListsByUserId = async (id) => {
   return response.json();
 };
 
-export const getUserById = async function (id) {
+export const getUserById = async function (token, id) {
   const req = new Request(`${endpoint}/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
     },
   });
   const res = await fetch(req);
   return await res.json();
 };
 
-export const getUserName = async function (id) {
-  const req = new Request(`${endpoint}/${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const res = await fetch(req);
-  return await res.json().name;
-};
-
-export const getUserFavorites = async function (id) {
-  const req = new Request(`${endpoint}/${id}/favorites`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const res = await fetch(req);
-  return (await res.json()).items;
-};
-
-export const getUserVisits = async function (id) {
+export const getUserVisits = async function (token, id) {
   const req = new Request(`${endpoint}/${id}/restaurants/visits?limit=500`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
     },
   });
   const res = await fetch(req);
   return (await res.json()).items;
 };
 
-export const postVisit = async function (visit) {
+export const postVisit = async function (token, visit) {
   const req = new Request(`${endpoint}/${visit.user_id}/restaurants/visits`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
     },
     body: JSON.stringify({
       restaurant_id: visit.resto_id,
@@ -87,11 +58,12 @@ export const postVisit = async function (visit) {
   return res;
 };
 
-export const getUsersBySearch = async function (search) {
+export const getUsersBySearch = async function (token, search) {
   const req = new Request(`${endpoint}?q=${search}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
     },
   });
   const res = await fetch(req);

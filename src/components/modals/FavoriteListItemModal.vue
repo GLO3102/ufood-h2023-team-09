@@ -1,7 +1,10 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <a @click="addRestaurantToList(list.id)" class="button is-primary"
+      <a
+        @click="addRestaurantToList(list.id)"
+        class="button is-primary"
+        v-if="!isRestoAdded"
         >+ Add</a
       >
       <div class="list-name" v-if="!isInputReady">{{ list.name }}</div>
@@ -69,6 +72,7 @@ import {
   addFavoriteListItem,
 } from "../../api/favoriteListsApi";
 import { getRestaurantByID } from "../../api/restaurantApi";
+import { useUserStore } from "../../stores/user";
 
 export default defineComponent({
   name: "FavoriteList",
@@ -77,6 +81,7 @@ export default defineComponent({
       list: [Object],
       isInputReady: false,
       isOptionsReady: false,
+      isRestoAdded: false,
     };
   },
   extends: FavoriteList,
@@ -103,15 +108,32 @@ export default defineComponent({
           console.log(`Restaurant ${restaurantId} is already in the list`);
           return;
         }
-        await addFavoriteListItem(restaurantId, listId);
+        await addFavoriteListItem(
+          useUserStore().getUser().token,
+          restaurantId,
+          listId
+        );
         this.list.restaurants.push(restaurant);
+        for (let i = 0; i < this.list.restaurants.length; i++) {
+          if (this.list.restaurants[i].id === this.restoId) {
+            this.isRestoAdded = true;
+          }
+        }
       } catch (error) {
         console.error(error);
       }
     },
   },
   async created() {
-    this.list = await getFavoriteListById(this.listId);
+    this.list = await getFavoriteListById(
+      useUserStore().getUser().token,
+      this.listId
+    );
+    for (let i = 0; i < this.list.restaurants.length; i++) {
+      if (this.list.restaurants[i].id === this.restoId) {
+        this.isRestoAdded = true;
+      }
+    }
   },
 });
 </script>

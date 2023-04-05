@@ -60,6 +60,7 @@ import { useUserStore } from "@/stores/user";
 
 import { postVisit } from "@/api/userApi.js";
 
+const userStore = useUserStore();
 const isSuccess = ref(false);
 const isError = ref(false);
 const errorValue = ref("");
@@ -73,13 +74,13 @@ function close() {
 }
 async function save() {
   const visit = {
-    user_id: useUserStore().getUser().id,
+    user_id: userStore.getUser().id,
     resto_id: props.id,
     visitDate: visitDate.value,
     rating: rating.value,
     comment: comment.value,
   };
-  const res = await postVisit(visit);
+  const res = await postVisit(userStore.getUser().token, visit);
   if (res.status === 201) {
     isSuccess.value = true;
     isError.value = false;

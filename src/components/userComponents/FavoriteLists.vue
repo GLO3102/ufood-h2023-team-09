@@ -57,8 +57,14 @@ export default defineComponent({
   },
   methods: {
     async deleteList(listId) {
-      const response = await deleteFavoriteListById(listId);
-      this.userLists = await getFavoriteListsByUserId(this.userId);
+      const response = await deleteFavoriteListById(
+        useUserStore().getUser().token,
+        listId
+      );
+      this.userLists = await getFavoriteListsByUserId(
+        useUserStore().getUser().token,
+        this.userId
+      );
     },
     async createNewList() {
       if (this.isInputReady) {
@@ -66,8 +72,15 @@ export default defineComponent({
         email = email.replace("/", "");
         let name = this.$refs.inputName.value;
         if (name.length > 0) {
-          const response = await createFavoriteList(name, email);
-          this.userLists = await getFavoriteListsByUserId(this.userId);
+          const response = await createFavoriteList(
+            useUserStore().getUser().token,
+            name,
+            email
+          );
+          this.userLists = await getFavoriteListsByUserId(
+            useUserStore().getUser().token,
+            this.userId
+          );
           this.isInputReady = false;
         }
       } else {
@@ -83,10 +96,16 @@ export default defineComponent({
         for (let i = this.userLists.items.length - 1; i >= 0; i--) {
           if (this.userLists.items[i].id !== listId) {
             temp.push(this.userLists.items[i]);
-            await deleteFavoriteListById(this.userLists.items[i].id);
+            await deleteFavoriteListById(
+              useUserStore().getUser().token,
+              this.userLists.items[i].id
+            );
           } else {
             const upper = this.userLists.items[i - 1];
-            await deleteFavoriteListById(upper.id);
+            await deleteFavoriteListById(
+              useUserStore().getUser().token,
+              upper.id
+            );
             await this.addList(upper);
             for (let j = temp.length - 1; j >= 0; j--) {
               await this.addList(temp.pop());
@@ -94,7 +113,10 @@ export default defineComponent({
             break;
           }
         }
-        this.userLists = await getFavoriteListsByUserId(this.userId);
+        this.userLists = await getFavoriteListsByUserId(
+          useUserStore().getUser().token,
+          this.userId
+        );
       }
     },
     async moveDown(listId) {
@@ -103,10 +125,16 @@ export default defineComponent({
         for (let i = this.userLists.items.length - 1; i >= 0; i--) {
           if (this.userLists.items[i].id !== listId) {
             temp.push(this.userLists.items[i]);
-            await deleteFavoriteListById(this.userLists.items[i].id);
+            await deleteFavoriteListById(
+              useUserStore().getUser().token,
+              this.userLists.items[i].id
+            );
           } else {
             const target = this.userLists.items[i];
-            await deleteFavoriteListById(listId);
+            await deleteFavoriteListById(
+              useUserStore().getUser().token,
+              listId
+            );
             await this.addList(temp.pop());
             await this.addList(target);
             for (let j = temp.length - 1; j >= 0; j--) {
@@ -115,21 +143,32 @@ export default defineComponent({
             break;
           }
         }
-        this.userLists = await getFavoriteListsByUserId(this.userId);
+        this.userLists = await getFavoriteListsByUserId(
+          useUserStore().getUser().token,
+          this.userId
+        );
       }
     },
     async addList(favoriteList) {
       const newList = await createFavoriteList(
+        useUserStore().getUser().token,
         favoriteList.name,
         favoriteList.owner.email
       );
       for (const restaurant of favoriteList.restaurants) {
-        await addFavoriteListItem(restaurant.id, newList.id);
+        await addFavoriteListItem(
+          useUserStore().getUser().token,
+          restaurant.id,
+          newList.id
+        );
       }
     },
   },
   async created() {
-    this.userLists = await getFavoriteListsByUserId(this.userId);
+    this.userLists = await getFavoriteListsByUserId(
+      useUserStore().getUser().token,
+      this.userId
+    );
   },
 });
 </script>

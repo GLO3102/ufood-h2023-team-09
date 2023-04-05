@@ -191,7 +191,7 @@ const user = ref({
   following: [],
 });
 onBeforeMount(async () => {
-  user.value = await getUserById(route.params.id);
+  user.value = await getUserById(userStore.getUser().token, route.params.id);
 });
 
 //load visits and resto info
@@ -201,7 +201,10 @@ const userVisits = ref({
   total: 0,
 });
 onBeforeMount(async () => {
-  userVisits.value = await getUserVisits(route.params.id);
+  userVisits.value = await getUserVisits(
+    userStore.getUser().token,
+    route.params.id
+  );
   userVisits.value.forEach(async (visit) => {
     isVisitsEmpty.value = false;
     if (!restoPicturesInfo.value.includes(visit.restaurant_id)) {

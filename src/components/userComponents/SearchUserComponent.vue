@@ -48,7 +48,11 @@ watch(search, (newValue, oldValue) => {
 });
 
 const searchUser = async (search) => {
-  await getUsersBySearch(search, userStore.getUser().token)
+  await getUsersBySearch(
+    userStore.getUser().token,
+    search,
+    userStore.getUser().token
+  )
     .then((res) => {
       userSearched.value = res;
     })

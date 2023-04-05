@@ -47,6 +47,7 @@
 
 <script>
 import { defineComponent } from "vue";
+import { useUserStore } from "../../stores/user";
 import FavoriteLists from "../userComponents/FavoriteLists.vue";
 import FavoriteListModal from "./FavoriteListItemModal.vue";
 import { getFavoriteListsByUserId } from "../../api/userApi";
@@ -69,7 +70,10 @@ export default defineComponent({
   },
   methods: {},
   async created() {
-    this.userLists = await getFavoriteListsByUserId(this.userId);
+    this.userLists = await getFavoriteListsByUserId(
+      useUserStore().getUser().token,
+      this.userId
+    );
   },
 });
 </script>

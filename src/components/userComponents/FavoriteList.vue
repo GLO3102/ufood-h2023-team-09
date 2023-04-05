@@ -68,6 +68,8 @@
 </template>
 
 <script>
+import { useRoute } from "vue-router";
+import { useUserStore } from "../../stores/user";
 import { defineComponent } from "vue";
 import FavoriteListItem from "./FavoriteListItem.vue";
 import {
@@ -84,6 +86,8 @@ export default defineComponent({
       list: [Object],
       isInputReady: false,
       isOptionsReady: false,
+      userStore: useUserStore(),
+      route: useRoute(),
     };
   },
   components: {
@@ -98,17 +102,28 @@ export default defineComponent({
       this.isOptionsReady = !this.isOptionsReady;
     },
     async removeItem(restaurantId) {
-      const response = await removeFavoriteListItem(restaurantId, this.listId);
-      this.list = await getFavoriteListById(this.listId);
+      const response = await removeFavoriteListItem(
+        useUserStore().getUser().token,
+        restaurantId,
+        this.listId
+      );
+      this.list = await getFavoriteListById(
+        useUserStore().getUser().token,
+        this.listId
+      );
     },
     async modifyName(event) {
       if (this.isInputReady) {
         const response = await modifyFavoriteList(
+          useUserStore().getUser().token,
           this.list.name,
           this.list.owner.email,
           this.list.id
         );
-        this.list = await getFavoriteListById(this.listId);
+        this.list = await getFavoriteListById(
+          useUserStore().getUser().token,
+          this.listId
+        );
         this.isInputReady = false;
       } else {
         this.isInputReady = true;
@@ -126,20 +141,36 @@ export default defineComponent({
           if (this.list.restaurants[i].id !== restaurantId) {
             temp.push(this.list.restaurants[i].id);
             await removeFavoriteListItem(
+              useUserStore().getUser().token,
               this.list.restaurants[i].id,
               this.list.id
             );
           } else {
             const upper = this.list.restaurants[i - 1].id;
-            await removeFavoriteListItem(upper, this.list.id);
-            await addFavoriteListItem(upper, this.list.id);
+            await removeFavoriteListItem(
+              useUserStore().getUser().token,
+              upper,
+              this.list.id
+            );
+            await addFavoriteListItem(
+              useUserStore().getUser().token,
+              upper,
+              this.list.id
+            );
             for (let j = temp.length - 1; j >= 0; j--) {
-              await addFavoriteListItem(temp.pop(), this.list.id);
+              await addFavoriteListItem(
+                useUserStore().getUser().token,
+                temp.pop(),
+                this.list.id
+              );
             }
             break;
           }
         }
-        this.list = await getFavoriteListById(this.listId);
+        this.list = await getFavoriteListById(
+          useUserStore().getUser().token,
+          this.listId
+        );
       }
     },
     async moveDown(restaurantId) {
@@ -152,34 +183,50 @@ export default defineComponent({
           if (this.list.restaurants[i].id !== restaurantId) {
             temp.push(this.list.restaurants[i].id);
             await removeFavoriteListItem(
+              useUserStore().getUser().token,
               this.list.restaurants[i].id,
               this.list.id
             );
           } else {
-            await removeFavoriteListItem(restaurantId, this.list.id);
-            await addFavoriteListItem(temp.pop(), this.list.id);
-            await addFavoriteListItem(restaurantId, this.list.id);
+            await removeFavoriteListItem(
+              useUserStore().getUser().token,
+              restaurantId,
+              this.list.id
+            );
+            await addFavoriteListItem(
+              useUserStore().getUser().token,
+              temp.pop(),
+              this.list.id
+            );
+            await addFavoriteListItem(
+              useUserStore().getUser().token,
+              restaurantId,
+              this.list.id
+            );
             for (let j = temp.length - 1; j >= 0; j--) {
-              await addFavoriteListItem(temp.pop(), this.list.id);
+              await addFavoriteListItem(
+                useUserStore().getUser().token,
+                temp.pop(),
+                this.list.id
+              );
             }
             break;
           }
         }
-        this.list = await getFavoriteListById(this.listId);
+        this.list = await getFavoriteListById(
+          useUserStore().getUser().token,
+          this.listId
+        );
       }
     },
   },
   async created() {
-    this.list = await getFavoriteListById(this.listId);
+    this.list = await getFavoriteListById(
+      useUserStore().getUser().token,
+      this.listId
+    );
   },
 });
-</script>
-<script setup>
-import { useRoute } from "vue-router";
-import { useUserStore } from "../../stores/user";
-
-const userStore = useUserStore();
-const route = useRoute();
 </script>
 <style scoped>
 .card-header {

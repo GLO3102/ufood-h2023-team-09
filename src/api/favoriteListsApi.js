@@ -1,10 +1,11 @@
-const endpoint = "https://ufoodapi.herokuapp.com/unsecure/favorites";
+const endpoint = "https://ufoodapi.herokuapp.com/favorites";
 
-export const getFavoriteListById = async (id) => {
+export const getFavoriteListById = async (token, id) => {
   const response = await fetch(`${endpoint}/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
     },
   });
   if (response.status !== 200) {
@@ -15,11 +16,12 @@ export const getFavoriteListById = async (id) => {
   return response.json();
 };
 
-export const createFavoriteList = async (name, owner) => {
+export const createFavoriteList = async (token, name, owner) => {
   const response = await fetch(`${endpoint}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
     },
     body: JSON.stringify({
       name: name,
@@ -34,11 +36,12 @@ export const createFavoriteList = async (name, owner) => {
   return response.json();
 };
 
-export const modifyFavoriteList = async (name, owner, listId) => {
+export const modifyFavoriteList = async (token, name, owner, listId) => {
   const response = await fetch(`${endpoint}/${listId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
     },
     body: JSON.stringify({
       name: name,
@@ -53,11 +56,12 @@ export const modifyFavoriteList = async (name, owner, listId) => {
   return response.json();
 };
 
-export const deleteFavoriteListById = async (listId) => {
+export const deleteFavoriteListById = async (token, listId) => {
   const response = await fetch(`${endpoint}/${listId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
     },
   });
   if (response.status !== 200) {
@@ -68,11 +72,12 @@ export const deleteFavoriteListById = async (listId) => {
   return response.json();
 };
 
-export const addFavoriteListItem = async (restaurantId, listId) => {
+export const addFavoriteListItem = async (token, restaurantId, listId) => {
   const response = await fetch(`${endpoint}/${listId}/restaurants`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: token,
     },
     body: JSON.stringify({
       id: restaurantId,
@@ -86,13 +91,14 @@ export const addFavoriteListItem = async (restaurantId, listId) => {
   return response.json();
 };
 
-export const removeFavoriteListItem = async (restaurantId, listId) => {
+export const removeFavoriteListItem = async (token, restaurantId, listId) => {
   const response = await fetch(
     `${endpoint}/${listId}/restaurants/${restaurantId}`,
     {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+      Authorization: token,
       },
     }
   );

@@ -18,7 +18,10 @@
       >{{ restaurant.name }}</router-link
     >
     <a
-      v-if="isOptionsReady && route.params.id === userStore.getUser().id"
+      v-if="
+        isOptionsReady &&
+        (route.params.id === userStore.getUser().id || route.name === 'Home')
+      "
       @click="$emit('removeItem', restaurant.id)"
       class="tag is-delete is-small is-danger"
     ></a>

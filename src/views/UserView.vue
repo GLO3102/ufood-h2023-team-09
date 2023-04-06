@@ -90,7 +90,7 @@
         <!-- End Work Content IF USER HAVE VISITED RESTAURANTS-->
         <!-- Begin Work Content IF USER DONT VISIT//GOTTA SHOW INDICATION OF NON VISITED AND LINK TO HOME PAGE-->
         <div v-if="isVisitsEmpty" class="hero is-medium">
-          <div class="box">
+          <div class="box my-5">
             <div class="has-text-centered">
               <div>
                 <h1 class="title is-2">

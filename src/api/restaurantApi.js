@@ -11,7 +11,7 @@ export const getRestaurants = async (
 ) => {
   let genresStr = "";
   if (genres.length !== 0) {
-    genresStr = `&genres=${genres}`.replaceAll(" ", "");
+    genresStr = `&genres=${genres}`.replaceAll(", ", ",");
   }
   let rangesStr = "";
   if (price_ranges.length !== 0) {

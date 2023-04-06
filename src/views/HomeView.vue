@@ -1,7 +1,228 @@
+<script setup>
+import { onMounted, computed, ref, watch } from "vue";
+import { getRestaurants } from "../api/restaurantApi.js";
+import { useRoute } from "vue-router";
+import RestaurantCard from "../components/homeComponents/RestaurantCard.vue";
+
+let restaurantsList = ref({ total: 0 });
+const input = ref(null);
+
+const page = ref(0);
+const pageLimit = ref(12);
+const searchFilter = ref("");
+const genreFilters = ref([]);
+const rangeFilters = ref([]);
+let lat = ref(0);
+let lon = ref(0);
+
+const genres = ref({})
+let completeList = ref({})
+let words = []
+
+function getWords(list){
+  let genreList = []
+  for(let restaurant of list){
+    words = words.concat(restaurant.name.split(" "))
+    words.push(restaurant.name)
+    genreList = genreList.concat(restaurant.genres)
+  }
+  words.filter(word => word.length > 0)
+  words = Array.from(new Set(words))
+  genreList = Array.from(new Set(genreList))
+  for(let genre of genreList){
+    genres.value[genre] = false
+  }
+}
+
+const pagesTotal = computed(() => {
+  return Math.floor(restaurantsList.value.total / pageLimit.value) + 1;
+});
+
+const search = useRoute().query.search;
+if (search !== undefined) {
+  searchFilter.value = search;
+}
+
+async function resetList(newPage) {
+  page.value = newPage;
+  restaurantsList.value = await getRestaurants(
+    page.value,
+    pageLimit.value,
+    searchFilter.value,
+    genreFilters.value,
+    rangeFilters.value,
+    lat.value,
+    lon.value
+  );
+  window.scrollTo(0, 0);
+}
+
+// Initialization
+onMounted(async () => {
+  await resetList(0);
+  input.value.focus();
+  getRestaurants(0, 1000, '', [], [], 0, 0).then(response=>{
+    response.json
+  })
+  completeList.value = await getRestaurants(0, 1000, '', [], [], 0, 0)
+  getWords(await completeList.value.items)
+});
+
+// Filter by Price Range ---------------------------------------------------
+// Defines the states of the buttons
+const ranges = ref({
+  1: false,
+  2: false,
+  3: false,
+  4: false,
+});
+// Toggle the range filter buttons et refresh
+async function rangeFilter(button) {
+  ranges.value[button] = !ranges.value[button];
+  rangeFilters.value = Object.keys(ranges.value).filter(
+    (key) => ranges.value[key]
+  );
+  await resetList(0);
+}
+
+// Filter by Genres ----------------------------------------
+// Dropdown genre menu
+let isDropdownActive = ref(false);
+function dropDownToggle() {
+  isDropdownActive.value = !isDropdownActive.value;
+}
+function closeDropdown() {
+  isDropdownActive.value = false;
+}
+async function genreFilter(genre) {
+  genres.value[genre] = !genres.value[genre];
+  genreFilters.value = Object.keys(genres.value).filter(
+    (key) => genres.value[key]
+  );
+  await resetList(0);
+}
+function format(str) {
+  let newStr = str[0].toUpperCase() + str.slice(1);
+  return newStr;
+}
+
+// Gets the current location ------------------------
+async function getLocation() {
+  if (navigator.geolocation) {
+    const position = await new Promise(function (resolve, reject) {
+      navigator.geolocation.getCurrentPosition(resolve, showGetLocationError);
+    });
+    lat.value = position.coords.latitude;
+    lon.value = position.coords.longitude;
+  } else {
+    alert("Geolocation is not supported by this browser.");
+  }
+}
+async function showGetLocationError(error) {
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      alert("User denied the request for Geolocation.");
+      break;
+    case error.POSITION_UNAVAILABLE:
+      alert("Location information is unavailable.");
+      break;
+    case error.TIMEOUT:
+      alert("The request to get user location timed out.");
+      break;
+    case error.UNKNOWN_ERROR:
+      alert("An unknown error occurred.");
+      break;
+  }
+  await resetList(0);
+}
+async function toggleLocation() {
+  if (lat.value === 0 && lon.value === 0) {
+    await getLocation();
+  } else {
+    lat.value = 0;
+    lon.value = 0;
+  }
+  await resetList(0);
+}
+
+// Search -------------------------------
+
+// Levenshtein distance
+// Source https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#C++
+// Compute the edit distance between the two given strings
+function getDistance(str1, str2) {
+  str1 = str1.toLowerCase()
+  str2 = str2.toLowerCase()
+  const len1 = str1.length
+  const len2 = str2.length
+  if (len1 === 0) return len2;
+  if (len2 === 0) return len1
+
+  const matrix = []
+
+  // increment along the first column of each row
+  let i
+  for (i = 0; i <= len2; i++) {
+    matrix[i] = [i]
+  }
+
+  // increment each column in the first row
+  let j
+  for (j = 0; j <= len1; j++) {
+    matrix[0][j] = j
+  }
+
+  // Fill in the rest of the matrix
+  for (i = 1; i <= len2; i++) {
+    for (j = 1; j <= len1; j++) {
+      if (str2.charAt(i-1) == str1.charAt(j-1)) {
+        matrix[i][j] = matrix[i-1][j-1]
+      } else {
+        matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, // substitution
+                                Math.min(matrix[i][j-1] + 1, // insertion
+                                         matrix[i-1][j] + 1)) // deletion
+      }
+    }
+  }
+  let length = Math.max(len1, len2)
+  let distance = matrix[len2][len1]
+  return distance/length
+}
+
+function getClosest(str){
+  if(str.length === 1 || words.includes(str)){
+    return str
+  }else{
+    let closest = {value: '', distance: 255}
+    for(let word of words){
+      let distance = getDistance(str, word)
+      if(distance < closest.distance){
+        closest.value = word
+        closest.distance = distance
+      }
+    }
+    if(closest.distance < 0.5) return closest.value
+    else return str
+  } 
+}
+
+let suggestions = ref({});
+let isSearchActive = ref(false);
+
+watch(searchFilter, async (newValue, oldValue) => {
+  if(newValue === '' || newValue === null) isSearchActive.value = false
+  else isSearchActive.value = true
+  const value = getClosest(newValue)
+  suggestions.value = await getRestaurants(0, 10, value, genreFilters.value, rangeFilters.value, lat.value, lon.value)
+  if(suggestions.value.items.length === 0) isSearchActive.value = false
+})
+
+</script>
+
 <template>
   <div class="home-container" @click="closeDropdown()">
     <div class="search-filter">
-      <div class="search field has-addons">
+      <div class="search field has-addons dropdown" :class="{ 'is-active': isSearchActive }">
         <p class="control">
           <input
             ref="input"
@@ -15,7 +236,13 @@
         <p class="control">
           <button class="button" @click="resetList(0)">&#x1F50E;</button>
         </p>
+        <div class="dropdown-menu">
+          <div class="dropdown-content">
+            <router-link :to="`/restaurant/${restaurant.id}`" class="dropdown-item" v-for="restaurant in suggestions.items" :key="restaurant.id">{{restaurant.name}}</router-link>
+          </div>
+        </div>
       </div>
+      
       <div class="filter">
         <div class="is-flex-wrap-nowrap">
           <!-- Geo-Location Toggle Button -->
@@ -65,41 +292,13 @@
         </div>
         <!-- Range filter buttons -->
         <div class="is-flex-wrap-nowrap field has-addons">
-          <p class="control">
+          <p class="control" v-for="range in Object.entries(ranges)" :key="range[0]">
             <button
               class="button"
-              :class="{ 'is-active': ranges[1] }"
-              @click="rangeFilter(1)"
+              :class="{ 'is-active': range[1] }"
+              @click="rangeFilter(range[0])"
             >
-              $
-            </button>
-          </p>
-
-          <p class="control">
-            <button
-              class="button"
-              :class="{ 'is-active': ranges[2] }"
-              @click="rangeFilter(2)"
-            >
-              $$
-            </button>
-          </p>
-          <p class="control">
-            <button
-              class="button"
-              :class="{ 'is-active': ranges[3] }"
-              @click="rangeFilter(3)"
-            >
-              $$$
-            </button>
-          </p>
-          <p class="control">
-            <button
-              class="button"
-              :class="{ 'is-active': ranges[4] }"
-              @click="rangeFilter(4)"
-            >
-              $$$$
+            {{ '$'.repeat(range[0]) }}
             </button>
           </p>
         </div>
@@ -198,155 +397,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { onMounted, computed, ref } from "vue";
-import { getRestaurants } from "../api/restaurantApi.js";
-import { useRoute } from "vue-router";
-import RestaurantCard from "../components/homeComponents/RestaurantCard.vue";
-
-let restaurantsList = ref({ total: 0 });
-const input = ref(null);
-
-const page = ref(0);
-const pageLimit = ref(12);
-const searchFilter = ref("");
-const genreFilters = ref([]);
-const rangeFilters = ref([]);
-let lat = ref(0);
-let lon = ref(0);
-
-const pagesTotal = computed(() => {
-  return Math.floor(restaurantsList.value.total / pageLimit.value) + 1;
-});
-const search = useRoute().query.search;
-if (search !== undefined) {
-  searchFilter.value = search;
-}
-
-async function resetList(newPage) {
-  page.value = newPage;
-  restaurantsList.value = await getRestaurants(
-    page.value,
-    pageLimit.value,
-    searchFilter.value,
-    genreFilters.value,
-    rangeFilters.value,
-    lat.value,
-    lon.value
-  );
-  window.scrollTo(0, 0);
-}
-
-// Initialization
-onMounted(async () => {
-  await resetList(0);
-  input.value.focus();
-});
-
-// Filter by Price Range ---------------------------------------------------
-// Defines the states of the buttons
-const ranges = ref({
-  1: false,
-  2: false,
-  3: false,
-  4: false,
-});
-// Toggle the range filter buttons et refresh
-async function rangeFilter(button) {
-  ranges.value[button] = !ranges.value[button];
-  rangeFilters.value = Object.keys(ranges.value).filter(
-    (key) => ranges.value[key]
-  );
-  await resetList(0);
-}
-
-// Filter by Genres ----------------------------------------
-const genres = ref({
-  desserts: false,
-  bistro: false,
-  ambiance: false,
-  "fast-food": false,
-  "fruits de mer": false,
-  hamburgers: false,
-  végétarien: false,
-  santé: false,
-  mexicain: false,
-  café: false,
-  libanais: false,
-  italien: false,
-  "happy hour": false,
-  japonais: false,
-  asiatique: false,
-  steakhouse: false,
-  boulangerie: false,
-  grec: false,
-  charcuterie: false,
-  pizzeria: false,
-  "cuisine moléculaire": false,
-  vietnamien: false,
-  indien: false,
-  européen: false,
-});
-// Dropdown genre menu
-let isDropdownActive = ref(false);
-function dropDownToggle() {
-  isDropdownActive.value = !isDropdownActive.value;
-}
-function closeDropdown() {
-  isDropdownActive.value = false;
-}
-async function genreFilter(genre) {
-  genres.value[genre] = !genres.value[genre];
-  genreFilters.value = Object.keys(genres.value).filter(
-    (key) => genres.value[key]
-  );
-  await resetList(0);
-}
-function format(str) {
-  let newStr = str[0].toUpperCase() + str.slice(1);
-  return newStr;
-}
-
-// Gets the current location ------------------------
-async function getLocation() {
-  if (navigator.geolocation) {
-    const position = await new Promise(function (resolve, reject) {
-      navigator.geolocation.getCurrentPosition(resolve, showGetLocationError);
-    });
-    lat.value = position.coords.latitude;
-    lon.value = position.coords.longitude;
-  } else {
-    alert("Geolocation is not supported by this browser.");
-  }
-}
-async function showGetLocationError(error) {
-  switch (error.code) {
-    case error.PERMISSION_DENIED:
-      alert("User denied the request for Geolocation.");
-      break;
-    case error.POSITION_UNAVAILABLE:
-      alert("Location information is unavailable.");
-      break;
-    case error.TIMEOUT:
-      alert("The request to get user location timed out.");
-      break;
-    case error.UNKNOWN_ERROR:
-      alert("An unknown error occurred.");
-      break;
-  }
-  await resetList(0);
-}
-async function toggleLocation() {
-  if (lat.value === 0 && lon.value === 0) {
-    await getLocation();
-  } else {
-    lat.value = 0;
-    lon.value = 0;
-  }
-  await resetList(0);
-}
-</script>
 
 <style scoped>
 .home-container {

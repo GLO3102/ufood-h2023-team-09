@@ -60,7 +60,7 @@ import { postVisit } from "@/api/userApi.js";
 const today = new Date();
 let date = today.getDate().toString()
 if(date.length === 1) date = `0${date}`
-let month = today.getMonth().toString()
+let month = (today.getMonth()+1).toString()
 if(month.length === 1) month = `0${month}`
 const year = today.getFullYear().toString()
 

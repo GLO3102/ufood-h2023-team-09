@@ -99,6 +99,7 @@ export default defineComponent({
   emits: ["deleteList", "moveUp", "moveDown"],
   methods: {
     toggleOptions() {
+      if(this.isOptionsReady) this.isInputReady = false;
       this.isOptionsReady = !this.isOptionsReady;
     },
     async removeItem(restaurantId) {

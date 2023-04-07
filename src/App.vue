@@ -7,15 +7,15 @@
 
 <script setup>
 import Navigation from "@/components/Navigation";
+import { onBeforeMount } from "vue";
 import { useUserStore } from "./stores/user";
 import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
 const userStore = useUserStore();
-
-if (cookies.get("ufood-token")) {
-  let token = cookies.get("ufood-token");
-  userStore.getToken(token);
-}
+const token = cookies.get("ufood-token")
+onBeforeMount(async () => {
+  if (token !== null) await userStore.getToken(token);
+})
 </script>
 
 <style>

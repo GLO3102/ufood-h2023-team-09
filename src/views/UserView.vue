@@ -103,7 +103,7 @@
       </div>
 
       <!-- Liste de liste de restaurants favories ou autre -->
-      <FavoriteLists :userId="route.params.id" />
+      <FavoriteLists v-if="isSameUser" :userId="route.params.id" />
       <VisitedList :visits="userVisits" />
       <!-- Follow Modal -->
       <FollowModal
@@ -131,6 +131,7 @@ import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
 import { getUserVisits, getUserById } from "@/api/userApi.js";
 import { followUserApi, unFollowUserApi } from "@/api/followApi.js";
 import FollowModal from "../components/modals/FollowModal.vue";
+import { useCookies } from "vue3-cookies";
 
 const userStore = useUserStore();
 const route = useRoute();
@@ -139,19 +140,7 @@ const isVisitsEmpty = ref(true);
 //follow/unfollow button
 const isSameUser = ref(false);
 const isFollowing = ref(false);
-onBeforeMount(() => {
-  isSameUser.value = userStore.getUser().id === route.params.id;
-  if (isSameUser.value) {
-    isFollowing.value = false;
-  } else {
-    for (let i = 0; i < userStore.getUser().following.length; i++) {
-      if (userStore.getUser().following[i].id === route.params.id) {
-        isFollowing.value = true;
-        break;
-      }
-    }
-  }
-});
+
 async function followUser() {
   const res = await followUserApi(route.params.id, userStore.getUser().token);
   if (res.status === 201) {
@@ -190,9 +179,6 @@ const user = ref({
   followers: [],
   following: [],
 });
-onBeforeMount(async () => {
-  user.value = await getUserById(userStore.getUser().token, route.params.id);
-});
 
 //load visits and resto info
 const restoPicturesInfo = ref([]);
@@ -201,6 +187,14 @@ const userVisits = ref({
   total: 0,
 });
 onBeforeMount(async () => {
+  if(userStore.getUser().token === ''){
+    const { cookies } = useCookies()
+    let token = cookies.get("ufood-token")
+    if(token !== null){
+      await userStore.getToken(token)
+    }
+  }
+  user.value = await getUserById(userStore.getUser().token, route.params.id);
   userVisits.value = await getUserVisits(
     userStore.getUser().token,
     route.params.id
@@ -213,6 +207,17 @@ onBeforeMount(async () => {
     const resto = await getRestaurantByID(visit.restaurant_id);
     visit["restoName"] = resto.name;
   });
+  isSameUser.value = userStore.getUser().id === route.params.id;
+  if (isSameUser.value) {
+    isFollowing.value = false;
+  } else {
+    for (let i = 0; i < userStore.getUser().following.length; i++) {
+      if (userStore.getUser().following[i].id === route.params.id) {
+        isFollowing.value = true;
+        break;
+      }
+    }
+  }
 });
 
 function calculateNumberVisits(restaurantID) {

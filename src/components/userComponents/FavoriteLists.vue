@@ -41,12 +41,17 @@ import {
   addFavoriteListItem,
 } from "../../api/favoriteListsApi";
 import { getFavoriteListsByUserId } from "../../api/userApi";
+import { useCookies } from "vue3-cookies";
+import { useRoute } from "vue-router";
+import { useUserStore } from "../../stores/user";
 
 export default defineComponent({
   data: () => {
     return {
       userLists: {},
       isInputReady: false,
+      userStore: useUserStore(),
+      route: useRoute()
     };
   },
   components: {
@@ -165,6 +170,13 @@ export default defineComponent({
     },
   },
   async created() {
+    if (this.userStore.getUser().token === '') {
+      const { cookies } = useCookies()
+      let token = cookies.get("ufood-token")
+      if (token !== null) {
+        await this.userStore.getToken(token)
+      }
+    }
     this.userLists = await getFavoriteListsByUserId(
       useUserStore().getUser().token,
       this.userId
@@ -172,13 +184,7 @@ export default defineComponent({
   },
 });
 </script>
-<script setup>
-import { useRoute } from "vue-router";
-import { useUserStore } from "../../stores/user";
 
-const userStore = useUserStore();
-const route = useRoute();
-</script>
 <style scoped>
 .list {
   display: block;

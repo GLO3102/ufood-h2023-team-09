@@ -1,74 +1,88 @@
 <script setup>
-import { onMounted, computed, ref, watch } from "vue";
+import { onMounted, onBeforeMount, computed, ref, watch } from "vue";
 import { getRestaurants } from "../api/restaurantApi.js";
-import { useRoute } from "vue-router";
 import RestaurantCard from "../components/homeComponents/RestaurantCard.vue";
+import { getSimilitude, format, accentLess } from "../utils/formats.js"
+import { useUserStore } from "@/stores/user";
+const userStore = useUserStore();
 
 let restaurantsList = ref({ total: 0 });
-const input = ref(null);
+let completeList = ref({})
+let completeListCopy = []
+let words = []
 
 const page = ref(0);
 const pageLimit = ref(12);
-const searchFilter = ref("");
-const genreFilters = ref([]);
-const rangeFilters = ref([]);
-let lat = ref(0);
-let lon = ref(0);
+const pagesTotal = computed(() => {
+  let result = restaurantsList.value.total / pageLimit.value
+  let rounded = Math.floor(restaurantsList.value.total / pageLimit.value)
+  if(result !== rounded) rounded+=1
+  return rounded;
+});
 
-const genres = ref({})
-let completeList = ref({})
-let words = []
-
-function getWords(list){
-  let genreList = []
+// Initialization  ---------------------------------------------------------------------------------
+function getDictionnaries(list){
   for(let restaurant of list){
     words = words.concat(restaurant.name.split(" "))
-    words.push(restaurant.name)
-    genreList = genreList.concat(restaurant.genres)
+    words.push(restaurant.name.replace('Restaurant', ''))
+    for(let genre of restaurant.genres){
+      genres.value[genre] = false
+    }
   }
   words.filter(word => word.length > 0)
   words = Array.from(new Set(words))
-  genreList = Array.from(new Set(genreList))
-  for(let genre of genreList){
-    genres.value[genre] = false
-  }
 }
-
-const pagesTotal = computed(() => {
-  return Math.floor(restaurantsList.value.total / pageLimit.value) + 1;
-});
-
-const search = useRoute().query.search;
-if (search !== undefined) {
-  searchFilter.value = search;
-}
-
-async function resetList(newPage) {
+function resetList(newPage) {
   page.value = newPage;
-  restaurantsList.value = await getRestaurants(
-    page.value,
-    pageLimit.value,
-    searchFilter.value,
-    genreFilters.value,
-    rangeFilters.value,
-    lat.value,
-    lon.value
-  );
+  const first = page.value*pageLimit.value
+
+  let isRangeActive = false
+  for(let range in ranges.value){
+    if(ranges.value[range]){
+      isRangeActive = true
+      break
+    }
+  }
+  let isGenreActive = false
+  for(let genre in genres.value){
+    if(genres.value[genre]){
+      isGenreActive = true
+      break
+    }
+  }
+
+  let temp = []
+  for(let restaurant of completeList.value.items){
+    if(!isRangeActive || ranges.value[restaurant.price_range]){
+      let isGenreMatching = false
+      for(let genre of restaurant.genres){
+        if(genres.value[genre]){
+          isGenreMatching = true
+          break
+        } 
+      }
+      if(!isGenreActive || isGenreMatching){
+        if(accentLess(restaurant.name.toLowerCase()).includes(accentLess(searchFilter.value.toLowerCase()))) temp.push(restaurant)
+      }
+    }
+  }
+  restaurantsList.value.items = temp.slice(first, first+pageLimit.value)
+  restaurantsList.value.total = temp.length
   window.scrollTo(0, 0);
 }
-
-// Initialization
-onMounted(async () => {
-  await resetList(0);
-  input.value.focus();
-  getRestaurants(0, 1000, '', [], [], 0, 0).then(response=>{
-    response.json
-  })
+onBeforeMount(async()=>{
   completeList.value = await getRestaurants(0, 1000, '', [], [], 0, 0)
-  getWords(await completeList.value.items)
-});
+  getDictionnaries(await completeList.value.items)
+  completeListCopy = Array.from(completeList.value.items)
 
-// Filter by Price Range ---------------------------------------------------
+  await getLocation()
+  if(lon.value !== 0 && lat.value !== 0) sortList()
+  resetList(0);
+})
+onMounted(() => input.value.focus());
+
+// Filter by Price Range ---------------------------------------------------------------------------
+const rangeFilters = ref([]);
 // Defines the states of the buttons
 const ranges = ref({
   1: false,
@@ -82,10 +96,12 @@ async function rangeFilter(button) {
   rangeFilters.value = Object.keys(ranges.value).filter(
     (key) => ranges.value[key]
   );
-  await resetList(0);
+  resetList(0);
 }
 
-// Filter by Genres ----------------------------------------
+// Filter by Genres ----------------------------------------------------------------------------------
+const genreFilters = ref([]);
+const genres = ref({})
 // Dropdown genre menu
 let isDropdownActive = ref(false);
 function dropDownToggle() {
@@ -99,14 +115,13 @@ async function genreFilter(genre) {
   genreFilters.value = Object.keys(genres.value).filter(
     (key) => genres.value[key]
   );
-  await resetList(0);
-}
-function format(str) {
-  let newStr = str[0].toUpperCase() + str.slice(1);
-  return newStr;
+  resetList(0);
 }
 
-// Gets the current location ------------------------
+// Geo location ---------------------------------------------------------------------------
+let lat = ref(0);
+let lon = ref(0);
+
 async function getLocation() {
   if (navigator.geolocation) {
     const position = await new Promise(function (resolve, reject) {
@@ -133,90 +148,81 @@ async function showGetLocationError(error) {
       alert("An unknown error occurred.");
       break;
   }
-  await resetList(0);
+  resetList(0);
 }
 async function toggleLocation() {
   if (lat.value === 0 && lon.value === 0) {
     await getLocation();
+    completeList.value.items = Array.from(completeListCopy)
+    sortList()
   } else {
     lat.value = 0;
     lon.value = 0;
+    completeList.value.items = completeListCopy
   }
-  await resetList(0);
+  resetList(0);
 }
-
-// Search -------------------------------
-
-// Levenshtein distance
-// Source https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#C++
-// Compute the edit distance between the two given strings
-function getDistance(str1, str2) {
-  str1 = str1.toLowerCase()
-  str2 = str2.toLowerCase()
-  const len1 = str1.length
-  const len2 = str2.length
-  if (len1 === 0) return len2;
-  if (len2 === 0) return len1
-
-  const matrix = []
-
-  // increment along the first column of each row
-  let i
-  for (i = 0; i <= len2; i++) {
-    matrix[i] = [i]
+function sortList(){
+  for(let restaurant of completeList.value.items){
+    restaurant.distance = getDistanceFrom(restaurant.location.coordinates)
   }
-
-  // increment each column in the first row
-  let j
-  for (j = 0; j <= len1; j++) {
-    matrix[0][j] = j
-  }
-
-  // Fill in the rest of the matrix
-  for (i = 1; i <= len2; i++) {
-    for (j = 1; j <= len1; j++) {
-      if (str2.charAt(i-1) == str1.charAt(j-1)) {
-        matrix[i][j] = matrix[i-1][j-1]
-      } else {
-        matrix[i][j] = Math.min(matrix[i-1][j-1] + 1, // substitution
-                                Math.min(matrix[i][j-1] + 1, // insertion
-                                         matrix[i-1][j] + 1)) // deletion
-      }
-    }
-  }
-  let length = Math.max(len1, len2)
-  let distance = matrix[len2][len1]
-  return distance/length
-}
-
-function getClosest(str){
-  if(str.length === 1 || words.includes(str)){
-    return str
+  if(lat.value === 0 && lon.value === 0){
+    completeList.value.items.sort((a, b)=> b.distance - a.distance)
   }else{
-    let closest = {value: '', distance: 255}
-    for(let word of words){
-      let distance = getDistance(str, word)
-      if(distance < closest.distance){
-        closest.value = word
-        closest.distance = distance
-      }
-    }
-    if(closest.distance < 0.5) return closest.value
-    else return str
-  } 
+    completeList.value.items.sort((a, b)=> a.distance - b.distance)
+  }
+}
+function getDistanceFrom(destination){
+  let latDif = destination[0] - lat.value
+  if(latDif < 0) latDif = -latDif
+  let lonDif = destination[1] - lon.value
+  if(lonDif < 0) lonDif = -lonDif
+  return latDif + lonDif
 }
 
-let suggestions = ref({});
+// Search auto-complete ------------------------------------------------------------------
+const searchFilter = ref("");
+const input = ref(null);
+let suggestions = ref({items: []});
 let isSearchActive = ref(false);
+
+const searchParam = userStore.getSearchParam()
+if (searchParam !== '') {
+  searchFilter.value = searchParam;
+  userStore.setSearchParam('')
+}
+
+function getClosests(str){
+  if(str.length === 1) return [str.toLowerCase()]
+
+  let closests = []
+  for(let word of words){
+    let similitude = getSimilitude(str.toLowerCase(), word.toLowerCase())
+    if(similitude > 0.5) closests.push({'value': word.toLowerCase(), 'similitude': similitude})
+  }
+  closests.sort((word1, word2)=> word1.similitude - word2.similitude)
+  if(closests.length === 0) return [str.toLowerCase()]
+  return closests.map(word=>word.value)
+}
 
 watch(searchFilter, async (newValue, oldValue) => {
   if(newValue === '' || newValue === null) isSearchActive.value = false
   else isSearchActive.value = true
-  const value = getClosest(newValue)
-  suggestions.value = await getRestaurants(0, 10, value, genreFilters.value, rangeFilters.value, lat.value, lon.value)
-  if(suggestions.value.items.length === 0) isSearchActive.value = false
+   
+  suggestions.value.items = []
+  let values = getClosests(newValue)
+  values = Array.from(new Set(values))
+  values = values.slice(0,5)
+  for(let value of values){
+    let list = await getRestaurants(0, 10, value, genreFilters.value, rangeFilters.value, lat.value, lon.value)
+    suggestions.value.items = suggestions.value.items.concat(await list.items) 
+  }
+  suggestions.value.items = Array.from(new Set(suggestions.value.items.map(resto => resto.id))).map(id => {
+    return suggestions.value.items.find(resto => resto.id === id)
+  })
+  suggestions.value.items = suggestions.value.items.slice(0, 10)
+  if(suggestions.value.items.length === 0 || searchFilter.value === suggestions.value.items[0].name) isSearchActive.value = false
 })
-
 </script>
 
 <template>
@@ -226,7 +232,7 @@ watch(searchFilter, async (newValue, oldValue) => {
         <p class="control">
           <input
             ref="input"
-            @keyup.enter="resetList(0)"
+            @keyup.enter="resetList(0); isSearchActive = false"
             v-model="searchFilter"
             class="input"
             type="search"
@@ -238,7 +244,14 @@ watch(searchFilter, async (newValue, oldValue) => {
         </p>
         <div class="dropdown-menu">
           <div class="dropdown-content">
-            <router-link :to="`/restaurant/${restaurant.id}`" class="dropdown-item" v-for="restaurant in suggestions.items" :key="restaurant.id">{{restaurant.name}}</router-link>
+            <a
+              v-for="restaurant in suggestions.items" 
+              class="dropdown-item" 
+              :key="restaurant.id"
+              @click="searchFilter = restaurant.name; resetList(0)"
+            >
+              {{restaurant.name}}
+            </a>
           </div>
         </div>
       </div>

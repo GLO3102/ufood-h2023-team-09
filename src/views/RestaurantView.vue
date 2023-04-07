@@ -213,6 +213,7 @@ import VisitModal from "../components/modals/VisitModal.vue";
 import ListModal from "../components/modals/FavoriteListModal.vue";
 import { useUserStore } from "../stores/user";
 import { useRouter } from "vue-router";
+import { format } from "@/utils/formats.js"
 
 let showVisitModal = ref(false);
 const userStore = useUserStore();
@@ -259,10 +260,6 @@ const breakpoints = {
   1200: { itemsToShow: 3 },
   1300: { itemsToShow: 3.5 },
 };
-function format(str) {
-  let newStr = str[0].toUpperCase() + str.slice(1);
-  return newStr;
-}
 </script>
 
 <script>
@@ -275,6 +272,7 @@ export default {
   components: {
     Carousel,
     Slide,
+    Schedule,
   },
   data: () => ({
     currentSlide: 0,

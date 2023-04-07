@@ -4,7 +4,7 @@
       <input
         class="input is-primary"
         v-model="search"
-        placeholder="search users"
+        placeholder="Search users..."
       />
     </div>
     <div class="dropdown-menu" id="dropdown-menu" role="menu">

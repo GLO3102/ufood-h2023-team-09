@@ -160,6 +160,7 @@ import VisitModal from "../modals/VisitModal.vue";
 import ListModal from "../modals/FavoriteListModal.vue";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
+import { format } from "@/utils/formats.js"
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -200,10 +201,6 @@ let today = new Date().getDay();
 const color_map = ["success", "primary", "danger", "black"];
 
 defineProps(["restaurant"]);
-function format(str) {
-  let newStr = str[0].toUpperCase() + str.slice(1);
-  return newStr;
-}
 </script>
 
 <style scoped>

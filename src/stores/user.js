@@ -16,6 +16,14 @@ export const useUserStore = defineStore("user", () => {
     isLoggedIn: false,
   });
 
+  const searchParam = ref('')
+  const getSearchParam = () => {
+    return searchParam.value
+  }
+  const setSearchParam = (param) => {
+    searchParam.value = param
+  }
+
   watch(
     user,
     (newUser) => {
@@ -84,5 +92,5 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
-  return { getUser, create, login, signup, logout, getIsLoggedIn, getToken };
+  return { getUser, create, login, signup, logout, getIsLoggedIn, getToken, getSearchParam, setSearchParam };
 });

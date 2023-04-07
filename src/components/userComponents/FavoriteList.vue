@@ -6,7 +6,7 @@
         ref="rename"
         @focus="$event.target.select()"
         :id="list.id"
-        @keyup.enter="modifyName(null)"
+        @keyup.enter="modifyName($event)"
         v-if="isInputReady"
         type="text"
         v-model="list.name"
@@ -114,17 +114,23 @@ export default defineComponent({
     },
     async modifyName(event) {
       if (this.isInputReady) {
-        const response = await modifyFavoriteList(
-          useUserStore().getUser().token,
-          this.list.name,
-          this.list.owner.email,
-          this.list.id
-        );
-        this.list = await getFavoriteListById(
-          useUserStore().getUser().token,
-          this.listId
-        );
-        this.isInputReady = false;
+        if (this.list.name.length !== 0) {
+          const response = await modifyFavoriteList(
+            useUserStore().getUser().token,
+            this.list.name,
+            this.list.owner.email,
+            this.list.id
+          );
+          this.list = await getFavoriteListById(
+            useUserStore().getUser().token,
+            this.listId
+          );
+          this.isInputReady = false;
+        }else{
+          this.$nextTick(() => {
+            this.$refs.rename.focus();
+          });
+        }
       } else {
         this.isInputReady = true;
         if (event) {

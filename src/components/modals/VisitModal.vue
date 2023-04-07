@@ -16,7 +16,7 @@
             <span>Date:</span>
             <input
               class="input"
-              max="2023-03-15"
+              :max="`${year}-${month}-${date}`"
               type="date"
               v-model="visitDate"
             />
@@ -43,9 +43,7 @@
             </div>
             <div class="is-align-self-center">
               <span class="has-text-success" v-if="isSuccess">Success</span>
-              <span class="has-text-danger" v-if="isError">{{
-                errorValue
-              }}</span>
+              <span class="has-text-danger" v-if="isError">A rating must be set</span>
             </div>
           </div>
         </div>
@@ -57,8 +55,14 @@
 <script setup>
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user";
-
 import { postVisit } from "@/api/userApi.js";
+
+const today = new Date();
+let date = today.getDate().toString()
+if(date.length === 1) date = `0${date}`
+let month = today.getMonth().toString()
+if(month.length === 1) month = `0${month}`
+const year = today.getFullYear().toString()
 
 const userStore = useUserStore();
 const isSuccess = ref(false);
@@ -80,8 +84,9 @@ async function save() {
     rating: rating.value,
     comment: comment.value,
   };
-  const res = await postVisit(userStore.getUser().token, visit);
-  if (res.status === 201) {
+  if(rating.value !== 0){
+    const res = await postVisit(userStore.getUser().token, visit);
+    if (res.status === 201) {
     isSuccess.value = true;
     isError.value = false;
     setTimeout(() => {
@@ -93,6 +98,7 @@ async function save() {
     const errorData = await res.json();
     errorValue.value = errorData.message;
   }
+  }else isError.value = true
 }
 </script>
 <style scoped></style>

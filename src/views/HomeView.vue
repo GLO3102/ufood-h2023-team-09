@@ -4,11 +4,13 @@ import { getRestaurants } from "../api/restaurantApi.js";
 import RestaurantCard from "../components/homeComponents/RestaurantCard.vue";
 import { getSimilitude, format, accentLess } from "../utils/formats.js"
 import { useUserStore } from "@/stores/user";
+import RestaurantMap from "../components/homeComponents/RestaurantMap.vue";
 const userStore = useUserStore();
 
 let restaurantsList = ref({ total: 0 });
 let completeList = ref({})
 let completeListCopy = []
+let completeListFiltered = ref({})
 let words = []
 
 const page = ref(0);
@@ -68,6 +70,7 @@ function resetList(newPage) {
   }
   restaurantsList.value.items = temp.slice(first, first+pageLimit.value)
   restaurantsList.value.total = temp.length
+  completeListFiltered.value = { items: [...temp] };
   window.scrollTo(0, 0);
 }
 onBeforeMount(async()=>{
@@ -122,6 +125,7 @@ async function genreFilter(genre) {
 let lat = ref(0);
 let lon = ref(0);
 
+
 async function getLocation() {
   if (navigator.geolocation) {
     const position = await new Promise(function (resolve, reject) {
@@ -150,6 +154,23 @@ async function showGetLocationError(error) {
   }
   resetList(0);
 }
+
+let showMap = ref(false);
+
+async function toggleMapMode() {
+  if (lat.value === 0 && lon.value === 0) {
+    await getLocation();
+    completeList.value.items = Array.from(completeListCopy)
+    sortList()
+  } else {
+    lat.value = 0;
+    lon.value = 0;
+    completeList.value.items = completeListCopy
+  }
+  showMap.value = !showMap.value;
+  resetList(0);
+}
+
 async function toggleLocation() {
   if (lat.value === 0 && lon.value === 0) {
     await getLocation();
@@ -173,7 +194,7 @@ function sortList(){
   }
 }
 function getDistanceFrom(destination){
-  let latDif = destination[0] - lat.value
+  let latDif = destination[0] - lat.value 
   if(latDif < 0) latDif = -latDif
   let lonDif = destination[1] - lon.value
   if(lonDif < 0) lonDif = -lonDif
@@ -258,6 +279,12 @@ watch(searchFilter, async (newValue, oldValue) => {
       
       <div class="filter">
         <div class="is-flex-wrap-nowrap">
+          <button
+            class="button"
+            @click="toggleMapMode()"
+          >
+            MapMode
+          </button>
           <!-- Geo-Location Toggle Button -->
           <button
             class="button"
@@ -331,15 +358,19 @@ watch(searchFilter, async (newValue, oldValue) => {
     </div>
 
     <!-- Dynamically generated restaurants list -->
-    <div class="restaurant-list" ref="restaurantListScroll">
+    <div class="restaurant-list" ref="restaurantListScroll" v-if="!showMap">
       <RestaurantCard
         :restaurant="restaurant"
         v-for="restaurant in restaurantsList.items"
         :key="restaurant"
       />
     </div>
+    <!-- Dynamically generated restaurants list -->
+    <div class="restaurant-map" ref="restaurantMap" v-if="showMap">
+      <RestaurantMap :restaurants="completeListFiltered.items"/>
+    </div>
     <!-- Shows a message if no match is found -->
-    <h1 v-if="restaurantsList.total === 0" class="title is-3 has-text-centered">
+    <h1 v-if="completeList.total === 0" class="title is-3 has-text-centered">
       No match found
     </h1>
     <!-- Pagination to help navigate -->

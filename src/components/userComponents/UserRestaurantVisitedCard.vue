@@ -1,5 +1,8 @@
 <template>
-  <div class="card">
+  <div 
+    class="card is-clickable" 
+    @click="$router.push(`/restaurant/${restaurantId}`)"
+    >
     <!--image-->
     <div class="card-image">
       <figure class="image is-4by3">
@@ -22,17 +25,22 @@
 
 <script>
 import { getRestaurantByID } from "../../api/restaurantApi.js";
+import { useUserStore } from "../../stores/user";
+
 export default {
   props: ["numberVisits", "restaurantId"],
-
   data: () => ({
     restaurantName: "",
     restaurantPic: "",
   }),
   async created() {
-    const restaurant = await getRestaurantByID(this.restaurantId);
-    this.restaurantName = restaurant.name;
-    this.restaurantPic = restaurant.pictures;
+    try{
+      const restaurant = await getRestaurantByID(this.restaurantId, useUserStore().getUser().token);
+      this.restaurantName = restaurant.name;
+      this.restaurantPic = restaurant.pictures;
+    }catch(e){
+      console.log(e)
+    }
   },
 };
 </script>
@@ -41,9 +49,12 @@ export default {
 .card {
   width: 300px;
   max-width: 300px;
-  height: 350px;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+.card-image{
+  width: 300px;
+  height: 225px;
 }
 .card-content {
   white-space: pre-wrap; /* CSS3 */

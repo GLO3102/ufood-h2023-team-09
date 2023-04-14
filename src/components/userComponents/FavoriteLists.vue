@@ -1,6 +1,7 @@
 <template>
   <div class="box">
-    <div class="title is-2">Favorite Lists</div>
+    <div class="title is-2 has-text-centered">Favorite Lists</div>
+    <div class="title is-4 has-text-centered" v-if="isEmpty">There are no favorite list</div>
     <div class="tags has-addons">
       <a
         @click="createNewList"
@@ -51,7 +52,8 @@ export default defineComponent({
       userLists: {},
       isInputReady: false,
       userStore: useUserStore(),
-      route: useRoute()
+      route: useRoute(),
+      isEmpty: true,
     };
   },
   components: {
@@ -70,6 +72,8 @@ export default defineComponent({
         useUserStore().getUser().token,
         this.userId
       );
+      if (this.userLists.items.length === 0) this.isEmpty = true
+      else this.isEmpty = false
     },
     async createNewList() {
       if (this.isInputReady) {
@@ -94,8 +98,14 @@ export default defineComponent({
           this.$refs.inputName.focus();
         });
       }
+      if (this.userLists.items.length === 0) this.isEmpty = true
+      else this.isEmpty = false
     },
     async moveUp(listId) {
+      this.userLists = await getFavoriteListsByUserId(
+        useUserStore().getUser().token,
+        this.userId
+      );
       if (listId !== this.userLists.items[0].id) {
         let temp = [];
         for (let i = this.userLists.items.length - 1; i >= 0; i--) {
@@ -125,6 +135,10 @@ export default defineComponent({
       }
     },
     async moveDown(listId) {
+      this.userLists = await getFavoriteListsByUserId(
+        useUserStore().getUser().token,
+        this.userId
+      );
       if (listId !== this.userLists.items[this.userLists.items.length - 1].id) {
         let temp = [];
         for (let i = this.userLists.items.length - 1; i >= 0; i--) {
@@ -181,6 +195,8 @@ export default defineComponent({
       useUserStore().getUser().token,
       this.userId
     );
+    if(this.userLists.items.length === 0) this.isEmpty = true
+    else this.isEmpty = false
   },
 });
 </script>
@@ -191,9 +207,6 @@ export default defineComponent({
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-}
-.title.is-2 {
-  text-align: center;
 }
 .tags.has-addons {
   justify-content: center;

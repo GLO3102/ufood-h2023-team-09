@@ -94,7 +94,7 @@
             <div class="has-text-centered">
               <div>
                 <h1 class="title is-2">
-                  There is no visited restaurants<br />
+                  There are no visited restaurants<br />
                 </h1>
               </div>
             </div>
@@ -103,8 +103,8 @@
       </div>
 
       <!-- Liste de liste de restaurants favories ou autre -->
-      <FavoriteLists v-if="isSameUser" :userId="route.params.id" />
-      <VisitedList :visits="userVisits" />
+      <FavoriteLists :userId="route.params.id" />
+      <VisitedList v-if="!isVisitsEmpty" :visits="userVisits" />
       <!-- Follow Modal -->
       <FollowModal
         :id="route.params.id"
@@ -126,7 +126,7 @@ import "vue3-carousel/dist/carousel.css";
 import { ref, onBeforeMount } from "vue";
 import { useUserStore } from "../stores/user";
 import { useRoute } from "vue-router";
-import { getRestaurantByID } from "../api/restaurantApi";
+import { getRestaurantByID, getAllRestaurants } from "../api/restaurantApi";
 import { Carousel, Navigation, Pagination, Slide } from "vue3-carousel";
 import { getUserVisits, getUserById } from "@/api/userApi.js";
 import { followUserApi, unFollowUserApi } from "@/api/followApi.js";
@@ -136,6 +136,7 @@ import { useCookies } from "vue3-cookies";
 const userStore = useUserStore();
 const route = useRoute();
 const isVisitsEmpty = ref(true);
+const restaurants = ref({items:[{id:''}]})
 
 //follow/unfollow button
 const isSameUser = ref(false);
@@ -183,7 +184,7 @@ const user = ref({
 //load visits and resto info
 const restoPicturesInfo = ref([]);
 const userVisits = ref({
-  items: [],
+  items: [{id:''}],
   total: 0,
 });
 onBeforeMount(async () => {
@@ -199,12 +200,22 @@ onBeforeMount(async () => {
     userStore.getUser().token,
     route.params.id
   );
+  restaurants.value = await getAllRestaurants(userStore.getUser().token)
+  let validUserVisits = []
+  for(let restaurant of restaurants.value.items){
+    for(let visit of userVisits.value){
+      if(restaurant.id === visit.restaurant_id){
+        validUserVisits.push(visit)
+      }
+    }
+  }
+  userVisits.value = validUserVisits
   userVisits.value.forEach(async (visit) => {
     isVisitsEmpty.value = false;
     if (!restoPicturesInfo.value.includes(visit.restaurant_id)) {
       restoPicturesInfo.value.push(visit.restaurant_id);
     }
-    const resto = await getRestaurantByID(visit.restaurant_id);
+    const resto = await getRestaurantByID(visit.restaurant_id, userStore.getUser().token);
     visit["restoName"] = resto.name;
   });
   isSameUser.value = userStore.getUser().id === route.params.id;
@@ -251,6 +262,7 @@ const breakpoints = {
   box-shadow: inset 100px 0px 100px -50px #959595,
     inset -100px 0px 100px -50px #959595;
   margin: 0;
+  flex-grow: 1;
 }
 #temporary {
   background-color: aqua;

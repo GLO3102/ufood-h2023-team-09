@@ -14,7 +14,7 @@
     />
     <slot v-if="displayError">
       <div
-        class="box is-flex is-align-items-center is-justify-content-center is-flex-direction-column"
+        class="box is-flex is-align-items-center is-justify-content-center is-flex-direction-column pb-6"
       >
         <figure>
           <img src="../assets/something_went_wrong.png" alt="" />
@@ -211,7 +211,6 @@ import Map from "../components/restaurantComponents/Map.vue";
 import { ref } from "vue";
 import VisitModal from "../components/modals/VisitModal.vue";
 import ListModal from "../components/modals/FavoriteListModal.vue";
-import { useUserStore } from "../stores/user";
 import { useRouter } from "vue-router";
 import { format } from "@/utils/formats.js"
 
@@ -267,6 +266,7 @@ import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel";
 import { getRestaurantByID } from "../api/restaurantApi.js";
 import Schedule from "../components/restaurantComponents/Schedule.vue";
 import "vue3-carousel/dist/carousel.css";
+import { useUserStore } from "../stores/user";
 
 export default {
   components: {
@@ -283,7 +283,7 @@ export default {
   }),
   async created() {
     try {
-      this.resto_data = await getRestaurantByID(this.$route.params.id);
+      this.resto_data = await getRestaurantByID(this.$route.params.id, useUserStore().getUser().token);
     } catch (e) {
       this.displayError = true;
       this.displayErrorMsg = e.message;

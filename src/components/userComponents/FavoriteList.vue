@@ -26,7 +26,7 @@
           >&#8595;</a
         >
         <a
-          v-if="isOptionsReady && route.params.id === userStore.getUser().id"
+          v-if="isOptionsReady"
           @click="modifyName($event)"
           class="tag is-small has-background-grey-lighter"
           >Rename</a
@@ -34,14 +34,14 @@
         <a
           v-if="
             !isInputReady &&
-            isOptionsReady &&
-            route.params.id === userStore.getUser().id
+            isOptionsReady
           "
           @click="$emit('deleteList', listId)"
           class="tag is-small is-danger"
           >Delete</a
         >
         <a
+          v-if="route.params.id === userStore.getUser().id"
           @click="toggleOptions"
           class="tag is-small has-background-grey-lighter"
           >&#8226;&#8226;&#8226;</a
@@ -88,6 +88,7 @@ export default defineComponent({
       isOptionsReady: false,
       userStore: useUserStore(),
       route: useRoute(),
+      isRestoAdded: false,
     };
   },
   components: {
@@ -112,6 +113,7 @@ export default defineComponent({
         useUserStore().getUser().token,
         this.listId
       );
+      this.isRestoAdded = false;
     },
     async modifyName(event) {
       if (this.isInputReady) {
@@ -142,6 +144,10 @@ export default defineComponent({
       }
     },
     async moveUp(restaurantId) {
+      this.list = await getFavoriteListById(
+        useUserStore().getUser().token,
+        this.listId
+      );
       if (restaurantId !== this.list.restaurants[0].id) {
         let temp = [];
         for (let i = this.list.restaurants.length - 1; i >= 0; i--) {
@@ -181,6 +187,10 @@ export default defineComponent({
       }
     },
     async moveDown(restaurantId) {
+      this.list = await getFavoriteListById(
+        useUserStore().getUser().token,
+        this.listId
+      );
       if (
         restaurantId !==
         this.list.restaurants[this.list.restaurants.length - 1].id

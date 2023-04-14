@@ -96,7 +96,7 @@
 import { ref, computed, watch, onBeforeMount } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
-import { getRestaurants } from "../api/restaurantApi";
+import { getAllRestaurants, getRestaurants } from "../api/restaurantApi";
 import { getSimilitude } from "../utils/formats";
 
 const router = useRouter();
@@ -108,7 +108,7 @@ let suggestions = ref({items: []});
 let words = []
 
 onBeforeMount(async() => {
-  restaurants.value = await getRestaurants(0, 1000, '', [], [], 0, 0)
+  restaurants.value = await getAllRestaurants(userStore.getUser().token)
   getDictionnaries(await restaurants.value.items)
 })
 

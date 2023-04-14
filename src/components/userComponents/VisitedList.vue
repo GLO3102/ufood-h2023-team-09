@@ -14,7 +14,11 @@
             :visit="visit"
           />
           <div>
-            <span class="has-text-weight-bold">{{ visit.restoName }}</span>
+            <span 
+              @click="$router.push(`/restaurant/${visit.restaurant_id}`)" 
+              class="has-text-weight-bold is-clickable"
+              >{{ visit.restoName }}
+            </span>
             <br />
             <span>{{ formatDate(visit.date) }}</span>
           </div>

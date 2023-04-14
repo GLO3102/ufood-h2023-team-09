@@ -13,19 +13,18 @@
       >&#8595;</a
     >
     <router-link
-      class="tag is-info is-small"
+      class="tag is-info is-small name"
       :to="`/restaurant/${restaurant.id}`"
       >{{ restaurant.name }}</router-link
     >
     <a
-      v-if="
-        isOptionsReady &&
-        (route.params.id === userStore.getUser().id || route.name === 'Home')
-      "
+      v-if="isOptionsReady"
       @click="$emit('removeItem', restaurant.id)"
       class="tag is-delete is-small is-danger"
     ></a>
-    <a @click="toggleOptions" class="tag is-small has-background-grey-lighter"
+    <a 
+      v-if="(route.params.id === userStore.getUser().id || route.name !== 'User')" 
+      @click="toggleOptions" class="tag is-small has-background-grey-lighter options"
       >&#8226;&#8226;&#8226;</a
     >
   </div>
@@ -34,6 +33,8 @@
 <script>
 import { defineComponent } from "vue";
 import { getRestaurantByID } from "../../api/restaurantApi";
+import { useUserStore } from "../../stores/user";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   name: "FavoriteListItem",
@@ -41,6 +42,8 @@ export default defineComponent({
     return {
       restaurant: Object,
       isOptionsReady: false,
+      userStore: useUserStore(),
+      route: useRoute(),
     };
   },
   props: {
@@ -53,14 +56,19 @@ export default defineComponent({
   },
   emits: ["removeItem", "moveUp", "moveDown"],
   async created() {
-    this.restaurant = await getRestaurantByID(this.restaurantId);
+    try{
+      this.restaurant = await getRestaurantByID(this.restaurantId, useUserStore().getUser().token);
+    }catch(e){
+      console.log(e)
+    }
   },
 });
 </script>
-<script setup>
-import { useRoute } from "vue-router";
-import { useUserStore } from "../../stores/user";
-
-const userStore = useUserStore();
-const route = useRoute();
-</script>
+<style scoped>
+.name{
+  max-width: 75%;
+  white-space: normal;
+  height: auto;  
+  padding-block: 3px;
+}
+</style>

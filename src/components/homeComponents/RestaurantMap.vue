@@ -1,6 +1,6 @@
 <template>
     <div class="box mb-6">
-      <h1 class="title">Where to find us</h1>
+      <h1 class="title">Where to find it all</h1>
       <br /><br />
       <div id="map" style="height: 600px; width: 100%"></div>
     </div>
@@ -14,7 +14,7 @@
   });
 
   let map;
-  let directions;
+  let selectedMarker;
   const center = ref(props.restaurants[0].location.coordinates);
   const zoom = ref(10);
 
@@ -30,10 +30,15 @@
 
     updateMarkers();
 
-    directions = new MapboxDirections({
+    var directions = new MapboxDirections({
       accessToken: mapboxgl.accessToken,
+      interactive: false
     });
     map.addControl(directions, "top-left");
+    map.on("click", () => {
+      directions.setDestination([selectedMarker.lng, selectedMarker.lat]);
+
+    });
     
 
     if (navigator.geolocation) {
@@ -48,6 +53,7 @@
             .then((data) => {
               const address = data.features[0].place_name;
               directions.setOrigin([longitude, latitude]);
+
               center.value =[longitude, latitude] 
               map.flyTo({
                 center: center.value,
@@ -74,14 +80,11 @@
 
   watch(() => props.restaurants, () => {
     zoom.value = map.getZoom()
-    console.log(center.value, zoom.value)
     updateMarkers();
   });
 
   function updateMarkers() {
-    console.log(center.value, zoom.value)
     const markers = document.querySelectorAll('.mapboxgl-marker');
-
     markers.forEach(marker => {
     marker.remove();
     });
@@ -99,11 +102,10 @@
         .addTo(map);
 
         marker.getElement().addEventListener('click', () => {
-            console.log("MARKER CLICKED");     
-            directions.setDestination(marker.getLngLat());
-            console.log(marker.getLngLat());
-            directions.query();
+            selectedMarker = marker.getLngLat()
 
+
+ 
     });
     });
   }

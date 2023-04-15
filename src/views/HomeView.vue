@@ -12,6 +12,7 @@ let completeList = ref({})
 let completeListCopy = []
 let completeListFiltered = ref({})
 let words = []
+let geolocationAllowed = false;
 
 const page = ref(0);
 const pageLimit = ref(12);
@@ -80,6 +81,7 @@ onBeforeMount(async()=>{
 
   await getLocation()
   if(lon.value !== 0 && lat.value !== 0) sortList()
+
   resetList(0);
 })
 onMounted(() => input.value.focus());
@@ -131,6 +133,7 @@ async function getLocation() {
     const position = await new Promise(function (resolve, reject) {
       navigator.geolocation.getCurrentPosition(resolve, showGetLocationError);
     });
+    geolocationAllowed = true;
     lat.value = position.coords.latitude;
     lon.value = position.coords.longitude;
   } else {
@@ -140,6 +143,7 @@ async function getLocation() {
 async function showGetLocationError(error) {
   switch (error.code) {
     case error.PERMISSION_DENIED:
+    geolocationAllowed = false;
       alert("User denied the request for Geolocation.");
       break;
     case error.POSITION_UNAVAILABLE:
@@ -159,16 +163,17 @@ let showMap = ref(false);
 
 async function toggleMapMode() {
   if (lat.value === 0 && lon.value === 0) {
-    await getLocation();
+    getLocation(); 
+    if(geolocationAllowed){
+          await getLocation();
+    }
     completeList.value.items = Array.from(completeListCopy)
     sortList()
   } else {
     lat.value = 0;
     lon.value = 0;
-    completeList.value.items = completeListCopy
   }
   showMap.value = !showMap.value;
-  resetList(0);
 }
 
 async function toggleLocation() {
@@ -281,6 +286,7 @@ watch(searchFilter, async (newValue, oldValue) => {
         <div class="is-flex-wrap-nowrap">
           <button
             class="button"
+            :class="{ 'is-active': showMap }"
             @click="toggleMapMode()"
           >
             MapMode
@@ -380,7 +386,7 @@ watch(searchFilter, async (newValue, oldValue) => {
       role="navigation"
       aria-label="pagination"
     >
-      <ul class="pagination-list">
+      <ul class="pagination-list" v-if="!showMap">
         <li v-if="page > 1">
           <a
             class="pagination-link"

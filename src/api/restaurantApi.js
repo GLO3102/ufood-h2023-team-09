@@ -1,4 +1,5 @@
-const endpoint = "https://ufoodapi.herokuapp.com/unsecure/restaurants";
+const UNSECURE_ENDPOINT = "https://ufoodapi.herokuapp.com/unsecure/restaurants";
+const ENDPOINT = "https://ufoodapi.herokuapp.com/restaurants";
 
 export const getRestaurants = async (
   page,
@@ -27,9 +28,9 @@ export const getRestaurants = async (
     latStr = `&lat=${lat}`;
     lonStr = `&lon=${lon}`;
   }
-  const URL = `${endpoint}?page=${page}&limit=${limit}${genresStr}${rangesStr}${searchStr}${latStr}${lonStr}`;
+  const URL = `${UNSECURE_ENDPOINT}?page=${page}&limit=${limit}${genresStr}${rangesStr}${searchStr}${latStr}${lonStr}`;
   const response = await fetch(URL, {
-    Method: "GET",
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
@@ -42,10 +43,61 @@ export const getRestaurants = async (
   return response.json();
 };
 
-export const getRestaurantByID = async (id) => {
-  const response = await fetch(`${endpoint}/${id}`, {
-    Method: "GET",
+export const getAllRestaurants = async (token) => {
+  let headers = {
+    "Content-Type": "application/json",
+  }
+  let URL = ''
+  if (token !== "") {
+    headers.Authorization = token
+    URL = ENDPOINT
+  }
+  else URL = UNSECURE_ENDPOINT
+
+  let allRestaurants = { items: [], total: 0 }
+
+  let response = await fetch(URL, {
+    method: "GET",
+    headers,
   });
+  if (response.status !== 200) {
+    throw new Error(
+      `Something went wrong : request returned status ${response.status}...`
+    );
+  }
+  let total = (await response.json()).total
+  response = await fetch(`${URL}?limit=${total}`, {
+    method: "GET",
+    headers,
+  });
+  if (response.status !== 200) {
+    throw new Error(
+      `Something went wrong : request returned status ${response.status}...`
+    );
+  }
+  allRestaurants = await response.json()
+  return allRestaurants
+};
+
+export const getRestaurantByID = async (id, token) => {
+  let headers = {
+    "Content-Type": "application/json",
+  }
+
+  let URL = ''
+  if(token !== ""){
+    headers.Authorization = token
+    URL = ENDPOINT
+  }
+  else URL = UNSECURE_ENDPOINT 
+
+  const response = await fetch(`${URL}/${id}`, {
+    method: "GET",
+    headers,
+  }).catch();
+  if(response.status === 404){
+    throw new Error("Restaurant Not Found")
+  }
   if (response.status !== 200) {
     throw new Error(
       `Something went wrong : request returned status ${response.status}...`

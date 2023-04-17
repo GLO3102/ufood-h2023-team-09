@@ -10,9 +10,10 @@
             >
               <div>
                 <span>Visit for : </span>
-                <span class="has-text-weight-bold">
-                  {{ visit.restoName }}
-                </span>
+                <span 
+                  class="has-text-weight-bold is-clickable"
+                  @click="$router.push(`/restaurant/${visit.restaurant_id}`)" 
+                >{{ visit.restoName }}</span>
               </div>
             </div>
             <span>Date:</span>
@@ -38,7 +39,7 @@
               <span>Comment:</span>
               <textarea
                 class="textarea has-fixed-size"
-                placeholder="Add a comment"
+                placeholder="No comment"
                 :value="visit.comment"
                 disabled
               ></textarea>

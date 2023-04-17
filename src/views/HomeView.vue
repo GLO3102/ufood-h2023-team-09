@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onBeforeMount, computed, ref, watch } from "vue";
-import { getRestaurants } from "../api/restaurantApi.js";
+import { getRestaurants, getAllRestaurants } from "../api/restaurantApi.js";
 import RestaurantCard from "../components/homeComponents/RestaurantCard.vue";
 import { getSimilitude, format, accentLess } from "../utils/formats.js"
 import { useUserStore } from "@/stores/user";
@@ -75,7 +75,7 @@ function resetList(newPage) {
   window.scrollTo(0, 0);
 }
 onBeforeMount(async()=>{
-  completeList.value = await getRestaurants(0, 1000, '', [], [], 0, 0)
+  completeList.value = await getAllRestaurants(userStore.getUser().token)
   getDictionnaries(await completeList.value.items)
   completeListCopy = Array.from(completeList.value.items)
 

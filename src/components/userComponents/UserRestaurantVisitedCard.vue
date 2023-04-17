@@ -47,13 +47,13 @@ export default {
 
 <style scoped>
 .card {
-  width: 300px;
-  max-width: 300px;
+  width: 280px;
+  max-width: 280px;
   margin-top: 20px;
   margin-bottom: 20px;
 }
 .card-image{
-  width: 300px;
+  width: 280px;
   height: 225px;
 }
 .card-content {

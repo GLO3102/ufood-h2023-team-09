@@ -72,7 +72,6 @@ function resetList(newPage) {
   restaurantsList.value.items = temp.slice(first, first+pageLimit.value)
   restaurantsList.value.total = temp.length
   completeListFiltered.value = { items: [...temp] };
-  window.scrollTo(0, 0);
 }
 onBeforeMount(async()=>{
   completeList.value = await getAllRestaurants(userStore.getUser().token)
@@ -85,6 +84,9 @@ onBeforeMount(async()=>{
   resetList(0);
 })
 onMounted(() => input.value.focus());
+function scrollToTop(){
+  window.scrollTo(0, 0);
+}
 
 // Filter by Price Range ---------------------------------------------------------------------------
 const rangeFilters = ref([]);
@@ -289,7 +291,7 @@ watch(searchFilter, async (newValue, oldValue) => {
             :class="{ 'is-active': showMap }"
             @click="toggleMapMode()"
           >
-            MapMode
+            Map Mode
           </button>
           <!-- Geo-Location Toggle Button -->
           <button
@@ -436,6 +438,10 @@ watch(searchFilter, async (newValue, oldValue) => {
         </li>
       </ul>
     </nav>
+    <div class="is-flex is-justify-content-center is-align-items-center mb-5">
+      <button class="button is-centered" @click="scrollToTop()">Back to the top</button>
+    </div>
+    
     <div class="has-text-centered pb-5">GLO-3102 Home</div>
     <div class="has-text-centered pb-5">
       <a
@@ -510,5 +516,11 @@ watch(searchFilter, async (newValue, oldValue) => {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+.field:not(:last-child) {
+    margin-bottom: 0;
+}
+.restaurant-map{
+  margin-inline: 2vw;
 }
 </style>

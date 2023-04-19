@@ -93,19 +93,17 @@ function updateMarkers() {
       restaurant.location.coordinates[0],
       restaurant.location.coordinates[1]
     );
-    const popup = new mapboxgl.Popup().setHTML(restaurant.name);
+    
+    const popup = new mapboxgl.Popup().setHTML(`<a href="/restaurant/${restaurant.id}">${restaurant.name}</a><address>${restaurant.address}</a>`);
     const marker = new mapboxgl.Marker({
       color: "#8F3BDE",
     })
       .setLngLat(lngLat)
-      .setPopup(new mapboxgl.Popup().setHTML(restaurant.name))
+      .setPopup(popup)
       .addTo(map);
 
     marker.getElement().addEventListener('click', () => {
       selectedMarker = marker.getLngLat()
-
-
-
     });
   });
 }

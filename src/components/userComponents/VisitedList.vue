@@ -14,8 +14,8 @@
             :visit="visit"
           />
           <div>
-            <span 
-              @click="$router.push(`/restaurant/${visit.restaurant_id}`)" 
+            <span
+              @click="$router.push(`/restaurant/${visit.restaurant_id}`)"
               class="has-text-weight-bold is-clickable"
               >{{ visit.restoName }}
             </span>

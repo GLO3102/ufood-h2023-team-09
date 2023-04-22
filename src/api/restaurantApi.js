@@ -46,15 +46,14 @@ export const getRestaurants = async (
 export const getAllRestaurants = async (token) => {
   let headers = {
     "Content-Type": "application/json",
-  }
-  let URL = ''
+  };
+  let URL = "";
   if (token !== "") {
-    headers.Authorization = token
-    URL = ENDPOINT
-  }
-  else URL = UNSECURE_ENDPOINT
+    headers.Authorization = token;
+    URL = ENDPOINT;
+  } else URL = UNSECURE_ENDPOINT;
 
-  let allRestaurants = { items: [], total: 0 }
+  let allRestaurants = { items: [], total: 0 };
 
   let response = await fetch(URL, {
     method: "GET",
@@ -65,7 +64,7 @@ export const getAllRestaurants = async (token) => {
       `Something went wrong : request returned status ${response.status}...`
     );
   }
-  let total = (await response.json()).total
+  let total = (await response.json()).total;
   response = await fetch(`${URL}?limit=${total}`, {
     method: "GET",
     headers,
@@ -75,28 +74,27 @@ export const getAllRestaurants = async (token) => {
       `Something went wrong : request returned status ${response.status}...`
     );
   }
-  allRestaurants = await response.json()
-  return allRestaurants
+  allRestaurants = await response.json();
+  return allRestaurants;
 };
 
 export const getRestaurantByID = async (id, token) => {
   let headers = {
     "Content-Type": "application/json",
-  }
+  };
 
-  let URL = ''
-  if(token !== ""){
-    headers.Authorization = token
-    URL = ENDPOINT
-  }
-  else URL = UNSECURE_ENDPOINT 
+  let URL = "";
+  if (token !== "") {
+    headers.Authorization = token;
+    URL = ENDPOINT;
+  } else URL = UNSECURE_ENDPOINT;
 
   const response = await fetch(`${URL}/${id}`, {
     method: "GET",
     headers,
   }).catch();
-  if(response.status === 404){
-    throw new Error("Restaurant Not Found")
+  if (response.status === 404) {
+    throw new Error("Restaurant Not Found");
   }
   if (response.status !== 200) {
     throw new Error(

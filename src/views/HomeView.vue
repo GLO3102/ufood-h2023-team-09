@@ -1,90 +1,96 @@
 <script setup>
 import { onMounted, onBeforeMount, computed, ref, watch } from "vue";
+import SearchUser from "../components/userComponents/SearchUserComponent.vue";
 import { getRestaurants, getAllRestaurants } from "../api/restaurantApi.js";
 import RestaurantCard from "../components/homeComponents/RestaurantCard.vue";
-import { getSimilitude, format, accentLess } from "../utils/formats.js"
+import { getSimilitude, format, accentLess } from "../utils/formats.js";
 import { useUserStore } from "@/stores/user";
 import RestaurantMap from "../components/homeComponents/RestaurantMap.vue";
 const userStore = useUserStore();
 
 let restaurantsList = ref({ total: 0 });
-let completeList = ref({})
-let completeListCopy = []
-let completeListFiltered = ref({})
-let words = []
+let completeList = ref({});
+let completeListCopy = [];
+let completeListFiltered = ref({});
+let words = [];
 let geolocationAllowed = false;
 
 const page = ref(0);
 const pageLimit = ref(12);
 const pagesTotal = computed(() => {
-  let result = restaurantsList.value.total / pageLimit.value
-  let rounded = Math.floor(restaurantsList.value.total / pageLimit.value)
-  if(result !== rounded) rounded+=1
+  let result = restaurantsList.value.total / pageLimit.value;
+  let rounded = Math.floor(restaurantsList.value.total / pageLimit.value);
+  if (result !== rounded) rounded += 1;
   return rounded;
 });
 
 // Initialization  ---------------------------------------------------------------------------------
-function getDictionnaries(list){
-  for(let restaurant of list){
-    words = words.concat(restaurant.name.split(" "))
-    words.push(restaurant.name.replace('Restaurant', ''))
-    for(let genre of restaurant.genres){
-      genres.value[genre] = false
+function getDictionnaries(list) {
+  for (let restaurant of list) {
+    words = words.concat(restaurant.name.split(" "));
+    words.push(restaurant.name.replace("Restaurant", ""));
+    for (let genre of restaurant.genres) {
+      genres.value[genre] = false;
     }
   }
-  words.filter(word => word.length > 0)
-  words = Array.from(new Set(words))
+  words.filter((word) => word.length > 0);
+  words = Array.from(new Set(words));
 }
 function resetList(newPage) {
   page.value = newPage;
-  const first = page.value*pageLimit.value
+  const first = page.value * pageLimit.value;
 
-  let isRangeActive = false
-  for(let range in ranges.value){
-    if(ranges.value[range]){
-      isRangeActive = true
-      break
+  let isRangeActive = false;
+  for (let range in ranges.value) {
+    if (ranges.value[range]) {
+      isRangeActive = true;
+      break;
     }
   }
-  let isGenreActive = false
-  for(let genre in genres.value){
-    if(genres.value[genre]){
-      isGenreActive = true
-      break
+  let isGenreActive = false;
+  for (let genre in genres.value) {
+    if (genres.value[genre]) {
+      isGenreActive = true;
+      break;
     }
   }
 
-  let temp = []
-  for(let restaurant of completeList.value.items){
-    if(!isRangeActive || ranges.value[restaurant.price_range]){
-      let isGenreMatching = false
-      for(let genre of restaurant.genres){
-        if(genres.value[genre]){
-          isGenreMatching = true
-          break
-        } 
+  let temp = [];
+  for (let restaurant of completeList.value.items) {
+    if (!isRangeActive || ranges.value[restaurant.price_range]) {
+      let isGenreMatching = false;
+      for (let genre of restaurant.genres) {
+        if (genres.value[genre]) {
+          isGenreMatching = true;
+          break;
+        }
       }
-      if(!isGenreActive || isGenreMatching){
-        if(accentLess(restaurant.name.toLowerCase()).includes(accentLess(searchFilter.value.toLowerCase()))) temp.push(restaurant)
+      if (!isGenreActive || isGenreMatching) {
+        if (
+          accentLess(restaurant.name.toLowerCase()).includes(
+            accentLess(searchFilter.value.toLowerCase())
+          )
+        )
+          temp.push(restaurant);
       }
     }
   }
-  restaurantsList.value.items = temp.slice(first, first+pageLimit.value)
-  restaurantsList.value.total = temp.length
+  restaurantsList.value.items = temp.slice(first, first + pageLimit.value);
+  restaurantsList.value.total = temp.length;
   completeListFiltered.value = { items: [...temp] };
 }
-onBeforeMount(async()=>{
-  completeList.value = await getAllRestaurants(userStore.getUser().token)
-  getDictionnaries(await completeList.value.items)
-  completeListCopy = Array.from(completeList.value.items)
+onBeforeMount(async () => {
+  completeList.value = await getAllRestaurants(userStore.getUser().token);
+  getDictionnaries(await completeList.value.items);
+  completeListCopy = Array.from(completeList.value.items);
 
-  await getLocation()
-  if(lon.value !== 0 && lat.value !== 0) sortList()
+  await getLocation();
+  if (lon.value !== 0 && lat.value !== 0) sortList();
 
   resetList(0);
-})
+});
 onMounted(() => input.value.focus());
-function scrollToTop(){
+function scrollToTop() {
   window.scrollTo(0, 0);
 }
 
@@ -108,7 +114,7 @@ async function rangeFilter(button) {
 
 // Filter by Genres ----------------------------------------------------------------------------------
 const genreFilters = ref([]);
-const genres = ref({})
+const genres = ref({});
 // Dropdown genre menu
 let isDropdownActive = ref(false);
 function dropDownToggle() {
@@ -129,7 +135,6 @@ async function genreFilter(genre) {
 let lat = ref(0);
 let lon = ref(0);
 
-
 async function getLocation() {
   if (navigator.geolocation) {
     const position = await new Promise(function (resolve, reject) {
@@ -145,7 +150,7 @@ async function getLocation() {
 async function showGetLocationError(error) {
   switch (error.code) {
     case error.PERMISSION_DENIED:
-    geolocationAllowed = false;
+      geolocationAllowed = false;
       alert("User denied the request for Geolocation.");
       break;
     case error.POSITION_UNAVAILABLE:
@@ -165,12 +170,12 @@ let showMap = ref(false);
 
 async function toggleMapMode() {
   if (lat.value === 0 && lon.value === 0) {
-    getLocation(); 
-    if(geolocationAllowed){
-          await getLocation();
+    getLocation();
+    if (geolocationAllowed) {
+      await getLocation();
     }
-    completeList.value.items = Array.from(completeListCopy)
-    sortList()
+    completeList.value.items = Array.from(completeListCopy);
+    sortList();
   } else {
     lat.value = 0;
     lon.value = 0;
@@ -181,109 +186,134 @@ async function toggleMapMode() {
 async function toggleLocation() {
   if (lat.value === 0 && lon.value === 0) {
     await getLocation();
-    completeList.value.items = Array.from(completeListCopy)
-    sortList()
+    completeList.value.items = Array.from(completeListCopy);
+    sortList();
   } else {
     lat.value = 0;
     lon.value = 0;
-    completeList.value.items = completeListCopy
+    completeList.value.items = completeListCopy;
   }
   resetList(0);
 }
-function sortList(){
-  for(let restaurant of completeList.value.items){
-    restaurant.distance = getDistanceFrom(restaurant.location.coordinates)
+function sortList() {
+  for (let restaurant of completeList.value.items) {
+    restaurant.distance = getDistanceFrom(restaurant.location.coordinates);
   }
-  if(lat.value === 0 && lon.value === 0){
-    completeList.value.items.sort((a, b)=> b.distance - a.distance)
-  }else{
-    completeList.value.items.sort((a, b)=> a.distance - b.distance)
+  if (lat.value === 0 && lon.value === 0) {
+    completeList.value.items.sort((a, b) => b.distance - a.distance);
+  } else {
+    completeList.value.items.sort((a, b) => a.distance - b.distance);
   }
 }
-function getDistanceFrom(destination){
-  let latDif = destination[0] - lat.value 
-  if(latDif < 0) latDif = -latDif
-  let lonDif = destination[1] - lon.value
-  if(lonDif < 0) lonDif = -lonDif
-  return latDif + lonDif
+function getDistanceFrom(destination) {
+  let latDif = destination[0] - lat.value;
+  if (latDif < 0) latDif = -latDif;
+  let lonDif = destination[1] - lon.value;
+  if (lonDif < 0) lonDif = -lonDif;
+  return latDif + lonDif;
 }
 
 // Search auto-complete ------------------------------------------------------------------
 const searchFilter = ref("");
 const input = ref(null);
-let suggestions = ref({items: []});
+let suggestions = ref({ items: [] });
 let isSearchActive = ref(false);
 
-const searchParam = userStore.getSearchParam()
-if (searchParam !== '') {
+const searchParam = userStore.getSearchParam();
+if (searchParam !== "") {
   searchFilter.value = searchParam;
-  userStore.setSearchParam('')
+  userStore.setSearchParam("");
 }
 
-function getClosests(str){
-  if(str.length === 1) return [str.toLowerCase()]
+function getClosests(str) {
+  if (str.length === 1) return [str.toLowerCase()];
 
-  let closests = []
-  for(let word of words){
-    let similitude = getSimilitude(str.toLowerCase(), word.toLowerCase())
-    if(similitude > 0.5) closests.push({'value': word.toLowerCase(), 'similitude': similitude})
+  let closests = [];
+  for (let word of words) {
+    let similitude = getSimilitude(str.toLowerCase(), word.toLowerCase());
+    if (similitude > 0.5)
+      closests.push({ value: word.toLowerCase(), similitude: similitude });
   }
-  closests.sort((word1, word2)=> word1.similitude - word2.similitude)
-  if(closests.length === 0) return [str.toLowerCase()]
-  return closests.map(word=>word.value)
+  closests.sort((word1, word2) => word1.similitude - word2.similitude);
+  if (closests.length === 0) return [str.toLowerCase()];
+  return closests.map((word) => word.value);
 }
 
 watch(searchFilter, async (newValue, oldValue) => {
-  if(newValue === '' || newValue === null) isSearchActive.value = false
-  else isSearchActive.value = true
-   
-  suggestions.value.items = []
-  let values = getClosests(newValue)
-  values = Array.from(new Set(values))
-  values = values.slice(0,5)
-  for(let value of values){
-    let list = await getRestaurants(0, 10, value, genreFilters.value, rangeFilters.value, lat.value, lon.value)
-    suggestions.value.items = suggestions.value.items.concat(await list.items) 
+  if (newValue === "" || newValue === null) isSearchActive.value = false;
+  else isSearchActive.value = true;
+
+  suggestions.value.items = [];
+  let values = getClosests(newValue);
+  values = Array.from(new Set(values));
+  values = values.slice(0, 5);
+  for (let value of values) {
+    let list = await getRestaurants(
+      0,
+      10,
+      value,
+      genreFilters.value,
+      rangeFilters.value,
+      lat.value,
+      lon.value
+    );
+    suggestions.value.items = suggestions.value.items.concat(await list.items);
   }
-  suggestions.value.items = Array.from(new Set(suggestions.value.items.map(resto => resto.id))).map(id => {
-    return suggestions.value.items.find(resto => resto.id === id)
-  })
-  suggestions.value.items = suggestions.value.items.slice(0, 10)
-  if(suggestions.value.items.length === 0 || searchFilter.value === suggestions.value.items[0].name) isSearchActive.value = false
-})
+  suggestions.value.items = Array.from(
+    new Set(suggestions.value.items.map((resto) => resto.id))
+  ).map((id) => {
+    return suggestions.value.items.find((resto) => resto.id === id);
+  });
+  suggestions.value.items = suggestions.value.items.slice(0, 10);
+  if (
+    suggestions.value.items.length === 0 ||
+    searchFilter.value === suggestions.value.items[0].name
+  )
+    isSearchActive.value = false;
+});
 </script>
 
 <template>
   <div class="home-container" @click="closeDropdown()">
     <div class="search-filter">
-      <div class="search field has-addons dropdown" :class="{ 'is-active': isSearchActive }">
+      <div
+        class="search field has-addons dropdown"
+        :class="{ 'is-active': isSearchActive }"
+      >
         <p class="control">
           <input
             ref="input"
-            @keyup.enter="resetList(0); isSearchActive = false"
+            @keyup.enter="
+              resetList(0);
+              isSearchActive = false;
+            "
             v-model="searchFilter"
-            class="input"
+            class="input is-link"
             type="search"
-            placeholder="Search..."
+            placeholder="Search restaurents..."
           />
         </p>
+        <SearchUser />
         <p class="control">
           <button class="button" @click="resetList(0)">&#x1F50E;</button>
         </p>
         <div class="dropdown-menu">
           <div class="dropdown-content">
             <a
-              v-for="restaurant in suggestions.items" 
-              class="dropdown-item" 
+              v-for="restaurant in suggestions.items"
+              class="dropdown-item"
               :key="restaurant.id"
-              @click="searchFilter = restaurant.name; resetList(0)"
+              @click="
+                searchFilter = restaurant.name;
+                resetList(0);
+              "
             >
-              {{restaurant.name}}
+              {{ restaurant.name }}
             </a>
           </div>
         </div>
       </div>
-      
+
       <div class="filter">
         <div class="is-flex-wrap-nowrap">
           <button
@@ -340,13 +370,17 @@ watch(searchFilter, async (newValue, oldValue) => {
         </div>
         <!-- Range filter buttons -->
         <div class="is-flex-wrap-nowrap field has-addons">
-          <p class="control" v-for="range in Object.entries(ranges)" :key="range[0]">
+          <p
+            class="control"
+            v-for="range in Object.entries(ranges)"
+            :key="range[0]"
+          >
             <button
               class="button"
               :class="{ 'is-active': range[1] }"
               @click="rangeFilter(range[0])"
             >
-            {{ '$'.repeat(range[0]) }}
+              {{ "$".repeat(range[0]) }}
             </button>
           </p>
         </div>
@@ -375,7 +409,7 @@ watch(searchFilter, async (newValue, oldValue) => {
     </div>
     <!-- Dynamically generated restaurants list -->
     <div class="restaurant-map" ref="restaurantMap" v-if="showMap">
-      <RestaurantMap :restaurants="completeListFiltered.items"/>
+      <RestaurantMap :restaurants="completeListFiltered.items" />
     </div>
     <!-- Shows a message if no match is found -->
     <h1 v-if="completeList.total === 0" class="title is-3 has-text-centered">
@@ -439,9 +473,11 @@ watch(searchFilter, async (newValue, oldValue) => {
       </ul>
     </nav>
     <div class="is-flex is-justify-content-center is-align-items-center mb-5">
-      <button class="button is-centered" @click="scrollToTop()">Back to the top</button>
+      <button class="button is-centered" @click="scrollToTop()">
+        Back to the top
+      </button>
     </div>
-    
+
     <div class="has-text-centered pb-5">GLO-3102 Home</div>
     <div class="has-text-centered pb-5">
       <a
@@ -518,9 +554,9 @@ watch(searchFilter, async (newValue, oldValue) => {
   justify-content: center;
 }
 .field:not(:last-child) {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
-.restaurant-map{
+.restaurant-map {
   margin-inline: 2vw;
 }
 </style>

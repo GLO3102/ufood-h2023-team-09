@@ -7,7 +7,9 @@
         <span class="title is-5">{{ this.restoName }}&nbsp;</span>
         <span class="title is-5"> to a favorite list </span>
       </div>
-      <div class="title is-6 has-text-centered" v-if="isEmpty">There are no favorite list</div>
+      <div class="title is-6 has-text-centered" v-if="isEmpty">
+        There are no favorite list
+      </div>
       <div class="is-flex is-justify-content-center pb-5">
         <div class="tags has-addons">
           <a

@@ -212,7 +212,7 @@ import { ref } from "vue";
 import VisitModal from "../components/modals/VisitModal.vue";
 import ListModal from "../components/modals/FavoriteListModal.vue";
 import { useRouter } from "vue-router";
-import { format } from "@/utils/formats.js"
+import { format } from "@/utils/formats.js";
 
 let showVisitModal = ref(false);
 const userStore = useUserStore();
@@ -283,7 +283,10 @@ export default {
   }),
   async created() {
     try {
-      this.resto_data = await getRestaurantByID(this.$route.params.id, useUserStore().getUser().token);
+      this.resto_data = await getRestaurantByID(
+        this.$route.params.id,
+        useUserStore().getUser().token
+      );
     } catch (e) {
       this.displayError = true;
       this.displayErrorMsg = e.message;

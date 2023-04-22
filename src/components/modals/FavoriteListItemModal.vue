@@ -99,7 +99,10 @@ export default defineComponent({
     async addRestaurantToList(listId) {
       try {
         const restaurantId = this.restoId;
-        const restaurant = await getRestaurantByID(restaurantId, useUserStore().getUser().token);
+        const restaurant = await getRestaurantByID(
+          restaurantId,
+          useUserStore().getUser().token
+        );
         const existingRestaurant = this.list.restaurants.find(
           (r) => r.id === restaurant.id
         );

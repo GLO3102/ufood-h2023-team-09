@@ -32,10 +32,7 @@
           >Rename</a
         >
         <a
-          v-if="
-            !isInputReady &&
-            isOptionsReady
-          "
+          v-if="!isInputReady && isOptionsReady"
           @click="$emit('deleteList', listId)"
           class="tag is-small is-danger"
           >Delete</a
@@ -100,7 +97,7 @@ export default defineComponent({
   emits: ["deleteList", "moveUp", "moveDown"],
   methods: {
     toggleOptions() {
-      if(this.isOptionsReady) this.isInputReady = false;
+      if (this.isOptionsReady) this.isInputReady = false;
       this.isOptionsReady = !this.isOptionsReady;
     },
     async removeItem(restaurantId) {
@@ -129,7 +126,7 @@ export default defineComponent({
             this.listId
           );
           this.isInputReady = false;
-        }else{
+        } else {
           this.$nextTick(() => {
             this.$refs.rename.focus();
           });

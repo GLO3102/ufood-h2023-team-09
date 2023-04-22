@@ -43,7 +43,9 @@
             </div>
             <div class="is-align-self-center">
               <span class="has-text-success" v-if="isSuccess">Success</span>
-              <span class="has-text-danger" v-if="isError">A rating must be set</span>
+              <span class="has-text-danger" v-if="isError"
+                >A rating must be set</span
+              >
             </div>
           </div>
         </div>
@@ -58,11 +60,11 @@ import { useUserStore } from "@/stores/user";
 import { postVisit } from "@/api/userApi.js";
 
 const today = new Date();
-let date = today.getDate().toString()
-if(date.length === 1) date = `0${date}`
-let month = (today.getMonth()+1).toString()
-if(month.length === 1) month = `0${month}`
-const year = today.getFullYear().toString()
+let date = today.getDate().toString();
+if (date.length === 1) date = `0${date}`;
+let month = (today.getMonth() + 1).toString();
+if (month.length === 1) month = `0${month}`;
+const year = today.getFullYear().toString();
 
 const userStore = useUserStore();
 const isSuccess = ref(false);
@@ -84,21 +86,21 @@ async function save() {
     rating: rating.value,
     comment: comment.value,
   };
-  if(rating.value !== 0){
+  if (rating.value !== 0) {
     const res = await postVisit(userStore.getUser().token, visit);
     if (res.status === 201) {
-    isSuccess.value = true;
-    isError.value = false;
-    setTimeout(() => {
-      close();
-    }, 750);
-  } else {
-    isError.value = true;
-    isSuccess.value = false;
-    const errorData = await res.json();
-    errorValue.value = errorData.message;
-  }
-  }else isError.value = true
+      isSuccess.value = true;
+      isError.value = false;
+      setTimeout(() => {
+        close();
+      }, 750);
+    } else {
+      isError.value = true;
+      isSuccess.value = false;
+      const errorData = await res.json();
+      errorValue.value = errorData.message;
+    }
+  } else isError.value = true;
 }
 </script>
 <style scoped></style>

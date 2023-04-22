@@ -1,8 +1,8 @@
 <template>
-  <div 
-    class="card is-clickable" 
+  <div
+    class="card is-clickable"
     @click="$router.push(`/restaurant/${restaurantId}`)"
-    >
+  >
     <!--image-->
     <div class="card-image">
       <figure class="image is-4by3">
@@ -34,12 +34,15 @@ export default {
     restaurantPic: "",
   }),
   async created() {
-    try{
-      const restaurant = await getRestaurantByID(this.restaurantId, useUserStore().getUser().token);
+    try {
+      const restaurant = await getRestaurantByID(
+        this.restaurantId,
+        useUserStore().getUser().token
+      );
       this.restaurantName = restaurant.name;
       this.restaurantPic = restaurant.pictures;
-    }catch(e){
-      console.log(e)
+    } catch (e) {
+      console.log(e);
     }
   },
 };
@@ -52,7 +55,7 @@ export default {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-.card-image{
+.card-image {
   width: 280px;
   height: 225px;
 }

@@ -22,9 +22,10 @@
       @click="$emit('removeItem', restaurant.id)"
       class="tag is-delete is-small is-danger"
     ></a>
-    <a 
-      v-if="(route.params.id === userStore.getUser().id || route.name !== 'User')" 
-      @click="toggleOptions" class="tag is-small has-background-grey-lighter options"
+    <a
+      v-if="route.params.id === userStore.getUser().id || route.name !== 'User'"
+      @click="toggleOptions"
+      class="tag is-small has-background-grey-lighter options"
       >&#8226;&#8226;&#8226;</a
     >
   </div>
@@ -56,19 +57,22 @@ export default defineComponent({
   },
   emits: ["removeItem", "moveUp", "moveDown"],
   async created() {
-    try{
-      this.restaurant = await getRestaurantByID(this.restaurantId, useUserStore().getUser().token);
-    }catch(e){
-      console.log(e)
+    try {
+      this.restaurant = await getRestaurantByID(
+        this.restaurantId,
+        useUserStore().getUser().token
+      );
+    } catch (e) {
+      console.log(e);
     }
   },
 });
 </script>
 <style scoped>
-.name{
+.name {
   max-width: 75%;
   white-space: normal;
-  height: auto;  
+  height: auto;
   padding-block: 3px;
 }
 </style>

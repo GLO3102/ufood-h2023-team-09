@@ -136,7 +136,7 @@ import { useCookies } from "vue3-cookies";
 const userStore = useUserStore();
 const route = useRoute();
 const isVisitsEmpty = ref(true);
-const restaurants = ref({items:[{id:''}]})
+const restaurants = ref({ items: [{ id: "" }] });
 
 //follow/unfollow button
 const isSameUser = ref(false);
@@ -184,15 +184,15 @@ const user = ref({
 //load visits and resto info
 const restoPicturesInfo = ref([]);
 const userVisits = ref({
-  items: [{id:''}],
+  items: [{ id: "" }],
   total: 0,
 });
 onBeforeMount(async () => {
-  if(userStore.getUser().token === ''){
-    const { cookies } = useCookies()
-    let token = cookies.get("ufood-token")
-    if(token !== null){
-      await userStore.getToken(token)
+  if (userStore.getUser().token === "") {
+    const { cookies } = useCookies();
+    let token = cookies.get("ufood-token");
+    if (token !== null) {
+      await userStore.getToken(token);
     }
   }
   user.value = await getUserById(userStore.getUser().token, route.params.id);
@@ -200,22 +200,25 @@ onBeforeMount(async () => {
     userStore.getUser().token,
     route.params.id
   );
-  restaurants.value = await getAllRestaurants(userStore.getUser().token)
-  let validUserVisits = []
-  for(let restaurant of restaurants.value.items){
-    for(let visit of userVisits.value){
-      if(restaurant.id === visit.restaurant_id){
-        validUserVisits.push(visit)
+  restaurants.value = await getAllRestaurants(userStore.getUser().token);
+  let validUserVisits = [];
+  for (let restaurant of restaurants.value.items) {
+    for (let visit of userVisits.value) {
+      if (restaurant.id === visit.restaurant_id) {
+        validUserVisits.push(visit);
       }
     }
   }
-  userVisits.value = validUserVisits
+  userVisits.value = validUserVisits;
   userVisits.value.forEach(async (visit) => {
     isVisitsEmpty.value = false;
     if (!restoPicturesInfo.value.includes(visit.restaurant_id)) {
       restoPicturesInfo.value.push(visit.restaurant_id);
     }
-    const resto = await getRestaurantByID(visit.restaurant_id, userStore.getUser().token);
+    const resto = await getRestaurantByID(
+      visit.restaurant_id,
+      userStore.getUser().token
+    );
     visit["restoName"] = resto.name;
   });
   isSameUser.value = userStore.getUser().id === route.params.id;

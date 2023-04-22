@@ -1,7 +1,9 @@
 <template>
   <div class="box">
     <div class="title is-2 has-text-centered">Favorite Lists</div>
-    <div class="title is-4 has-text-centered" v-if="isEmpty">There are no favorite list</div>
+    <div class="title is-4 has-text-centered" v-if="isEmpty">
+      There are no favorite list
+    </div>
     <div class="tags has-addons">
       <a
         @click="createNewList"
@@ -72,8 +74,8 @@ export default defineComponent({
         useUserStore().getUser().token,
         this.userId
       );
-      if (this.userLists.items.length === 0) this.isEmpty = true
-      else this.isEmpty = false
+      if (this.userLists.items.length === 0) this.isEmpty = true;
+      else this.isEmpty = false;
     },
     async createNewList() {
       if (this.isInputReady) {
@@ -98,8 +100,8 @@ export default defineComponent({
           this.$refs.inputName.focus();
         });
       }
-      if (this.userLists.items.length === 0) this.isEmpty = true
-      else this.isEmpty = false
+      if (this.userLists.items.length === 0) this.isEmpty = true;
+      else this.isEmpty = false;
     },
     async moveUp(listId) {
       this.userLists = await getFavoriteListsByUserId(
@@ -184,19 +186,19 @@ export default defineComponent({
     },
   },
   async created() {
-    if (this.userStore.getUser().token === '') {
-      const { cookies } = useCookies()
-      let token = cookies.get("ufood-token")
+    if (this.userStore.getUser().token === "") {
+      const { cookies } = useCookies();
+      let token = cookies.get("ufood-token");
       if (token !== null) {
-        await this.userStore.getToken(token)
+        await this.userStore.getToken(token);
       }
     }
     this.userLists = await getFavoriteListsByUserId(
       useUserStore().getUser().token,
       this.userId
     );
-    if(this.userLists.items.length === 0) this.isEmpty = true
-    else this.isEmpty = false
+    if (this.userLists.items.length === 0) this.isEmpty = true;
+    else this.isEmpty = false;
   },
 });
 </script>

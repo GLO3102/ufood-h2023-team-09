@@ -10,10 +10,11 @@
             >
               <div>
                 <span>Visit for : </span>
-                <span 
+                <span
                   class="has-text-weight-bold is-clickable"
-                  @click="$router.push(`/restaurant/${visit.restaurant_id}`)" 
-                >{{ visit.restoName }}</span>
+                  @click="$router.push(`/restaurant/${visit.restaurant_id}`)"
+                  >{{ visit.restoName }}</span
+                >
               </div>
             </div>
             <span>Date:</span>

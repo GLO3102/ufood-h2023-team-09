@@ -12,10 +12,10 @@ import { useUserStore } from "./stores/user";
 import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
 const userStore = useUserStore();
-const token = cookies.get("ufood-token")
+const token = cookies.get("ufood-token");
 onBeforeMount(async () => {
   if (token !== null) await userStore.getToken(token);
-})
+});
 </script>
 
 <style>
@@ -57,7 +57,7 @@ onBeforeMount(async () => {
   height: 100%;
 }
 
-#app{
+#app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;

@@ -5,7 +5,7 @@
     <div id="map" style="height: 600px; width: 100%"></div>
   </div>
 </template>
-  
+
 <script setup>
 import { onMounted, ref, watch } from "vue";
 
@@ -32,14 +32,12 @@ onMounted(() => {
 
   var directions = new MapboxDirections({
     accessToken: mapboxgl.accessToken,
-    interactive: false
+    interactive: false,
   });
   map.addControl(directions, "top-left");
   map.on("click", () => {
     directions.setDestination([selectedMarker.lng, selectedMarker.lat]);
-
   });
-
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -54,7 +52,7 @@ onMounted(() => {
             const address = data.features[0].place_name;
             directions.setOrigin([longitude, latitude]);
 
-            center.value = [longitude, latitude]
+            center.value = [longitude, latitude];
             map.flyTo({
               center: center.value,
               zoom: zoom.value,
@@ -68,7 +66,7 @@ onMounted(() => {
       }
     );
   } else {
-    center.value = props.restaurants[0].location.coordinates
+    center.value = props.restaurants[0].location.coordinates;
     map.flyTo({
       center: center.value,
       zoom: zoom.value,
@@ -78,14 +76,17 @@ onMounted(() => {
   }
 });
 
-watch(() => props.restaurants, () => {
-  zoom.value = map.getZoom()
-  updateMarkers();
-});
+watch(
+  () => props.restaurants,
+  () => {
+    zoom.value = map.getZoom();
+    updateMarkers();
+  }
+);
 
 function updateMarkers() {
-  const markers = document.querySelectorAll('.mapboxgl-marker');
-  markers.forEach(marker => {
+  const markers = document.querySelectorAll(".mapboxgl-marker");
+  markers.forEach((marker) => {
     marker.remove();
   });
   props.restaurants.forEach((restaurant) => {
@@ -93,8 +94,10 @@ function updateMarkers() {
       restaurant.location.coordinates[0],
       restaurant.location.coordinates[1]
     );
-    
-    const popup = new mapboxgl.Popup().setHTML(`<a href="/restaurant/${restaurant.id}">${restaurant.name}</a><address>${restaurant.address}</a>`);
+
+    const popup = new mapboxgl.Popup().setHTML(
+      `<a href="/restaurant/${restaurant.id}">${restaurant.name}</a><address>${restaurant.address}</a>`
+    );
     const marker = new mapboxgl.Marker({
       color: "#8F3BDE",
     })
@@ -102,16 +105,13 @@ function updateMarkers() {
       .setPopup(popup)
       .addTo(map);
 
-    marker.getElement().addEventListener('click', () => {
-      selectedMarker = marker.getLngLat()
+    marker.getElement().addEventListener("click", () => {
+      selectedMarker = marker.getLngLat();
     });
   });
 }
 </script>
 
-  
-  
-  
 <style>
 .mapbox-directions-instructions {
   height: 300px;
@@ -127,4 +127,3 @@ function updateMarkers() {
   }
 }
 </style>
-  

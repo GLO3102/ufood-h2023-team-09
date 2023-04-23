@@ -36,7 +36,7 @@ function getDictionnaries(list) {
   words.filter((word) => word.length > 0);
   words = Array.from(new Set(words));
 }
-function resetList(newPage) {
+function resetList(newPage, refresh = true) {
   page.value = newPage;
   const first = page.value * pageLimit.value;
 
@@ -75,9 +75,11 @@ function resetList(newPage) {
       }
     }
   }
-  restaurantsList.value.items = temp.slice(first, first + pageLimit.value);
-  restaurantsList.value.total = temp.length;
   completeListFiltered.value = { items: [...temp] };
+  if(refresh){  
+    restaurantsList.value.items = temp.slice(first, first + pageLimit.value);
+    restaurantsList.value.total = temp.length;
+  }
 }
 onBeforeMount(async () => {
   completeList.value = await getAllRestaurants(userStore.getUser().token);
@@ -240,6 +242,7 @@ function getClosests(str) {
 }
 
 watch(searchFilter, async (newValue, oldValue) => {
+  resetList(0, false)
   if (newValue === "" || newValue === null) isSearchActive.value = false;
   else isSearchActive.value = true;
 
@@ -300,7 +303,7 @@ watch(searchFilter, async (newValue, oldValue) => {
         <div class="dropdown-menu">
           <div class="dropdown-content">
             <a
-              v-for="restaurant in suggestions.items"
+              v-for="restaurant in completeListFiltered.items"
               class="dropdown-item"
               :key="restaurant.id"
               @click="

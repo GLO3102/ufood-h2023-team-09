@@ -6,9 +6,7 @@ export const getRestaurants = async (
   limit,
   search,
   genres,
-  price_ranges,
-  lat,
-  lon
+  price_ranges
 ) => {
   let genresStr = "";
   if (genres.length !== 0) {
@@ -22,13 +20,7 @@ export const getRestaurants = async (
   if (search.length !== 0) {
     searchStr = `&q=${search}`;
   }
-  let latStr = "";
-  let lonStr = "";
-  if (lon !== 0 && lat !== 0) {
-    latStr = `&lat=${lat}`;
-    lonStr = `&lon=${lon}`;
-  }
-  const URL = `${UNSECURE_ENDPOINT}?page=${page}&limit=${limit}${genresStr}${rangesStr}${searchStr}${latStr}${lonStr}`;
+  const URL = `${UNSECURE_ENDPOINT}?page=${page}&limit=${limit}${genresStr}${rangesStr}${searchStr}`;
   const response = await fetch(URL, {
     method: "GET",
     headers: {

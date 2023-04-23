@@ -26,7 +26,7 @@
             </div>
             <div class="is-align-self-center">
               <span class="has-text-success" v-if="isSuccess">Success</span>
-              <span class="has-text-danger" v-if="isError">all * sections must be completed</span>
+              <span class="has-text-danger" v-if="isError">All * sections must be completed correctly</span>
             </div>
           </div>
         </div>
@@ -67,7 +67,7 @@ async function save() {
     rating: rating.value,
     comment: comment.value,
   };
-  if (visitDate.value.length !== 0 && rating.value === 1 || visitDate.value.length !== 0 && rating.value === 2 || visitDate.value.length !== 0 && rating.value === 3 || visitDate.value.length !== 0 && rating.value === 4 || visitDate.value.length !== 0 && rating.value === 5 ) {
+  if (visitDate.value.length !== 0 && rating.value >= 1  && rating.value <= 5 ) {
     const res = await postVisit(userStore.getUser().token, visit);
     if (res.status === 201) {
       isSuccess.value = true;

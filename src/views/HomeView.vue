@@ -14,7 +14,7 @@ let completeListCopy = [];
 let completeListFiltered = ref({});
 let words = [];
 let geolocationAllowed = false;
-let isLoaded = ref(false);
+let isLoaded = ref(true);
 
 const page = ref(0);
 const pageLimit = ref(12);
@@ -76,7 +76,7 @@ function resetList(newPage) {
       }
     }
   }
-    completeListFiltered.value = { items: [...temp] };
+    completeListFiltered.value.items = temp;
     restaurantsList.value.items = temp.slice(first, first + pageLimit.value);
     restaurantsList.value.total = temp.length;
 }
@@ -231,8 +231,10 @@ function getClosests(str) {
 }
 
 watch(searchFilter, async (newValue, oldValue) => {
-  resetList(0)
-  if (newValue === "" || newValue === null) isSearchActive.value = false;
+  if (newValue === "" || newValue === null){
+    isSearchActive.value = false;
+    resetList(0)
+  } 
   else isSearchActive.value = true;
 
   suggestions.value.items = [];
@@ -246,8 +248,6 @@ watch(searchFilter, async (newValue, oldValue) => {
       value,
       genreFilters.value,
       rangeFilters.value,
-      lat.value,
-      lon.value
     );
     suggestions.value.items = suggestions.value.items.concat(await list.items);
   }

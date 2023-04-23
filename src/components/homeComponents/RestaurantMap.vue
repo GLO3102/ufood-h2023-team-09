@@ -15,7 +15,7 @@ const props = defineProps({
 
 let map;
 let selectedMarker;
-const center = ref(props.restaurants[0].location.coordinates);
+const center = ref(props.restaurants[0]?.location?.coordinates || [46.829853, -71.254028]);
 const zoom = ref(10);
 
 onMounted(() => {
@@ -36,7 +36,7 @@ onMounted(() => {
   });
   map.addControl(directions, "top-left");
   map.on("click", () => {
-    directions.setDestination([selectedMarker.lng, selectedMarker.lat]);
+    if(selectedMarker)directions.setDestination([selectedMarker.lng, selectedMarker.lat]);
   });
 
   if (navigator.geolocation) {
@@ -83,6 +83,22 @@ watch(
     updateMarkers();
   }
 );
+/** 
+watch(
+  () => props.restaurants,
+  (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+      center.value = props.restaurants[props.restaurants.length-1].location.coordinates;
+      zoom.value = map.getZoom();
+      map.flyTo({
+              center: center.value,
+              zoom: zoom.value,
+              essential: true,
+            });
+      updateMarkers();
+    }
+  }
+);**/
 
 function updateMarkers() {
   const markers = document.querySelectorAll(".mapboxgl-marker");

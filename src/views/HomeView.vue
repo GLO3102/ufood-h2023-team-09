@@ -36,7 +36,7 @@ function getDictionnaries(list) {
   words.filter((word) => word.length > 0);
   words = Array.from(new Set(words));
 }
-function resetList(newPage, refresh = true) {
+function resetList(newPage) {
   page.value = newPage;
   const first = page.value * pageLimit.value;
 
@@ -75,11 +75,9 @@ function resetList(newPage, refresh = true) {
       }
     }
   }
-  completeListFiltered.value = { items: [...temp] };
-  if(refresh){  
+    completeListFiltered.value = { items: [...temp] };
     restaurantsList.value.items = temp.slice(first, first + pageLimit.value);
     restaurantsList.value.total = temp.length;
-  }
 }
 onBeforeMount(async () => {
   completeList.value = await getAllRestaurants(userStore.getUser().token);
@@ -242,7 +240,7 @@ function getClosests(str) {
 }
 
 watch(searchFilter, async (newValue, oldValue) => {
-  resetList(0, false)
+  resetList(0)
   if (newValue === "" || newValue === null) isSearchActive.value = false;
   else isSearchActive.value = true;
 

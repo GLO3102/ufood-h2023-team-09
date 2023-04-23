@@ -285,7 +285,7 @@ watch(searchFilter, async (newValue, oldValue) => {
             placeholder="Search restaurents..."
           />
         </p>
-        <SearchUser />
+        <SearchUser v-if="userStore.getIsLoggedIn()" />
         <p class="control">
           <button class="button" @click="resetList(0)">&#x1F50E;</button>
         </p>

@@ -49,7 +49,7 @@
             </div>
             <button
               class="button is-block is-info is-medium is-fullwidth"
-              @click="signUp()"
+              @click="signUpAndLogin()"
             >
               Sign up
             </button>
@@ -71,8 +71,9 @@ const name = ref("");
 const email = ref("");
 const password = ref("");
 
-const signUp = async () => {
+const signUpAndLogin = async () => {
   await userStore.signup(name.value, email.value, password.value);
+  await userStore.login(email.value, password.value);
   if (userStore.getIsLoggedIn()) {
     router.push("/");
   } else {

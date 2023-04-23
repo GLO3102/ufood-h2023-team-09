@@ -55,7 +55,7 @@ export const getAllRestaurants = async (token) => {
 
   let allRestaurants = { items: [], total: 0 };
 
-  let response = await fetch(URL, {
+  let response = await fetch(`${URL}?limit=1`, {
     method: "GET",
     headers,
   });

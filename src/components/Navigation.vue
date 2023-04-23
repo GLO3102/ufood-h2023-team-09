@@ -96,7 +96,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onBeforeMount } from "vue";
+import { ref, computed, watch } from "vue";
 import { useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 import { getAllRestaurants, getRestaurants } from "../api/restaurantApi";
@@ -109,11 +109,6 @@ const isSearchActive = ref(false);
 const restaurants = ref({});
 let suggestions = ref({ items: [] });
 let words = [];
-
-onBeforeMount(async () => {
-  restaurants.value = await getAllRestaurants(userStore.getUser().token);
-  getDictionnaries(await restaurants.value.items);
-});
 
 function getDictionnaries(list) {
   for (let restaurant of list) {
@@ -186,6 +181,12 @@ watch(input, async (newValue, oldValue) => {
   )
     isSearchActive.value = false;
 });
+watch(isSearchActive, async(newValue, oldValue) => {
+  if(newValue){
+  restaurants.value = await getAllRestaurants(userStore.getUser().token);
+  getDictionnaries(await restaurants.value.items);
+  }
+})
 </script>
 
 <style scoped>

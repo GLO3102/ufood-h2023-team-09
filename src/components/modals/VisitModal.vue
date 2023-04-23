@@ -68,7 +68,6 @@ async function save() {
     comment: comment.value,
   };
   if (visitDate.value.length !== 0 && rating.value === 1 || visitDate.value.length !== 0 && rating.value === 2 || visitDate.value.length !== 0 && rating.value === 3 || visitDate.value.length !== 0 && rating.value === 4 || visitDate.value.length !== 0 && rating.value === 5 ) {
-    console.log (visitDate.value.length)
     const res = await postVisit(userStore.getUser().token, visit);
     if (res.status === 201) {
       isSuccess.value = true;

@@ -5,47 +5,28 @@
       <div class="card">
         <div class="card-content">
           <div class="content is-flex is-flex-direction-column">
-            <div
-              class="is-flex is-flex-direction-row is-justify-content-space-between"
-            >
+            <div class="is-flex is-flex-direction-row is-justify-content-space-between">
               <div>
                 <span>Add a visit for : </span>
                 <span class="has-text-weight-bold"> {{ name }} </span>
               </div>
             </div>
-            <span>Date:</span>
-            <input
-              class="input"
-              :max="`${year}-${month}-${date}`"
-              type="date"
-              v-model="visitDate"
-            />
+            <span>Date:<a style="color:red">*</a></span>
+            <input class="input" :max="`${year}-${month}-${date}`" type="date" v-model="visitDate" />
             <div>
-              <span>Rating:</span>
-              <input
-                class="input"
-                type="number"
-                min="0"
-                max="5"
-                v-model="rating"
-              />
+              <span>Rating:<a style="color:red">*</a></span>
+              <input class="input" type="number" min="0" max="5" v-model="rating" />
             </div>
             <div>
               <span>Comment:</span>
-              <textarea
-                class="textarea has-fixed-size"
-                placeholder="Add a comment"
-                v-model="comment"
-              ></textarea>
+              <textarea class="textarea has-fixed-size" placeholder="Add a comment" v-model="comment"></textarea>
             </div>
             <div class="is-align-self-center mt-2">
               <button class="button is-primary" @click="save">Save</button>
             </div>
             <div class="is-align-self-center">
               <span class="has-text-success" v-if="isSuccess">Success</span>
-              <span class="has-text-danger" v-if="isError"
-                >A rating must be set</span
-              >
+              <span class="has-text-danger" v-if="isError">all * sections must be completed</span>
             </div>
           </div>
         </div>
@@ -86,7 +67,7 @@ async function save() {
     rating: rating.value,
     comment: comment.value,
   };
-  if (rating.value !== 0) {
+  if (visitDate.value.length !== 0 && rating.value === 1 || visitDate.value.length !== 0 && rating.value === 2 || visitDate.value.length !== 0 && rating.value === 3 || visitDate.value.length !== 0 && rating.value === 4 || visitDate.value.length !== 0 && rating.value === 5 ) {
     const res = await postVisit(userStore.getUser().token, visit);
     if (res.status === 201) {
       isSuccess.value = true;

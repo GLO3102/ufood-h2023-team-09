@@ -14,6 +14,7 @@ let completeListCopy = [];
 let completeListFiltered = ref({});
 let words = [];
 let geolocationAllowed = false;
+let isLoaded = ref(false);
 
 const page = ref(0);
 const pageLimit = ref(12);
@@ -90,6 +91,7 @@ onBeforeMount(async () => {
   if (lon.value !== 0 && lat.value !== 0) sortList();
 
   resetList(0);
+  isLoaded.value = true;
 });
 onMounted(() => input.value.focus());
 function scrollToTop() {
@@ -171,17 +173,6 @@ async function showGetLocationError(error) {
 let showMap = ref(false);
 
 async function toggleMapMode() {
-  if (lat.value === 0 && lon.value === 0) {
-    getLocation();
-    if (geolocationAllowed) {
-      await getLocation();
-    }
-    completeList.value.items = Array.from(completeListCopy);
-    sortList();
-  } else {
-    lat.value = 0;
-    lon.value = 0;
-  }
   showMap.value = !showMap.value;
 }
 
@@ -320,6 +311,7 @@ watch(searchFilter, async (newValue, oldValue) => {
       <div class="filter">
         <div class="is-flex-wrap-nowrap">
           <button
+            v-if="isLoaded"
             class="button"
             :class="{ 'is-active': showMap }"
             @click="toggleMapMode()"
@@ -475,6 +467,11 @@ watch(searchFilter, async (newValue, oldValue) => {
         </li>
       </ul>
     </nav>
+    <div v-if="!isLoaded" class="is-flex is-justify-content-center is-align-items-center mb-5">
+      <div class="button is-centered is-success" @click="scrollToTop()">
+        ...loading...
+      </div>
+    </div>
     <div class="is-flex is-justify-content-center is-align-items-center mb-5">
       <button class="button is-centered" @click="scrollToTop()">
         Back to the top

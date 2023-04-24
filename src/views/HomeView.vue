@@ -14,8 +14,7 @@ let completeListCopy = [];
 let completeListFiltered = ref({});
 let words = [];
 let geolocationAllowed = false;
-let isLoaded = ref(true);
-let mapIsLoaded = ref(true)
+let isLoaded = ref(false);
 
 const page = ref(0);
 const pageLimit = ref(12);
@@ -85,9 +84,8 @@ function resetList(newPage) {
   }
     completeListFiltered.value.items = temp;
     restaurantsList.value.items = temp.slice(first, first + pageLimit.value);
-    console.log('HERE')
     restaurantsList.value.total = temp.length;
-    (completeListFiltered.value.items.length !== 0) ? mapIsLoaded.value = true : (showMap.value = false, mapIsLoaded.value = false);
+    (completeListFiltered.value.items.length !== 0) ? isLoaded.value = true : (showMap.value = false, isLoaded.value = false);
 }
 onBeforeMount(async () => {
   completeList.value = await getAllRestaurants(userStore.getUser().token);
@@ -312,7 +310,7 @@ watch(searchFilter, async (newValue, oldValue) => {
       <div class="filter">
         <div class="is-flex-wrap-nowrap">
           <button
-            v-if="mapIsLoaded"
+            v-if="isLoaded"
             class="button"
             :class="{ 'is-active': showMap }"
             @click="toggleMapMode()"

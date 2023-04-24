@@ -21,8 +21,6 @@ const zoom = ref(7);
 onMounted(() => {
   mapboxgl.accessToken =
     "pk.eyJ1IjoicGFsZXg5OTkiLCJhIjoiY2xlMDl4YWMwMG42OTN2bzgwbjd1bW82aCJ9.fH1lEdpJsNacjxdL8RlYog";
-    console.log("center.value")
-    console.log(center.value)
   map = new mapboxgl.Map({
     container: "map",
     style: "mapbox://styles/mapbox/streets-v12",
@@ -70,9 +68,9 @@ onMounted(() => {
       }
     );
   } else {
-    console.log("ELSE")
+    //point central si geolocalisation désactivée, zoom en retrait
     center.value = [-72.2738476153379, 46.30049064753106]
-    zoom.value = 5;
+    zoom.value = 7;
     map.flyTo({
       center: center.value,
       zoom: zoom.value,
@@ -89,22 +87,6 @@ watch(
     updateMarkers();
   }
 );
-/** 
-watch(
-  () => props.restaurants,
-  (newValue, oldValue) => {
-    if (newValue !== oldValue) {
-      center.value = props.restaurants[props.restaurants.length-1].location.coordinates;
-      zoom.value = map.getZoom();
-      map.flyTo({
-              center: center.value,
-              zoom: zoom.value,
-              essential: true,
-            });
-      updateMarkers();
-    }
-  }
-);**/
 
 function updateMarkers() {
   const markers = document.querySelectorAll(".mapboxgl-marker");

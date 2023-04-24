@@ -15,6 +15,7 @@ let completeListFiltered = ref({});
 let words = [];
 let geolocationAllowed = false;
 let isLoaded = ref(true);
+let mapIsLoaded = ref(true)
 
 const page = ref(0);
 const pageLimit = ref(12);
@@ -24,6 +25,12 @@ const pagesTotal = computed(() => {
   if (result !== rounded) rounded += 1;
   return rounded;
 });
+
+let showMap = ref(false);
+
+async function toggleMapMode() {
+  showMap.value = !showMap.value;
+}
 
 // Initialization  ---------------------------------------------------------------------------------
 function getDictionnaries(list) {
@@ -78,7 +85,9 @@ function resetList(newPage) {
   }
     completeListFiltered.value.items = temp;
     restaurantsList.value.items = temp.slice(first, first + pageLimit.value);
+    console.log('HERE')
     restaurantsList.value.total = temp.length;
+    (completeListFiltered.value.items.length !== 0) ? mapIsLoaded.value = true : (showMap.value = false, mapIsLoaded.value = false);
 }
 onBeforeMount(async () => {
   completeList.value = await getAllRestaurants(userStore.getUser().token);
@@ -166,12 +175,6 @@ async function showGetLocationError(error) {
       break;
   }
   resetList(0);
-}
-
-let showMap = ref(false);
-
-async function toggleMapMode() {
-  showMap.value = !showMap.value;
 }
 
 async function toggleLocation() {
@@ -292,7 +295,7 @@ watch(searchFilter, async (newValue, oldValue) => {
         <div class="dropdown-menu">
           <div class="dropdown-content">
             <a
-              v-for="restaurant in completeListFiltered.items"
+              v-for="restaurant in suggestions.items"
               class="dropdown-item"
               :key="restaurant.id"
               @click="
@@ -309,7 +312,7 @@ watch(searchFilter, async (newValue, oldValue) => {
       <div class="filter">
         <div class="is-flex-wrap-nowrap">
           <button
-            v-if="isLoaded"
+            v-if="mapIsLoaded"
             class="button"
             :class="{ 'is-active': showMap }"
             @click="toggleMapMode()"

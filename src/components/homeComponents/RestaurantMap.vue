@@ -13,19 +13,22 @@ const props = defineProps({
   restaurants: Array,
 });
 
-let map;
+let map; 
 let selectedMarker;
-const center = ref(props.restaurants[0]?.location?.coordinates || [46.829853, -71.254028]);
-const zoom = ref(10);
+const center = ref([-72.2738476153379, 46.30049064753106]);
+const zoom = ref(7);
 
 onMounted(() => {
   mapboxgl.accessToken =
     "pk.eyJ1IjoicGFsZXg5OTkiLCJhIjoiY2xlMDl4YWMwMG42OTN2bzgwbjd1bW82aCJ9.fH1lEdpJsNacjxdL8RlYog";
+    console.log("center.value")
+    console.log(center.value)
   map = new mapboxgl.Map({
     container: "map",
     style: "mapbox://styles/mapbox/streets-v12",
     center: center.value,
     zoom: zoom.value,
+
   });
 
   updateMarkers();
@@ -53,6 +56,7 @@ onMounted(() => {
             directions.setOrigin([longitude, latitude]);
 
             center.value = [longitude, latitude];
+            zoom.value = 10
             map.flyTo({
               center: center.value,
               zoom: zoom.value,
@@ -66,7 +70,9 @@ onMounted(() => {
       }
     );
   } else {
-    center.value = props.restaurants[0].location.coordinates;
+    console.log("ELSE")
+    center.value = [-72.2738476153379, 46.30049064753106]
+    zoom.value = 5;
     map.flyTo({
       center: center.value,
       zoom: zoom.value,

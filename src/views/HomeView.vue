@@ -85,7 +85,6 @@ function resetList(newPage) {
     completeListFiltered.value.items = temp;
     restaurantsList.value.items = temp.slice(first, first + pageLimit.value);
     restaurantsList.value.total = temp.length;
-    (completeListFiltered.value.items.length !== 0) ? isLoaded.value = true : (showMap.value = false, isLoaded.value = false);
 }
 onBeforeMount(async () => {
   completeList.value = await getAllRestaurants(userStore.getUser().token);
@@ -363,7 +362,7 @@ watch(searchFilter, async (newValue, oldValue) => {
           </div>
         </div>
         <!-- Range filter buttons -->
-        <div class="is-flex-wrap-nowrap field has-addons">
+        <div v-if="isLoaded" class="is-flex-wrap-nowrap field has-addons">
           <p
             class="control"
             v-for="range in Object.entries(ranges)"
@@ -467,7 +466,7 @@ watch(searchFilter, async (newValue, oldValue) => {
       </ul>
     </nav>
     <div v-if="!isLoaded" class="is-flex is-justify-content-center is-align-items-center mb-5">
-      <div class="button is-centered is-success" @click="scrollToTop()">
+      <div class="button is-centered is-success">
         ...loading...
       </div>
     </div>
